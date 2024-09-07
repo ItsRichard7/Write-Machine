@@ -45,7 +45,7 @@ def upload_file():
             codePanel.delete("1.0", tk.END)  # Limpiar el panel de código actual
             codePanel.insert(tk.END, file_content)
             update_line_numbers()
-            fileButton = tk.Button(filesPanel, text=file_name, font=("Consolas", 11, "bold"), bg="#828485", fg="#3b3d3f", width=30,
+            fileButton = tk.Button(filesPanel, text=file_name, font=("Consolas", 11, "bold"), bg="#4b6eaf", fg="#3b3d3f", width=30,
                                 height=2, relief=tk.FLAT, activebackground="#aaacad", command=lambda: load_file_content(file_path))
             fileButton.pack(pady=2)
             archivo = (int(archivo) + 1)
@@ -75,7 +75,7 @@ runImage = Image.open("Images/run.png")
 runImage = runImage.resize((28, 28), Image.ANTIALIAS)
 runImageTk = ImageTk.PhotoImage(runImage)
 
-runButton = tk.Button(menuFrame, image=runImageTk, command=run_code, bg="#3b3d3f", relief=tk.FLAT)
+runButton = tk.Button(menuFrame, image=runImageTk, command=run_code, bg="#3b3d3f", relief=tk.FLAT, activebackground="#4c5052")
 runButton.place(x=widthWindow-200, y=7)
 
 # Botón del árbol de parseo
@@ -83,7 +83,7 @@ treeImage = Image.open("Images/tree.png")
 treeImage = treeImage.resize((28, 28), Image.ANTIALIAS)
 treeImageTk = ImageTk.PhotoImage(treeImage)
 
-treeButton = tk.Button(menuFrame, image=treeImageTk, command=run_code, bg="#3b3d3f", relief=tk.FLAT)
+treeButton = tk.Button(menuFrame, image=treeImageTk, command=run_code, bg="#3b3d3f", relief=tk.FLAT, activebackground="#4c5052")
 treeButton.place(x=widthWindow-150, y=7)
 
 # Botón de tabla de símbolos
@@ -91,12 +91,13 @@ tableImage = Image.open("Images/table.png")
 tableImage = tableImage.resize((28, 28), Image.ANTIALIAS)
 tableImageTk = ImageTk.PhotoImage(tableImage)
 
-tableButton = tk.Button(menuFrame, image=tableImageTk, command=run_code, bg="#3b3d3f", relief=tk.FLAT)
+tableButton = tk.Button(menuFrame, image=tableImageTk, command=run_code, bg="#3b3d3f", relief=tk.FLAT, activebackground="#4c5052")
 tableButton.place(x=widthWindow-100, y=7)
 
 # Botón de subir archivo
-uploadButton = tk.Button(menuFrame, text="Subir Archivo", font=("Consolas", 13, "bold"), command=upload_file, bg="#828485", fg="#3b3d3f", relief=tk.FLAT)
-uploadButton.place(x=50, y=7)
+uploadButton = tk.Button(menuFrame, text="Subir Archivo", font=("Consolas", 13, "bold"),
+                         command=upload_file, bg="#b4b4af", fg="#3b3d3f", relief=tk.FLAT, activebackground="#4b6eaf", activeforeground="#b4b4af")
+uploadButton.place(x=15, y=7)
 
 """
 Panel de consola, aquí se va a printear
@@ -128,20 +129,26 @@ filesPanel.pack()
 filesLabel = tk.Label(filesPanel, text="Archivos", bg="#3c3f41", fg="#828485", font=("Consolas", 13, "bold"), width=52)
 filesLabel.pack(fill=tk.X)
 
-editableFile = tk.Button(filesPanel, text="Archivo editable", font=("Consolas", 11, "bold"), bg="#828485", fg="#3b3d3f", width=30,
+editableFile = tk.Button(filesPanel, text="Archivo editable", font=("Consolas", 11, "bold"), bg="#4b6eaf", fg="#3b3d3f", width=30,
                          height=2, relief=tk.FLAT, activebackground="#aaacad", command=lambda: [codePanel.delete("1.0", tk.END),update_line_numbers()])
 editableFile.pack()
 
 
-# Agregar el panel de warningsAndErrors debajo del panel de archivos
+"""
+Panel de errores
+"""
 warningsPanel = tk.Frame(leftPanel, bg="#3c3f41", height=400)
 warningsPanel.pack()
 
 warningsLabel = tk.Label(warningsPanel, text="Errores y precauciones", bg="#3c3f41", fg="#828485", font=("Consolas", 13, "bold"), width=50)
 warningsLabel.pack(fill=tk.X, padx=10, pady=5)
 
-file3 = tk.Label(warningsPanel, text="Error 1: En la línea 3", font=("Consolas", 11, "bold"), bg="#48494a", fg="#85010e", padx=100, pady=5)
-file3.pack(fill=tk.X)
+error1 = tk.Label(warningsPanel, text="Error 1: En la línea 3", font=("Consolas", 11), bg="#48494a", fg="#c26364", padx=100, pady=5)
+error1.pack(fill=tk.X)
+
+error2 = tk.Label(warningsPanel, text="Error 2: En la línea 13", font=("Consolas", 11), bg="#48494a", fg="#c26364", padx=100, pady=5)
+error2.pack(fill=tk.X)
+
 
 """
 Panel de números de línea
