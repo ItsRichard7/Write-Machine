@@ -28,18 +28,34 @@ tokens = [
     'SUM',
     'PARIZQ',
     'PARDER',
+    'BRAIZQ',
+    'BRADER',
     'TRUE',
     'FALSE',
     'PUNTOCOMA',
     'NUMBER',
     'VARIABLE',
     'COMMENT',
-    'TEXT'
+    'TEXT',
+    'FOR',
+    'LOOP',
+    'END',
+    'CASE',
+    'WHEN',
+    'THEN',
+    'ELSE',
+    'REPEAT',
+    'UNTIL',
+    'WHILE',
+    'WHEND',
+    'PROC',
+    'COMA',
 ]
 
 # Expresiones regulares para tokens simples
 t_DEF = r'Def'
 t_PUT = r'Put'
+t_PROC = r'Proc'
 t_ADD = r'Add'
 t_CONUP = r'ContinueUp'
 t_CONDOWN = r'ContinueDown'
@@ -64,9 +80,13 @@ t_DIV = r'Div'
 t_SUM = r'Sum'
 t_PARIZQ = r'\('
 t_PARDER = r'\)'
+t_BRAIZQ = r'\['
+t_BRADER = r'\]'
 t_TRUE = r'True'
 t_FALSE = r'False'
 t_PUNTOCOMA = r';'
+t_COMA = r','
+t_END = r'End'
 
 # Expresión regular para reconocer números enteros
 def t_NUMBER(t):
@@ -74,40 +94,57 @@ def t_NUMBER(t):
     t.value = int(t.value)
     return t
 
-# Expresión regular para variables (3-10 caracteres, letras, números, '@', '_')
+# Expresión regular para variables con nuevas reglas
 def t_VARIABLE(t):
-    r'[a-zA-Z0-9_@]{3,10}'
+    r'[a-z][a-zA-Z0-9_@]{2,9}'  # Empieza con minúscula, 3-10 caracteres
     return t
 
-# Expresión regular para reconocer comentarios que inician con //
+# Expresión regular para comentarios
 def t_COMMENT(t):
     r'//.*'
-    pass  # Ignoramos los comentarios, no se generan tokens
+    if t.lexer.lineno == 1:
+        t.lexer.first_comment = True
+    pass  # Ignoramos los comentarios
 
 # Expresión regular para reconocer texto (cadenas de caracteres)
 def t_TEXT(t):
-    r'\".*?\"'
+    r'\"[^\"]*\"'
     return t
 
-# Ignorar caracteres como espacios y saltos de línea
+# Ignorar espacios y saltos de línea
 t_ignore = ' \n'
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
 
 # Manejo de errores de token
 def t_error(t):
-    print("Carácter no válido: '%s'" % t.value[0])
+    print(f"Carácter no válido: '{t.value[0]}'")
     t.lexer.skip(1)
 
 # Construcción del analizador léxico
 lexer = lex.lex()
 
-# Ejemplo de uso
-data = "ContinueUp 10; // Esto es un comentario\nVar1 = \"Hello world\";"
+# Verificación de que la primera línea es un comentario
+def verificar_comentario_inicial(lexer, data):
+    lexer.first_comment = False
+    lexer.input(data)
+    lexer.token()  # Analizar el primer token
+    if not lexer.first_comment:
+        print("Error: La primera línea debe ser un comentario.")
+        return False
+    return True
+
+data = '''
+// Este es el nombre del programa
+Def(x, 5);
+UseColor 255;
+Proc myProc(zzz, www)
+    [PosX 10; Down;]
+End;
+'''
 
 lexer.input(data)
-
-# Obtener los tokens reconocidos
-while True:
-    token = lexer.token()
-    if not token:
-        break
+for token in lexer:
     print(token)
