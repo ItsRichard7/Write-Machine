@@ -35,6 +35,7 @@ tokens = [
     'PUNTOCOMA',
     'NUMBER',
     'VARIABLE',
+    'TO',
     'COMMENT',
     'TEXT',
     'FOR',
@@ -71,6 +72,7 @@ t_BEGIN = r'Beginning;'
 t_EQUAL = r'Equal'
 t_AND = r'And'
 t_OR = r'Or'
+t_TO = r'to'
 t_GREATER = r'Greater'
 t_SMALLER = r'Smaller'
 t_SUBSTR = r'Substr'
