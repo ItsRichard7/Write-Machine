@@ -85,7 +85,7 @@ t_BRADER = r'\]'
 t_TRUE = r'True'
 t_FALSE = r'False'
 t_PUNTOCOMA = r';'
-t_COMA = r','
+t_COMA = r',' 
 t_END = r'End'
 
 # Expresión regular para reconocer números enteros
@@ -102,19 +102,19 @@ def t_VARIABLE(t):
 # Expresión regular para comentarios
 def t_COMMENT(t):
     r'//.*'
-    # Si es la primera línea y es un comentario, marcamos first_comment como True
     if t.lexer.lineno == 1:
-        t.lexer.first_comment = True
-    pass  # Ignoramos los comentarios
+        t.lexer.first_comment = True  # Marca que el primer comentario fue encontrado
+    pass  # Ignorar comentarios
 
 # Expresión regular para reconocer texto (cadenas de caracteres)
 def t_TEXT(t):
     r'\"[^\"]*\"'
     return t
 
-# Ignorar espacios y saltos de línea
+# Ignorar espacios y tabulaciones
 t_ignore = ' \t'
 
+# Función para manejar saltos de línea
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
@@ -124,36 +124,43 @@ def t_error(t):
     print(f"Carácter no válido: '{t.value[0]}' en la línea {t.lexer.lineno}")
     t.lexer.skip(1)
 
-# Construcción del analizador léxico
+# Crear y construir el analizador léxico
 lexer = lex.lex()
 
-# Verificación de que la primera línea es un comentario
+# Verificación de que la primera línea sea un comentario
 def verificar_comentario_inicial(lexer, data):
-    lexer.first_comment = False  # Inicializamos el estado del comentario
-    lexer.input(data)
-    # Revisar tokens para encontrar el primer token
-    for tok in lexer:
-        # Si es un comentario y está en la primera línea
-        if lexer.lineno == 1 and tok.type == 'COMMENT':
+    lexer.first_comment = False  # Inicializamos la bandera
+    lexer.input(data)  # Alimentamos el lexer con el código
+
+    # Revisamos todos los tokens en la primera línea
+    while True:
+        tok = lexer.token()
+        if not tok or tok.lineno > 1:
+            break
+        # Si es un comentario en la primera línea, marcamos como válido
+        if tok.type == 'COMMENT':
             lexer.first_comment = True
-        break  # Solo verificamos el primer token
-    
-    # Si no se encontró el comentario, lanzar error
+
+    # Si no se encontró el comentario, lanzamos el error
     if not lexer.first_comment:
         print(f"Error en la línea {lexer.lineno}: La primera línea debe ser un comentario.")
         return False
     return True
 
-# Programa para verificar el funcionamiento
-data = '''
+# Función que recibe el código fuente y lo analiza léxicamente
+def analizar(data):
+    if verificar_comentario_inicial(lexer, data):
+        lexer.input(data)  # Reiniciamos el lexer para el análisis completo
+        for token in lexer:
+            print(token)
+
+# Ejemplo de prueba
+data = '''// Este es el nombre del programa
 Def(xxx, 5);
 UseColor 255;
 Proc myProc(zzz, www)
     [PosX 10; Down;]
 End;
 '''
-# Verificaciones Léxicas
-verificar_comentario_inicial(lexer, data)
-lexer.input(data)
-for token in lexer:
-    print(token)
+
+analizar(data)
