@@ -1,0 +1,2703 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ADD
+    BEGIN
+    DOWN
+    FALSE
+    PROC
+    SUBSTR
+    TEXT
+    TRUE
+    UP
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> COMMENT statements
+Rule 2     statements -> statement statements
+Rule 3     statements -> statement
+Rule 4     statement -> assign_stmt
+Rule 5     statement -> proc_stmt
+Rule 6     statement -> for_loop
+Rule 7     statement -> case_stmt
+Rule 8     statement -> repeat_stmt
+Rule 9     statement -> while_stmt
+Rule 10    statement -> boolean_expr
+Rule 11    statement -> move_stmt
+Rule 12    statement -> color_stmt
+Rule 13    assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+Rule 14    assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+Rule 15    proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA
+Rule 16    proc_body -> BRAIZQ statements BRADER
+Rule 17    param_list -> VARIABLE
+Rule 18    param_list -> VARIABLE COMA param_list
+Rule 19    param_list -> empty
+Rule 20    for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+Rule 21    case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA
+Rule 22    case_when_list -> when_clause
+Rule 23    case_when_list -> when_clause case_when_list
+Rule 24    when_clause -> WHEN NUMBER THEN BRAIZQ statements BRADER
+Rule 25    case_else -> ELSE BRAIZQ statements BRADER
+Rule 26    case_else -> empty
+Rule 27    repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA
+Rule 28    while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA
+Rule 29    boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER
+Rule 30    boolean_expr -> AND PARIZQ expr COMA expr PARDER
+Rule 31    boolean_expr -> OR PARIZQ expr COMA expr PARDER
+Rule 32    boolean_expr -> GREATER PARIZQ expr COMA expr PARDER
+Rule 33    boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER
+Rule 34    expr -> NUMBER
+Rule 35    expr -> VARIABLE
+Rule 36    expr -> SUM PARIZQ expr COMA expr PARDER
+Rule 37    expr -> MULT PARIZQ expr COMA expr PARDER
+Rule 38    expr -> DIV PARIZQ expr COMA expr PARDER
+Rule 39    expr -> RANDOM PARIZQ NUMBER PARDER
+Rule 40    move_stmt -> CONUP NUMBER PUNTOCOMA
+Rule 41    move_stmt -> CONDOWN NUMBER PUNTOCOMA
+Rule 42    move_stmt -> CONRIGHT NUMBER PUNTOCOMA
+Rule 43    move_stmt -> CONLEFT NUMBER PUNTOCOMA
+Rule 44    move_stmt -> POSX NUMBER PUNTOCOMA
+Rule 45    move_stmt -> POSY NUMBER PUNTOCOMA
+Rule 46    move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA
+Rule 47    color_stmt -> USECOLOR NUMBER PUNTOCOMA
+Rule 48    empty -> <empty>
+
+Terminals, with rules where they appear
+
+ADD                  : 
+AND                  : 30
+BEGIN                : 
+BRADER               : 16 20 24 25 27 28
+BRAIZQ               : 16 20 24 25 27 28
+CASE                 : 21 21
+COMA                 : 13 14 18 20 29 30 31 32 33 36 37 38 46
+COMMENT              : 1
+CONDOWN              : 41
+CONLEFT              : 43
+CONRIGHT             : 42
+CONUP                : 40
+DEF                  : 13 15
+DIV                  : 38
+DOWN                 : 
+ELSE                 : 25
+END                  : 15 20 21
+EQUAL                : 29
+FALSE                : 
+FOR                  : 20
+GREATER              : 32
+LOOP                 : 20
+MULT                 : 37
+NUMBER               : 13 14 20 20 24 34 39 40 41 42 43 44 45 46 46 47
+OR                   : 31
+PARDER               : 13 14 15 20 27 28 29 30 31 32 33 36 37 38 39 46
+PARIZQ               : 13 14 15 20 27 28 29 30 31 32 33 36 37 38 39 46
+POS                  : 46
+POSX                 : 44
+POSY                 : 45
+PROC                 : 
+PUNTOCOMA            : 13 14 15 20 21 27 28 40 41 42 43 44 45 46 47
+PUT                  : 14
+RANDOM               : 39
+REPEAT               : 27
+SMALLER              : 33
+SUBSTR               : 
+SUM                  : 36
+TEXT                 : 
+THEN                 : 24
+TRUE                 : 
+UNTIL                : 27
+UP                   : 
+USECOLOR             : 47
+VARIABLE             : 13 14 15 17 18 20 21 35
+WHEN                 : 24
+WHEND                : 28
+WHILE                : 28
+error                : 
+
+Nonterminals, with rules where they appear
+
+assign_stmt          : 4
+boolean_expr         : 10 27 28
+case_else            : 21
+case_stmt            : 7
+case_when_list       : 21 23
+color_stmt           : 12
+empty                : 19 26
+expr                 : 29 29 30 30 31 31 32 32 33 33 36 36 37 37 38 38
+for_loop             : 6
+move_stmt            : 11
+param_list           : 15 18
+proc_body            : 15
+proc_stmt            : 5
+program              : 0
+repeat_stmt          : 8
+statement            : 2 3
+statements           : 1 2 16 20 24 25 27 28
+when_clause          : 22 23
+while_stmt           : 9
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . COMMENT statements
+
+    COMMENT         shift and go to state 2
+
+    program                        shift and go to state 1
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> COMMENT . statements
+    (2) statements -> . statement statements
+    (3) statements -> . statement
+    (4) statement -> . assign_stmt
+    (5) statement -> . proc_stmt
+    (6) statement -> . for_loop
+    (7) statement -> . case_stmt
+    (8) statement -> . repeat_stmt
+    (9) statement -> . while_stmt
+    (10) statement -> . boolean_expr
+    (11) statement -> . move_stmt
+    (12) statement -> . color_stmt
+    (13) assign_stmt -> . DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (14) assign_stmt -> . PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (15) proc_stmt -> . DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA
+    (20) for_loop -> . FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+    (21) case_stmt -> . CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA
+    (27) repeat_stmt -> . REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA
+    (28) while_stmt -> . WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA
+    (29) boolean_expr -> . EQUAL PARIZQ expr COMA expr PARDER
+    (30) boolean_expr -> . AND PARIZQ expr COMA expr PARDER
+    (31) boolean_expr -> . OR PARIZQ expr COMA expr PARDER
+    (32) boolean_expr -> . GREATER PARIZQ expr COMA expr PARDER
+    (33) boolean_expr -> . SMALLER PARIZQ expr COMA expr PARDER
+    (40) move_stmt -> . CONUP NUMBER PUNTOCOMA
+    (41) move_stmt -> . CONDOWN NUMBER PUNTOCOMA
+    (42) move_stmt -> . CONRIGHT NUMBER PUNTOCOMA
+    (43) move_stmt -> . CONLEFT NUMBER PUNTOCOMA
+    (44) move_stmt -> . POSX NUMBER PUNTOCOMA
+    (45) move_stmt -> . POSY NUMBER PUNTOCOMA
+    (46) move_stmt -> . POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA
+    (47) color_stmt -> . USECOLOR NUMBER PUNTOCOMA
+
+    DEF             shift and go to state 14
+    PUT             shift and go to state 15
+    FOR             shift and go to state 16
+    CASE            shift and go to state 17
+    REPEAT          shift and go to state 18
+    WHILE           shift and go to state 19
+    EQUAL           shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    GREATER         shift and go to state 23
+    SMALLER         shift and go to state 24
+    CONUP           shift and go to state 25
+    CONDOWN         shift and go to state 26
+    CONRIGHT        shift and go to state 27
+    CONLEFT         shift and go to state 28
+    POSX            shift and go to state 29
+    POSY            shift and go to state 30
+    POS             shift and go to state 31
+    USECOLOR        shift and go to state 32
+
+    statements                     shift and go to state 3
+    statement                      shift and go to state 4
+    assign_stmt                    shift and go to state 5
+    proc_stmt                      shift and go to state 6
+    for_loop                       shift and go to state 7
+    case_stmt                      shift and go to state 8
+    repeat_stmt                    shift and go to state 9
+    while_stmt                     shift and go to state 10
+    boolean_expr                   shift and go to state 11
+    move_stmt                      shift and go to state 12
+    color_stmt                     shift and go to state 13
+
+state 3
+
+    (1) program -> COMMENT statements .
+
+    $end            reduce using rule 1 (program -> COMMENT statements .)
+
+
+state 4
+
+    (2) statements -> statement . statements
+    (3) statements -> statement .
+    (2) statements -> . statement statements
+    (3) statements -> . statement
+    (4) statement -> . assign_stmt
+    (5) statement -> . proc_stmt
+    (6) statement -> . for_loop
+    (7) statement -> . case_stmt
+    (8) statement -> . repeat_stmt
+    (9) statement -> . while_stmt
+    (10) statement -> . boolean_expr
+    (11) statement -> . move_stmt
+    (12) statement -> . color_stmt
+    (13) assign_stmt -> . DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (14) assign_stmt -> . PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (15) proc_stmt -> . DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA
+    (20) for_loop -> . FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+    (21) case_stmt -> . CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA
+    (27) repeat_stmt -> . REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA
+    (28) while_stmt -> . WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA
+    (29) boolean_expr -> . EQUAL PARIZQ expr COMA expr PARDER
+    (30) boolean_expr -> . AND PARIZQ expr COMA expr PARDER
+    (31) boolean_expr -> . OR PARIZQ expr COMA expr PARDER
+    (32) boolean_expr -> . GREATER PARIZQ expr COMA expr PARDER
+    (33) boolean_expr -> . SMALLER PARIZQ expr COMA expr PARDER
+    (40) move_stmt -> . CONUP NUMBER PUNTOCOMA
+    (41) move_stmt -> . CONDOWN NUMBER PUNTOCOMA
+    (42) move_stmt -> . CONRIGHT NUMBER PUNTOCOMA
+    (43) move_stmt -> . CONLEFT NUMBER PUNTOCOMA
+    (44) move_stmt -> . POSX NUMBER PUNTOCOMA
+    (45) move_stmt -> . POSY NUMBER PUNTOCOMA
+    (46) move_stmt -> . POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA
+    (47) color_stmt -> . USECOLOR NUMBER PUNTOCOMA
+
+    $end            reduce using rule 3 (statements -> statement .)
+    BRADER          reduce using rule 3 (statements -> statement .)
+    DEF             shift and go to state 14
+    PUT             shift and go to state 15
+    FOR             shift and go to state 16
+    CASE            shift and go to state 17
+    REPEAT          shift and go to state 18
+    WHILE           shift and go to state 19
+    EQUAL           shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    GREATER         shift and go to state 23
+    SMALLER         shift and go to state 24
+    CONUP           shift and go to state 25
+    CONDOWN         shift and go to state 26
+    CONRIGHT        shift and go to state 27
+    CONLEFT         shift and go to state 28
+    POSX            shift and go to state 29
+    POSY            shift and go to state 30
+    POS             shift and go to state 31
+    USECOLOR        shift and go to state 32
+
+    statement                      shift and go to state 4
+    statements                     shift and go to state 33
+    assign_stmt                    shift and go to state 5
+    proc_stmt                      shift and go to state 6
+    for_loop                       shift and go to state 7
+    case_stmt                      shift and go to state 8
+    repeat_stmt                    shift and go to state 9
+    while_stmt                     shift and go to state 10
+    boolean_expr                   shift and go to state 11
+    move_stmt                      shift and go to state 12
+    color_stmt                     shift and go to state 13
+
+state 5
+
+    (4) statement -> assign_stmt .
+
+    DEF             reduce using rule 4 (statement -> assign_stmt .)
+    PUT             reduce using rule 4 (statement -> assign_stmt .)
+    FOR             reduce using rule 4 (statement -> assign_stmt .)
+    CASE            reduce using rule 4 (statement -> assign_stmt .)
+    REPEAT          reduce using rule 4 (statement -> assign_stmt .)
+    WHILE           reduce using rule 4 (statement -> assign_stmt .)
+    EQUAL           reduce using rule 4 (statement -> assign_stmt .)
+    AND             reduce using rule 4 (statement -> assign_stmt .)
+    OR              reduce using rule 4 (statement -> assign_stmt .)
+    GREATER         reduce using rule 4 (statement -> assign_stmt .)
+    SMALLER         reduce using rule 4 (statement -> assign_stmt .)
+    CONUP           reduce using rule 4 (statement -> assign_stmt .)
+    CONDOWN         reduce using rule 4 (statement -> assign_stmt .)
+    CONRIGHT        reduce using rule 4 (statement -> assign_stmt .)
+    CONLEFT         reduce using rule 4 (statement -> assign_stmt .)
+    POSX            reduce using rule 4 (statement -> assign_stmt .)
+    POSY            reduce using rule 4 (statement -> assign_stmt .)
+    POS             reduce using rule 4 (statement -> assign_stmt .)
+    USECOLOR        reduce using rule 4 (statement -> assign_stmt .)
+    $end            reduce using rule 4 (statement -> assign_stmt .)
+    BRADER          reduce using rule 4 (statement -> assign_stmt .)
+
+
+state 6
+
+    (5) statement -> proc_stmt .
+
+    DEF             reduce using rule 5 (statement -> proc_stmt .)
+    PUT             reduce using rule 5 (statement -> proc_stmt .)
+    FOR             reduce using rule 5 (statement -> proc_stmt .)
+    CASE            reduce using rule 5 (statement -> proc_stmt .)
+    REPEAT          reduce using rule 5 (statement -> proc_stmt .)
+    WHILE           reduce using rule 5 (statement -> proc_stmt .)
+    EQUAL           reduce using rule 5 (statement -> proc_stmt .)
+    AND             reduce using rule 5 (statement -> proc_stmt .)
+    OR              reduce using rule 5 (statement -> proc_stmt .)
+    GREATER         reduce using rule 5 (statement -> proc_stmt .)
+    SMALLER         reduce using rule 5 (statement -> proc_stmt .)
+    CONUP           reduce using rule 5 (statement -> proc_stmt .)
+    CONDOWN         reduce using rule 5 (statement -> proc_stmt .)
+    CONRIGHT        reduce using rule 5 (statement -> proc_stmt .)
+    CONLEFT         reduce using rule 5 (statement -> proc_stmt .)
+    POSX            reduce using rule 5 (statement -> proc_stmt .)
+    POSY            reduce using rule 5 (statement -> proc_stmt .)
+    POS             reduce using rule 5 (statement -> proc_stmt .)
+    USECOLOR        reduce using rule 5 (statement -> proc_stmt .)
+    $end            reduce using rule 5 (statement -> proc_stmt .)
+    BRADER          reduce using rule 5 (statement -> proc_stmt .)
+
+
+state 7
+
+    (6) statement -> for_loop .
+
+    DEF             reduce using rule 6 (statement -> for_loop .)
+    PUT             reduce using rule 6 (statement -> for_loop .)
+    FOR             reduce using rule 6 (statement -> for_loop .)
+    CASE            reduce using rule 6 (statement -> for_loop .)
+    REPEAT          reduce using rule 6 (statement -> for_loop .)
+    WHILE           reduce using rule 6 (statement -> for_loop .)
+    EQUAL           reduce using rule 6 (statement -> for_loop .)
+    AND             reduce using rule 6 (statement -> for_loop .)
+    OR              reduce using rule 6 (statement -> for_loop .)
+    GREATER         reduce using rule 6 (statement -> for_loop .)
+    SMALLER         reduce using rule 6 (statement -> for_loop .)
+    CONUP           reduce using rule 6 (statement -> for_loop .)
+    CONDOWN         reduce using rule 6 (statement -> for_loop .)
+    CONRIGHT        reduce using rule 6 (statement -> for_loop .)
+    CONLEFT         reduce using rule 6 (statement -> for_loop .)
+    POSX            reduce using rule 6 (statement -> for_loop .)
+    POSY            reduce using rule 6 (statement -> for_loop .)
+    POS             reduce using rule 6 (statement -> for_loop .)
+    USECOLOR        reduce using rule 6 (statement -> for_loop .)
+    $end            reduce using rule 6 (statement -> for_loop .)
+    BRADER          reduce using rule 6 (statement -> for_loop .)
+
+
+state 8
+
+    (7) statement -> case_stmt .
+
+    DEF             reduce using rule 7 (statement -> case_stmt .)
+    PUT             reduce using rule 7 (statement -> case_stmt .)
+    FOR             reduce using rule 7 (statement -> case_stmt .)
+    CASE            reduce using rule 7 (statement -> case_stmt .)
+    REPEAT          reduce using rule 7 (statement -> case_stmt .)
+    WHILE           reduce using rule 7 (statement -> case_stmt .)
+    EQUAL           reduce using rule 7 (statement -> case_stmt .)
+    AND             reduce using rule 7 (statement -> case_stmt .)
+    OR              reduce using rule 7 (statement -> case_stmt .)
+    GREATER         reduce using rule 7 (statement -> case_stmt .)
+    SMALLER         reduce using rule 7 (statement -> case_stmt .)
+    CONUP           reduce using rule 7 (statement -> case_stmt .)
+    CONDOWN         reduce using rule 7 (statement -> case_stmt .)
+    CONRIGHT        reduce using rule 7 (statement -> case_stmt .)
+    CONLEFT         reduce using rule 7 (statement -> case_stmt .)
+    POSX            reduce using rule 7 (statement -> case_stmt .)
+    POSY            reduce using rule 7 (statement -> case_stmt .)
+    POS             reduce using rule 7 (statement -> case_stmt .)
+    USECOLOR        reduce using rule 7 (statement -> case_stmt .)
+    $end            reduce using rule 7 (statement -> case_stmt .)
+    BRADER          reduce using rule 7 (statement -> case_stmt .)
+
+
+state 9
+
+    (8) statement -> repeat_stmt .
+
+    DEF             reduce using rule 8 (statement -> repeat_stmt .)
+    PUT             reduce using rule 8 (statement -> repeat_stmt .)
+    FOR             reduce using rule 8 (statement -> repeat_stmt .)
+    CASE            reduce using rule 8 (statement -> repeat_stmt .)
+    REPEAT          reduce using rule 8 (statement -> repeat_stmt .)
+    WHILE           reduce using rule 8 (statement -> repeat_stmt .)
+    EQUAL           reduce using rule 8 (statement -> repeat_stmt .)
+    AND             reduce using rule 8 (statement -> repeat_stmt .)
+    OR              reduce using rule 8 (statement -> repeat_stmt .)
+    GREATER         reduce using rule 8 (statement -> repeat_stmt .)
+    SMALLER         reduce using rule 8 (statement -> repeat_stmt .)
+    CONUP           reduce using rule 8 (statement -> repeat_stmt .)
+    CONDOWN         reduce using rule 8 (statement -> repeat_stmt .)
+    CONRIGHT        reduce using rule 8 (statement -> repeat_stmt .)
+    CONLEFT         reduce using rule 8 (statement -> repeat_stmt .)
+    POSX            reduce using rule 8 (statement -> repeat_stmt .)
+    POSY            reduce using rule 8 (statement -> repeat_stmt .)
+    POS             reduce using rule 8 (statement -> repeat_stmt .)
+    USECOLOR        reduce using rule 8 (statement -> repeat_stmt .)
+    $end            reduce using rule 8 (statement -> repeat_stmt .)
+    BRADER          reduce using rule 8 (statement -> repeat_stmt .)
+
+
+state 10
+
+    (9) statement -> while_stmt .
+
+    DEF             reduce using rule 9 (statement -> while_stmt .)
+    PUT             reduce using rule 9 (statement -> while_stmt .)
+    FOR             reduce using rule 9 (statement -> while_stmt .)
+    CASE            reduce using rule 9 (statement -> while_stmt .)
+    REPEAT          reduce using rule 9 (statement -> while_stmt .)
+    WHILE           reduce using rule 9 (statement -> while_stmt .)
+    EQUAL           reduce using rule 9 (statement -> while_stmt .)
+    AND             reduce using rule 9 (statement -> while_stmt .)
+    OR              reduce using rule 9 (statement -> while_stmt .)
+    GREATER         reduce using rule 9 (statement -> while_stmt .)
+    SMALLER         reduce using rule 9 (statement -> while_stmt .)
+    CONUP           reduce using rule 9 (statement -> while_stmt .)
+    CONDOWN         reduce using rule 9 (statement -> while_stmt .)
+    CONRIGHT        reduce using rule 9 (statement -> while_stmt .)
+    CONLEFT         reduce using rule 9 (statement -> while_stmt .)
+    POSX            reduce using rule 9 (statement -> while_stmt .)
+    POSY            reduce using rule 9 (statement -> while_stmt .)
+    POS             reduce using rule 9 (statement -> while_stmt .)
+    USECOLOR        reduce using rule 9 (statement -> while_stmt .)
+    $end            reduce using rule 9 (statement -> while_stmt .)
+    BRADER          reduce using rule 9 (statement -> while_stmt .)
+
+
+state 11
+
+    (10) statement -> boolean_expr .
+
+    DEF             reduce using rule 10 (statement -> boolean_expr .)
+    PUT             reduce using rule 10 (statement -> boolean_expr .)
+    FOR             reduce using rule 10 (statement -> boolean_expr .)
+    CASE            reduce using rule 10 (statement -> boolean_expr .)
+    REPEAT          reduce using rule 10 (statement -> boolean_expr .)
+    WHILE           reduce using rule 10 (statement -> boolean_expr .)
+    EQUAL           reduce using rule 10 (statement -> boolean_expr .)
+    AND             reduce using rule 10 (statement -> boolean_expr .)
+    OR              reduce using rule 10 (statement -> boolean_expr .)
+    GREATER         reduce using rule 10 (statement -> boolean_expr .)
+    SMALLER         reduce using rule 10 (statement -> boolean_expr .)
+    CONUP           reduce using rule 10 (statement -> boolean_expr .)
+    CONDOWN         reduce using rule 10 (statement -> boolean_expr .)
+    CONRIGHT        reduce using rule 10 (statement -> boolean_expr .)
+    CONLEFT         reduce using rule 10 (statement -> boolean_expr .)
+    POSX            reduce using rule 10 (statement -> boolean_expr .)
+    POSY            reduce using rule 10 (statement -> boolean_expr .)
+    POS             reduce using rule 10 (statement -> boolean_expr .)
+    USECOLOR        reduce using rule 10 (statement -> boolean_expr .)
+    $end            reduce using rule 10 (statement -> boolean_expr .)
+    BRADER          reduce using rule 10 (statement -> boolean_expr .)
+
+
+state 12
+
+    (11) statement -> move_stmt .
+
+    DEF             reduce using rule 11 (statement -> move_stmt .)
+    PUT             reduce using rule 11 (statement -> move_stmt .)
+    FOR             reduce using rule 11 (statement -> move_stmt .)
+    CASE            reduce using rule 11 (statement -> move_stmt .)
+    REPEAT          reduce using rule 11 (statement -> move_stmt .)
+    WHILE           reduce using rule 11 (statement -> move_stmt .)
+    EQUAL           reduce using rule 11 (statement -> move_stmt .)
+    AND             reduce using rule 11 (statement -> move_stmt .)
+    OR              reduce using rule 11 (statement -> move_stmt .)
+    GREATER         reduce using rule 11 (statement -> move_stmt .)
+    SMALLER         reduce using rule 11 (statement -> move_stmt .)
+    CONUP           reduce using rule 11 (statement -> move_stmt .)
+    CONDOWN         reduce using rule 11 (statement -> move_stmt .)
+    CONRIGHT        reduce using rule 11 (statement -> move_stmt .)
+    CONLEFT         reduce using rule 11 (statement -> move_stmt .)
+    POSX            reduce using rule 11 (statement -> move_stmt .)
+    POSY            reduce using rule 11 (statement -> move_stmt .)
+    POS             reduce using rule 11 (statement -> move_stmt .)
+    USECOLOR        reduce using rule 11 (statement -> move_stmt .)
+    $end            reduce using rule 11 (statement -> move_stmt .)
+    BRADER          reduce using rule 11 (statement -> move_stmt .)
+
+
+state 13
+
+    (12) statement -> color_stmt .
+
+    DEF             reduce using rule 12 (statement -> color_stmt .)
+    PUT             reduce using rule 12 (statement -> color_stmt .)
+    FOR             reduce using rule 12 (statement -> color_stmt .)
+    CASE            reduce using rule 12 (statement -> color_stmt .)
+    REPEAT          reduce using rule 12 (statement -> color_stmt .)
+    WHILE           reduce using rule 12 (statement -> color_stmt .)
+    EQUAL           reduce using rule 12 (statement -> color_stmt .)
+    AND             reduce using rule 12 (statement -> color_stmt .)
+    OR              reduce using rule 12 (statement -> color_stmt .)
+    GREATER         reduce using rule 12 (statement -> color_stmt .)
+    SMALLER         reduce using rule 12 (statement -> color_stmt .)
+    CONUP           reduce using rule 12 (statement -> color_stmt .)
+    CONDOWN         reduce using rule 12 (statement -> color_stmt .)
+    CONRIGHT        reduce using rule 12 (statement -> color_stmt .)
+    CONLEFT         reduce using rule 12 (statement -> color_stmt .)
+    POSX            reduce using rule 12 (statement -> color_stmt .)
+    POSY            reduce using rule 12 (statement -> color_stmt .)
+    POS             reduce using rule 12 (statement -> color_stmt .)
+    USECOLOR        reduce using rule 12 (statement -> color_stmt .)
+    $end            reduce using rule 12 (statement -> color_stmt .)
+    BRADER          reduce using rule 12 (statement -> color_stmt .)
+
+
+state 14
+
+    (13) assign_stmt -> DEF . PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (15) proc_stmt -> DEF . VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA
+
+    PARIZQ          shift and go to state 34
+    VARIABLE        shift and go to state 35
+
+
+state 15
+
+    (14) assign_stmt -> PUT . PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+
+    PARIZQ          shift and go to state 36
+
+
+state 16
+
+    (20) for_loop -> FOR . VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+
+    VARIABLE        shift and go to state 37
+
+
+state 17
+
+    (21) case_stmt -> CASE . VARIABLE case_when_list case_else END CASE PUNTOCOMA
+
+    VARIABLE        shift and go to state 38
+
+
+state 18
+
+    (27) repeat_stmt -> REPEAT . BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA
+
+    BRAIZQ          shift and go to state 39
+
+
+state 19
+
+    (28) while_stmt -> WHILE . PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA
+
+    PARIZQ          shift and go to state 40
+
+
+state 20
+
+    (29) boolean_expr -> EQUAL . PARIZQ expr COMA expr PARDER
+
+    PARIZQ          shift and go to state 41
+
+
+state 21
+
+    (30) boolean_expr -> AND . PARIZQ expr COMA expr PARDER
+
+    PARIZQ          shift and go to state 42
+
+
+state 22
+
+    (31) boolean_expr -> OR . PARIZQ expr COMA expr PARDER
+
+    PARIZQ          shift and go to state 43
+
+
+state 23
+
+    (32) boolean_expr -> GREATER . PARIZQ expr COMA expr PARDER
+
+    PARIZQ          shift and go to state 44
+
+
+state 24
+
+    (33) boolean_expr -> SMALLER . PARIZQ expr COMA expr PARDER
+
+    PARIZQ          shift and go to state 45
+
+
+state 25
+
+    (40) move_stmt -> CONUP . NUMBER PUNTOCOMA
+
+    NUMBER          shift and go to state 46
+
+
+state 26
+
+    (41) move_stmt -> CONDOWN . NUMBER PUNTOCOMA
+
+    NUMBER          shift and go to state 47
+
+
+state 27
+
+    (42) move_stmt -> CONRIGHT . NUMBER PUNTOCOMA
+
+    NUMBER          shift and go to state 48
+
+
+state 28
+
+    (43) move_stmt -> CONLEFT . NUMBER PUNTOCOMA
+
+    NUMBER          shift and go to state 49
+
+
+state 29
+
+    (44) move_stmt -> POSX . NUMBER PUNTOCOMA
+
+    NUMBER          shift and go to state 50
+
+
+state 30
+
+    (45) move_stmt -> POSY . NUMBER PUNTOCOMA
+
+    NUMBER          shift and go to state 51
+
+
+state 31
+
+    (46) move_stmt -> POS . PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA
+
+    PARIZQ          shift and go to state 52
+
+
+state 32
+
+    (47) color_stmt -> USECOLOR . NUMBER PUNTOCOMA
+
+    NUMBER          shift and go to state 53
+
+
+state 33
+
+    (2) statements -> statement statements .
+
+    $end            reduce using rule 2 (statements -> statement statements .)
+    BRADER          reduce using rule 2 (statements -> statement statements .)
+
+
+state 34
+
+    (13) assign_stmt -> DEF PARIZQ . VARIABLE COMA NUMBER PARDER PUNTOCOMA
+
+    VARIABLE        shift and go to state 54
+
+
+state 35
+
+    (15) proc_stmt -> DEF VARIABLE . PARIZQ param_list PARDER proc_body END PUNTOCOMA
+
+    PARIZQ          shift and go to state 55
+
+
+state 36
+
+    (14) assign_stmt -> PUT PARIZQ . VARIABLE COMA NUMBER PARDER PUNTOCOMA
+
+    VARIABLE        shift and go to state 56
+
+
+state 37
+
+    (20) for_loop -> FOR VARIABLE . PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+
+    PARIZQ          shift and go to state 57
+
+
+state 38
+
+    (21) case_stmt -> CASE VARIABLE . case_when_list case_else END CASE PUNTOCOMA
+    (22) case_when_list -> . when_clause
+    (23) case_when_list -> . when_clause case_when_list
+    (24) when_clause -> . WHEN NUMBER THEN BRAIZQ statements BRADER
+
+    WHEN            shift and go to state 60
+
+    case_when_list                 shift and go to state 58
+    when_clause                    shift and go to state 59
+
+state 39
+
+    (27) repeat_stmt -> REPEAT BRAIZQ . statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA
+    (2) statements -> . statement statements
+    (3) statements -> . statement
+    (4) statement -> . assign_stmt
+    (5) statement -> . proc_stmt
+    (6) statement -> . for_loop
+    (7) statement -> . case_stmt
+    (8) statement -> . repeat_stmt
+    (9) statement -> . while_stmt
+    (10) statement -> . boolean_expr
+    (11) statement -> . move_stmt
+    (12) statement -> . color_stmt
+    (13) assign_stmt -> . DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (14) assign_stmt -> . PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (15) proc_stmt -> . DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA
+    (20) for_loop -> . FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+    (21) case_stmt -> . CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA
+    (27) repeat_stmt -> . REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA
+    (28) while_stmt -> . WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA
+    (29) boolean_expr -> . EQUAL PARIZQ expr COMA expr PARDER
+    (30) boolean_expr -> . AND PARIZQ expr COMA expr PARDER
+    (31) boolean_expr -> . OR PARIZQ expr COMA expr PARDER
+    (32) boolean_expr -> . GREATER PARIZQ expr COMA expr PARDER
+    (33) boolean_expr -> . SMALLER PARIZQ expr COMA expr PARDER
+    (40) move_stmt -> . CONUP NUMBER PUNTOCOMA
+    (41) move_stmt -> . CONDOWN NUMBER PUNTOCOMA
+    (42) move_stmt -> . CONRIGHT NUMBER PUNTOCOMA
+    (43) move_stmt -> . CONLEFT NUMBER PUNTOCOMA
+    (44) move_stmt -> . POSX NUMBER PUNTOCOMA
+    (45) move_stmt -> . POSY NUMBER PUNTOCOMA
+    (46) move_stmt -> . POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA
+    (47) color_stmt -> . USECOLOR NUMBER PUNTOCOMA
+
+    DEF             shift and go to state 14
+    PUT             shift and go to state 15
+    FOR             shift and go to state 16
+    CASE            shift and go to state 17
+    REPEAT          shift and go to state 18
+    WHILE           shift and go to state 19
+    EQUAL           shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    GREATER         shift and go to state 23
+    SMALLER         shift and go to state 24
+    CONUP           shift and go to state 25
+    CONDOWN         shift and go to state 26
+    CONRIGHT        shift and go to state 27
+    CONLEFT         shift and go to state 28
+    POSX            shift and go to state 29
+    POSY            shift and go to state 30
+    POS             shift and go to state 31
+    USECOLOR        shift and go to state 32
+
+    statements                     shift and go to state 61
+    boolean_expr                   shift and go to state 11
+    statement                      shift and go to state 4
+    assign_stmt                    shift and go to state 5
+    proc_stmt                      shift and go to state 6
+    for_loop                       shift and go to state 7
+    case_stmt                      shift and go to state 8
+    repeat_stmt                    shift and go to state 9
+    while_stmt                     shift and go to state 10
+    move_stmt                      shift and go to state 12
+    color_stmt                     shift and go to state 13
+
+state 40
+
+    (28) while_stmt -> WHILE PARIZQ . boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA
+    (29) boolean_expr -> . EQUAL PARIZQ expr COMA expr PARDER
+    (30) boolean_expr -> . AND PARIZQ expr COMA expr PARDER
+    (31) boolean_expr -> . OR PARIZQ expr COMA expr PARDER
+    (32) boolean_expr -> . GREATER PARIZQ expr COMA expr PARDER
+    (33) boolean_expr -> . SMALLER PARIZQ expr COMA expr PARDER
+
+    EQUAL           shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    GREATER         shift and go to state 23
+    SMALLER         shift and go to state 24
+
+    boolean_expr                   shift and go to state 62
+
+state 41
+
+    (29) boolean_expr -> EQUAL PARIZQ . expr COMA expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 63
+
+state 42
+
+    (30) boolean_expr -> AND PARIZQ . expr COMA expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 70
+
+state 43
+
+    (31) boolean_expr -> OR PARIZQ . expr COMA expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 71
+
+state 44
+
+    (32) boolean_expr -> GREATER PARIZQ . expr COMA expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 72
+
+state 45
+
+    (33) boolean_expr -> SMALLER PARIZQ . expr COMA expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 73
+
+state 46
+
+    (40) move_stmt -> CONUP NUMBER . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 74
+
+
+state 47
+
+    (41) move_stmt -> CONDOWN NUMBER . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 75
+
+
+state 48
+
+    (42) move_stmt -> CONRIGHT NUMBER . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 76
+
+
+state 49
+
+    (43) move_stmt -> CONLEFT NUMBER . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 77
+
+
+state 50
+
+    (44) move_stmt -> POSX NUMBER . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 78
+
+
+state 51
+
+    (45) move_stmt -> POSY NUMBER . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 79
+
+
+state 52
+
+    (46) move_stmt -> POS PARIZQ . NUMBER COMA NUMBER PARDER PUNTOCOMA
+
+    NUMBER          shift and go to state 80
+
+
+state 53
+
+    (47) color_stmt -> USECOLOR NUMBER . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 81
+
+
+state 54
+
+    (13) assign_stmt -> DEF PARIZQ VARIABLE . COMA NUMBER PARDER PUNTOCOMA
+
+    COMA            shift and go to state 82
+
+
+state 55
+
+    (15) proc_stmt -> DEF VARIABLE PARIZQ . param_list PARDER proc_body END PUNTOCOMA
+    (17) param_list -> . VARIABLE
+    (18) param_list -> . VARIABLE COMA param_list
+    (19) param_list -> . empty
+    (48) empty -> .
+
+    VARIABLE        shift and go to state 83
+    PARDER          reduce using rule 48 (empty -> .)
+
+    param_list                     shift and go to state 84
+    empty                          shift and go to state 85
+
+state 56
+
+    (14) assign_stmt -> PUT PARIZQ VARIABLE . COMA NUMBER PARDER PUNTOCOMA
+
+    COMA            shift and go to state 86
+
+
+state 57
+
+    (20) for_loop -> FOR VARIABLE PARIZQ . NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+
+    NUMBER          shift and go to state 87
+
+
+state 58
+
+    (21) case_stmt -> CASE VARIABLE case_when_list . case_else END CASE PUNTOCOMA
+    (25) case_else -> . ELSE BRAIZQ statements BRADER
+    (26) case_else -> . empty
+    (48) empty -> .
+
+    ELSE            shift and go to state 89
+    END             reduce using rule 48 (empty -> .)
+
+    case_else                      shift and go to state 88
+    empty                          shift and go to state 90
+
+state 59
+
+    (22) case_when_list -> when_clause .
+    (23) case_when_list -> when_clause . case_when_list
+    (22) case_when_list -> . when_clause
+    (23) case_when_list -> . when_clause case_when_list
+    (24) when_clause -> . WHEN NUMBER THEN BRAIZQ statements BRADER
+
+    ELSE            reduce using rule 22 (case_when_list -> when_clause .)
+    END             reduce using rule 22 (case_when_list -> when_clause .)
+    WHEN            shift and go to state 60
+
+    when_clause                    shift and go to state 59
+    case_when_list                 shift and go to state 91
+
+state 60
+
+    (24) when_clause -> WHEN . NUMBER THEN BRAIZQ statements BRADER
+
+    NUMBER          shift and go to state 92
+
+
+state 61
+
+    (27) repeat_stmt -> REPEAT BRAIZQ statements . BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA
+
+    BRADER          shift and go to state 93
+
+
+state 62
+
+    (28) while_stmt -> WHILE PARIZQ boolean_expr . PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA
+
+    PARDER          shift and go to state 94
+
+
+state 63
+
+    (29) boolean_expr -> EQUAL PARIZQ expr . COMA expr PARDER
+
+    COMA            shift and go to state 95
+
+
+state 64
+
+    (34) expr -> NUMBER .
+
+    COMA            reduce using rule 34 (expr -> NUMBER .)
+    PARDER          reduce using rule 34 (expr -> NUMBER .)
+
+
+state 65
+
+    (35) expr -> VARIABLE .
+
+    COMA            reduce using rule 35 (expr -> VARIABLE .)
+    PARDER          reduce using rule 35 (expr -> VARIABLE .)
+
+
+state 66
+
+    (36) expr -> SUM . PARIZQ expr COMA expr PARDER
+
+    PARIZQ          shift and go to state 96
+
+
+state 67
+
+    (37) expr -> MULT . PARIZQ expr COMA expr PARDER
+
+    PARIZQ          shift and go to state 97
+
+
+state 68
+
+    (38) expr -> DIV . PARIZQ expr COMA expr PARDER
+
+    PARIZQ          shift and go to state 98
+
+
+state 69
+
+    (39) expr -> RANDOM . PARIZQ NUMBER PARDER
+
+    PARIZQ          shift and go to state 99
+
+
+state 70
+
+    (30) boolean_expr -> AND PARIZQ expr . COMA expr PARDER
+
+    COMA            shift and go to state 100
+
+
+state 71
+
+    (31) boolean_expr -> OR PARIZQ expr . COMA expr PARDER
+
+    COMA            shift and go to state 101
+
+
+state 72
+
+    (32) boolean_expr -> GREATER PARIZQ expr . COMA expr PARDER
+
+    COMA            shift and go to state 102
+
+
+state 73
+
+    (33) boolean_expr -> SMALLER PARIZQ expr . COMA expr PARDER
+
+    COMA            shift and go to state 103
+
+
+state 74
+
+    (40) move_stmt -> CONUP NUMBER PUNTOCOMA .
+
+    DEF             reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    PUT             reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    FOR             reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    CASE            reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    REPEAT          reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    WHILE           reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    EQUAL           reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    AND             reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    OR              reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    GREATER         reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    SMALLER         reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    CONUP           reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    CONDOWN         reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    CONRIGHT        reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    CONLEFT         reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    POSX            reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    POSY            reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    POS             reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    USECOLOR        reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    $end            reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+    BRADER          reduce using rule 40 (move_stmt -> CONUP NUMBER PUNTOCOMA .)
+
+
+state 75
+
+    (41) move_stmt -> CONDOWN NUMBER PUNTOCOMA .
+
+    DEF             reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    PUT             reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    FOR             reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    CASE            reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    REPEAT          reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    WHILE           reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    EQUAL           reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    AND             reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    OR              reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    GREATER         reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    SMALLER         reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    CONUP           reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    CONDOWN         reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    CONRIGHT        reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    CONLEFT         reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    POSX            reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    POSY            reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    POS             reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    USECOLOR        reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    $end            reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+    BRADER          reduce using rule 41 (move_stmt -> CONDOWN NUMBER PUNTOCOMA .)
+
+
+state 76
+
+    (42) move_stmt -> CONRIGHT NUMBER PUNTOCOMA .
+
+    DEF             reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    PUT             reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    FOR             reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    CASE            reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    REPEAT          reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    WHILE           reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    EQUAL           reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    AND             reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    OR              reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    GREATER         reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    SMALLER         reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    CONUP           reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    CONDOWN         reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    CONRIGHT        reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    CONLEFT         reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    POSX            reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    POSY            reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    POS             reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    USECOLOR        reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    $end            reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+    BRADER          reduce using rule 42 (move_stmt -> CONRIGHT NUMBER PUNTOCOMA .)
+
+
+state 77
+
+    (43) move_stmt -> CONLEFT NUMBER PUNTOCOMA .
+
+    DEF             reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    PUT             reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    FOR             reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    CASE            reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    REPEAT          reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    WHILE           reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    EQUAL           reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    AND             reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    OR              reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    GREATER         reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    SMALLER         reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    CONUP           reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    CONDOWN         reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    CONRIGHT        reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    CONLEFT         reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    POSX            reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    POSY            reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    POS             reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    USECOLOR        reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    $end            reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+    BRADER          reduce using rule 43 (move_stmt -> CONLEFT NUMBER PUNTOCOMA .)
+
+
+state 78
+
+    (44) move_stmt -> POSX NUMBER PUNTOCOMA .
+
+    DEF             reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    PUT             reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    FOR             reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    CASE            reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    REPEAT          reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    WHILE           reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    EQUAL           reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    AND             reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    OR              reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    GREATER         reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    SMALLER         reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    CONUP           reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    CONDOWN         reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    CONRIGHT        reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    CONLEFT         reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    POSX            reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    POSY            reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    POS             reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    USECOLOR        reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    $end            reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+    BRADER          reduce using rule 44 (move_stmt -> POSX NUMBER PUNTOCOMA .)
+
+
+state 79
+
+    (45) move_stmt -> POSY NUMBER PUNTOCOMA .
+
+    DEF             reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    PUT             reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    FOR             reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    CASE            reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    REPEAT          reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    WHILE           reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    EQUAL           reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    AND             reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    OR              reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    GREATER         reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    SMALLER         reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    CONUP           reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    CONDOWN         reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    CONRIGHT        reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    CONLEFT         reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    POSX            reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    POSY            reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    POS             reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    USECOLOR        reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    $end            reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+    BRADER          reduce using rule 45 (move_stmt -> POSY NUMBER PUNTOCOMA .)
+
+
+state 80
+
+    (46) move_stmt -> POS PARIZQ NUMBER . COMA NUMBER PARDER PUNTOCOMA
+
+    COMA            shift and go to state 104
+
+
+state 81
+
+    (47) color_stmt -> USECOLOR NUMBER PUNTOCOMA .
+
+    DEF             reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    PUT             reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    FOR             reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    CASE            reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    REPEAT          reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    WHILE           reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    EQUAL           reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    AND             reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    OR              reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    GREATER         reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    SMALLER         reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    CONUP           reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    CONDOWN         reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    CONRIGHT        reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    CONLEFT         reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    POSX            reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    POSY            reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    POS             reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    USECOLOR        reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    $end            reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+    BRADER          reduce using rule 47 (color_stmt -> USECOLOR NUMBER PUNTOCOMA .)
+
+
+state 82
+
+    (13) assign_stmt -> DEF PARIZQ VARIABLE COMA . NUMBER PARDER PUNTOCOMA
+
+    NUMBER          shift and go to state 105
+
+
+state 83
+
+    (17) param_list -> VARIABLE .
+    (18) param_list -> VARIABLE . COMA param_list
+
+    PARDER          reduce using rule 17 (param_list -> VARIABLE .)
+    COMA            shift and go to state 106
+
+
+state 84
+
+    (15) proc_stmt -> DEF VARIABLE PARIZQ param_list . PARDER proc_body END PUNTOCOMA
+
+    PARDER          shift and go to state 107
+
+
+state 85
+
+    (19) param_list -> empty .
+
+    PARDER          reduce using rule 19 (param_list -> empty .)
+
+
+state 86
+
+    (14) assign_stmt -> PUT PARIZQ VARIABLE COMA . NUMBER PARDER PUNTOCOMA
+
+    NUMBER          shift and go to state 108
+
+
+state 87
+
+    (20) for_loop -> FOR VARIABLE PARIZQ NUMBER . COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+
+    COMA            shift and go to state 109
+
+
+state 88
+
+    (21) case_stmt -> CASE VARIABLE case_when_list case_else . END CASE PUNTOCOMA
+
+    END             shift and go to state 110
+
+
+state 89
+
+    (25) case_else -> ELSE . BRAIZQ statements BRADER
+
+    BRAIZQ          shift and go to state 111
+
+
+state 90
+
+    (26) case_else -> empty .
+
+    END             reduce using rule 26 (case_else -> empty .)
+
+
+state 91
+
+    (23) case_when_list -> when_clause case_when_list .
+
+    ELSE            reduce using rule 23 (case_when_list -> when_clause case_when_list .)
+    END             reduce using rule 23 (case_when_list -> when_clause case_when_list .)
+
+
+state 92
+
+    (24) when_clause -> WHEN NUMBER . THEN BRAIZQ statements BRADER
+
+    THEN            shift and go to state 112
+
+
+state 93
+
+    (27) repeat_stmt -> REPEAT BRAIZQ statements BRADER . UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA
+
+    UNTIL           shift and go to state 113
+
+
+state 94
+
+    (28) while_stmt -> WHILE PARIZQ boolean_expr PARDER . BRAIZQ statements BRADER WHEND PUNTOCOMA
+
+    BRAIZQ          shift and go to state 114
+
+
+state 95
+
+    (29) boolean_expr -> EQUAL PARIZQ expr COMA . expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 115
+
+state 96
+
+    (36) expr -> SUM PARIZQ . expr COMA expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 116
+
+state 97
+
+    (37) expr -> MULT PARIZQ . expr COMA expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 117
+
+state 98
+
+    (38) expr -> DIV PARIZQ . expr COMA expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 118
+
+state 99
+
+    (39) expr -> RANDOM PARIZQ . NUMBER PARDER
+
+    NUMBER          shift and go to state 119
+
+
+state 100
+
+    (30) boolean_expr -> AND PARIZQ expr COMA . expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 120
+
+state 101
+
+    (31) boolean_expr -> OR PARIZQ expr COMA . expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 121
+
+state 102
+
+    (32) boolean_expr -> GREATER PARIZQ expr COMA . expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 122
+
+state 103
+
+    (33) boolean_expr -> SMALLER PARIZQ expr COMA . expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 123
+
+state 104
+
+    (46) move_stmt -> POS PARIZQ NUMBER COMA . NUMBER PARDER PUNTOCOMA
+
+    NUMBER          shift and go to state 124
+
+
+state 105
+
+    (13) assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER . PARDER PUNTOCOMA
+
+    PARDER          shift and go to state 125
+
+
+state 106
+
+    (18) param_list -> VARIABLE COMA . param_list
+    (17) param_list -> . VARIABLE
+    (18) param_list -> . VARIABLE COMA param_list
+    (19) param_list -> . empty
+    (48) empty -> .
+
+    VARIABLE        shift and go to state 83
+    PARDER          reduce using rule 48 (empty -> .)
+
+    param_list                     shift and go to state 126
+    empty                          shift and go to state 85
+
+state 107
+
+    (15) proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER . proc_body END PUNTOCOMA
+    (16) proc_body -> . BRAIZQ statements BRADER
+
+    BRAIZQ          shift and go to state 128
+
+    proc_body                      shift and go to state 127
+
+state 108
+
+    (14) assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER . PARDER PUNTOCOMA
+
+    PARDER          shift and go to state 129
+
+
+state 109
+
+    (20) for_loop -> FOR VARIABLE PARIZQ NUMBER COMA . NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+
+    NUMBER          shift and go to state 130
+
+
+state 110
+
+    (21) case_stmt -> CASE VARIABLE case_when_list case_else END . CASE PUNTOCOMA
+
+    CASE            shift and go to state 131
+
+
+state 111
+
+    (25) case_else -> ELSE BRAIZQ . statements BRADER
+    (2) statements -> . statement statements
+    (3) statements -> . statement
+    (4) statement -> . assign_stmt
+    (5) statement -> . proc_stmt
+    (6) statement -> . for_loop
+    (7) statement -> . case_stmt
+    (8) statement -> . repeat_stmt
+    (9) statement -> . while_stmt
+    (10) statement -> . boolean_expr
+    (11) statement -> . move_stmt
+    (12) statement -> . color_stmt
+    (13) assign_stmt -> . DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (14) assign_stmt -> . PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (15) proc_stmt -> . DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA
+    (20) for_loop -> . FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+    (21) case_stmt -> . CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA
+    (27) repeat_stmt -> . REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA
+    (28) while_stmt -> . WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA
+    (29) boolean_expr -> . EQUAL PARIZQ expr COMA expr PARDER
+    (30) boolean_expr -> . AND PARIZQ expr COMA expr PARDER
+    (31) boolean_expr -> . OR PARIZQ expr COMA expr PARDER
+    (32) boolean_expr -> . GREATER PARIZQ expr COMA expr PARDER
+    (33) boolean_expr -> . SMALLER PARIZQ expr COMA expr PARDER
+    (40) move_stmt -> . CONUP NUMBER PUNTOCOMA
+    (41) move_stmt -> . CONDOWN NUMBER PUNTOCOMA
+    (42) move_stmt -> . CONRIGHT NUMBER PUNTOCOMA
+    (43) move_stmt -> . CONLEFT NUMBER PUNTOCOMA
+    (44) move_stmt -> . POSX NUMBER PUNTOCOMA
+    (45) move_stmt -> . POSY NUMBER PUNTOCOMA
+    (46) move_stmt -> . POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA
+    (47) color_stmt -> . USECOLOR NUMBER PUNTOCOMA
+
+    DEF             shift and go to state 14
+    PUT             shift and go to state 15
+    FOR             shift and go to state 16
+    CASE            shift and go to state 17
+    REPEAT          shift and go to state 18
+    WHILE           shift and go to state 19
+    EQUAL           shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    GREATER         shift and go to state 23
+    SMALLER         shift and go to state 24
+    CONUP           shift and go to state 25
+    CONDOWN         shift and go to state 26
+    CONRIGHT        shift and go to state 27
+    CONLEFT         shift and go to state 28
+    POSX            shift and go to state 29
+    POSY            shift and go to state 30
+    POS             shift and go to state 31
+    USECOLOR        shift and go to state 32
+
+    statements                     shift and go to state 132
+    statement                      shift and go to state 4
+    assign_stmt                    shift and go to state 5
+    proc_stmt                      shift and go to state 6
+    for_loop                       shift and go to state 7
+    case_stmt                      shift and go to state 8
+    repeat_stmt                    shift and go to state 9
+    while_stmt                     shift and go to state 10
+    boolean_expr                   shift and go to state 11
+    move_stmt                      shift and go to state 12
+    color_stmt                     shift and go to state 13
+
+state 112
+
+    (24) when_clause -> WHEN NUMBER THEN . BRAIZQ statements BRADER
+
+    BRAIZQ          shift and go to state 133
+
+
+state 113
+
+    (27) repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL . PARIZQ boolean_expr PARDER PUNTOCOMA
+
+    PARIZQ          shift and go to state 134
+
+
+state 114
+
+    (28) while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ . statements BRADER WHEND PUNTOCOMA
+    (2) statements -> . statement statements
+    (3) statements -> . statement
+    (4) statement -> . assign_stmt
+    (5) statement -> . proc_stmt
+    (6) statement -> . for_loop
+    (7) statement -> . case_stmt
+    (8) statement -> . repeat_stmt
+    (9) statement -> . while_stmt
+    (10) statement -> . boolean_expr
+    (11) statement -> . move_stmt
+    (12) statement -> . color_stmt
+    (13) assign_stmt -> . DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (14) assign_stmt -> . PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (15) proc_stmt -> . DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA
+    (20) for_loop -> . FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+    (21) case_stmt -> . CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA
+    (27) repeat_stmt -> . REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA
+    (28) while_stmt -> . WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA
+    (29) boolean_expr -> . EQUAL PARIZQ expr COMA expr PARDER
+    (30) boolean_expr -> . AND PARIZQ expr COMA expr PARDER
+    (31) boolean_expr -> . OR PARIZQ expr COMA expr PARDER
+    (32) boolean_expr -> . GREATER PARIZQ expr COMA expr PARDER
+    (33) boolean_expr -> . SMALLER PARIZQ expr COMA expr PARDER
+    (40) move_stmt -> . CONUP NUMBER PUNTOCOMA
+    (41) move_stmt -> . CONDOWN NUMBER PUNTOCOMA
+    (42) move_stmt -> . CONRIGHT NUMBER PUNTOCOMA
+    (43) move_stmt -> . CONLEFT NUMBER PUNTOCOMA
+    (44) move_stmt -> . POSX NUMBER PUNTOCOMA
+    (45) move_stmt -> . POSY NUMBER PUNTOCOMA
+    (46) move_stmt -> . POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA
+    (47) color_stmt -> . USECOLOR NUMBER PUNTOCOMA
+
+    DEF             shift and go to state 14
+    PUT             shift and go to state 15
+    FOR             shift and go to state 16
+    CASE            shift and go to state 17
+    REPEAT          shift and go to state 18
+    WHILE           shift and go to state 19
+    EQUAL           shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    GREATER         shift and go to state 23
+    SMALLER         shift and go to state 24
+    CONUP           shift and go to state 25
+    CONDOWN         shift and go to state 26
+    CONRIGHT        shift and go to state 27
+    CONLEFT         shift and go to state 28
+    POSX            shift and go to state 29
+    POSY            shift and go to state 30
+    POS             shift and go to state 31
+    USECOLOR        shift and go to state 32
+
+    boolean_expr                   shift and go to state 11
+    statements                     shift and go to state 135
+    statement                      shift and go to state 4
+    assign_stmt                    shift and go to state 5
+    proc_stmt                      shift and go to state 6
+    for_loop                       shift and go to state 7
+    case_stmt                      shift and go to state 8
+    repeat_stmt                    shift and go to state 9
+    while_stmt                     shift and go to state 10
+    move_stmt                      shift and go to state 12
+    color_stmt                     shift and go to state 13
+
+state 115
+
+    (29) boolean_expr -> EQUAL PARIZQ expr COMA expr . PARDER
+
+    PARDER          shift and go to state 136
+
+
+state 116
+
+    (36) expr -> SUM PARIZQ expr . COMA expr PARDER
+
+    COMA            shift and go to state 137
+
+
+state 117
+
+    (37) expr -> MULT PARIZQ expr . COMA expr PARDER
+
+    COMA            shift and go to state 138
+
+
+state 118
+
+    (38) expr -> DIV PARIZQ expr . COMA expr PARDER
+
+    COMA            shift and go to state 139
+
+
+state 119
+
+    (39) expr -> RANDOM PARIZQ NUMBER . PARDER
+
+    PARDER          shift and go to state 140
+
+
+state 120
+
+    (30) boolean_expr -> AND PARIZQ expr COMA expr . PARDER
+
+    PARDER          shift and go to state 141
+
+
+state 121
+
+    (31) boolean_expr -> OR PARIZQ expr COMA expr . PARDER
+
+    PARDER          shift and go to state 142
+
+
+state 122
+
+    (32) boolean_expr -> GREATER PARIZQ expr COMA expr . PARDER
+
+    PARDER          shift and go to state 143
+
+
+state 123
+
+    (33) boolean_expr -> SMALLER PARIZQ expr COMA expr . PARDER
+
+    PARDER          shift and go to state 144
+
+
+state 124
+
+    (46) move_stmt -> POS PARIZQ NUMBER COMA NUMBER . PARDER PUNTOCOMA
+
+    PARDER          shift and go to state 145
+
+
+state 125
+
+    (13) assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 146
+
+
+state 126
+
+    (18) param_list -> VARIABLE COMA param_list .
+
+    PARDER          reduce using rule 18 (param_list -> VARIABLE COMA param_list .)
+
+
+state 127
+
+    (15) proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body . END PUNTOCOMA
+
+    END             shift and go to state 147
+
+
+state 128
+
+    (16) proc_body -> BRAIZQ . statements BRADER
+    (2) statements -> . statement statements
+    (3) statements -> . statement
+    (4) statement -> . assign_stmt
+    (5) statement -> . proc_stmt
+    (6) statement -> . for_loop
+    (7) statement -> . case_stmt
+    (8) statement -> . repeat_stmt
+    (9) statement -> . while_stmt
+    (10) statement -> . boolean_expr
+    (11) statement -> . move_stmt
+    (12) statement -> . color_stmt
+    (13) assign_stmt -> . DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (14) assign_stmt -> . PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (15) proc_stmt -> . DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA
+    (20) for_loop -> . FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+    (21) case_stmt -> . CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA
+    (27) repeat_stmt -> . REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA
+    (28) while_stmt -> . WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA
+    (29) boolean_expr -> . EQUAL PARIZQ expr COMA expr PARDER
+    (30) boolean_expr -> . AND PARIZQ expr COMA expr PARDER
+    (31) boolean_expr -> . OR PARIZQ expr COMA expr PARDER
+    (32) boolean_expr -> . GREATER PARIZQ expr COMA expr PARDER
+    (33) boolean_expr -> . SMALLER PARIZQ expr COMA expr PARDER
+    (40) move_stmt -> . CONUP NUMBER PUNTOCOMA
+    (41) move_stmt -> . CONDOWN NUMBER PUNTOCOMA
+    (42) move_stmt -> . CONRIGHT NUMBER PUNTOCOMA
+    (43) move_stmt -> . CONLEFT NUMBER PUNTOCOMA
+    (44) move_stmt -> . POSX NUMBER PUNTOCOMA
+    (45) move_stmt -> . POSY NUMBER PUNTOCOMA
+    (46) move_stmt -> . POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA
+    (47) color_stmt -> . USECOLOR NUMBER PUNTOCOMA
+
+    DEF             shift and go to state 14
+    PUT             shift and go to state 15
+    FOR             shift and go to state 16
+    CASE            shift and go to state 17
+    REPEAT          shift and go to state 18
+    WHILE           shift and go to state 19
+    EQUAL           shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    GREATER         shift and go to state 23
+    SMALLER         shift and go to state 24
+    CONUP           shift and go to state 25
+    CONDOWN         shift and go to state 26
+    CONRIGHT        shift and go to state 27
+    CONLEFT         shift and go to state 28
+    POSX            shift and go to state 29
+    POSY            shift and go to state 30
+    POS             shift and go to state 31
+    USECOLOR        shift and go to state 32
+
+    statements                     shift and go to state 148
+    statement                      shift and go to state 4
+    assign_stmt                    shift and go to state 5
+    proc_stmt                      shift and go to state 6
+    for_loop                       shift and go to state 7
+    case_stmt                      shift and go to state 8
+    repeat_stmt                    shift and go to state 9
+    while_stmt                     shift and go to state 10
+    boolean_expr                   shift and go to state 11
+    move_stmt                      shift and go to state 12
+    color_stmt                     shift and go to state 13
+
+state 129
+
+    (14) assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 149
+
+
+state 130
+
+    (20) for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER . PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+
+    PARDER          shift and go to state 150
+
+
+state 131
+
+    (21) case_stmt -> CASE VARIABLE case_when_list case_else END CASE . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 151
+
+
+state 132
+
+    (25) case_else -> ELSE BRAIZQ statements . BRADER
+
+    BRADER          shift and go to state 152
+
+
+state 133
+
+    (24) when_clause -> WHEN NUMBER THEN BRAIZQ . statements BRADER
+    (2) statements -> . statement statements
+    (3) statements -> . statement
+    (4) statement -> . assign_stmt
+    (5) statement -> . proc_stmt
+    (6) statement -> . for_loop
+    (7) statement -> . case_stmt
+    (8) statement -> . repeat_stmt
+    (9) statement -> . while_stmt
+    (10) statement -> . boolean_expr
+    (11) statement -> . move_stmt
+    (12) statement -> . color_stmt
+    (13) assign_stmt -> . DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (14) assign_stmt -> . PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (15) proc_stmt -> . DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA
+    (20) for_loop -> . FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+    (21) case_stmt -> . CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA
+    (27) repeat_stmt -> . REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA
+    (28) while_stmt -> . WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA
+    (29) boolean_expr -> . EQUAL PARIZQ expr COMA expr PARDER
+    (30) boolean_expr -> . AND PARIZQ expr COMA expr PARDER
+    (31) boolean_expr -> . OR PARIZQ expr COMA expr PARDER
+    (32) boolean_expr -> . GREATER PARIZQ expr COMA expr PARDER
+    (33) boolean_expr -> . SMALLER PARIZQ expr COMA expr PARDER
+    (40) move_stmt -> . CONUP NUMBER PUNTOCOMA
+    (41) move_stmt -> . CONDOWN NUMBER PUNTOCOMA
+    (42) move_stmt -> . CONRIGHT NUMBER PUNTOCOMA
+    (43) move_stmt -> . CONLEFT NUMBER PUNTOCOMA
+    (44) move_stmt -> . POSX NUMBER PUNTOCOMA
+    (45) move_stmt -> . POSY NUMBER PUNTOCOMA
+    (46) move_stmt -> . POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA
+    (47) color_stmt -> . USECOLOR NUMBER PUNTOCOMA
+
+    DEF             shift and go to state 14
+    PUT             shift and go to state 15
+    FOR             shift and go to state 16
+    CASE            shift and go to state 17
+    REPEAT          shift and go to state 18
+    WHILE           shift and go to state 19
+    EQUAL           shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    GREATER         shift and go to state 23
+    SMALLER         shift and go to state 24
+    CONUP           shift and go to state 25
+    CONDOWN         shift and go to state 26
+    CONRIGHT        shift and go to state 27
+    CONLEFT         shift and go to state 28
+    POSX            shift and go to state 29
+    POSY            shift and go to state 30
+    POS             shift and go to state 31
+    USECOLOR        shift and go to state 32
+
+    statements                     shift and go to state 153
+    statement                      shift and go to state 4
+    assign_stmt                    shift and go to state 5
+    proc_stmt                      shift and go to state 6
+    for_loop                       shift and go to state 7
+    case_stmt                      shift and go to state 8
+    repeat_stmt                    shift and go to state 9
+    while_stmt                     shift and go to state 10
+    boolean_expr                   shift and go to state 11
+    move_stmt                      shift and go to state 12
+    color_stmt                     shift and go to state 13
+
+state 134
+
+    (27) repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ . boolean_expr PARDER PUNTOCOMA
+    (29) boolean_expr -> . EQUAL PARIZQ expr COMA expr PARDER
+    (30) boolean_expr -> . AND PARIZQ expr COMA expr PARDER
+    (31) boolean_expr -> . OR PARIZQ expr COMA expr PARDER
+    (32) boolean_expr -> . GREATER PARIZQ expr COMA expr PARDER
+    (33) boolean_expr -> . SMALLER PARIZQ expr COMA expr PARDER
+
+    EQUAL           shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    GREATER         shift and go to state 23
+    SMALLER         shift and go to state 24
+
+    boolean_expr                   shift and go to state 154
+
+state 135
+
+    (28) while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements . BRADER WHEND PUNTOCOMA
+
+    BRADER          shift and go to state 155
+
+
+state 136
+
+    (29) boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .
+
+    DEF             reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    PUT             reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    FOR             reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    CASE            reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    REPEAT          reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    WHILE           reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    EQUAL           reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    AND             reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    OR              reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    GREATER         reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    SMALLER         reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    CONUP           reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    CONDOWN         reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    CONRIGHT        reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    CONLEFT         reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    POSX            reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    POSY            reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    POS             reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    USECOLOR        reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    $end            reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    BRADER          reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+    PARDER          reduce using rule 29 (boolean_expr -> EQUAL PARIZQ expr COMA expr PARDER .)
+
+
+state 137
+
+    (36) expr -> SUM PARIZQ expr COMA . expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 156
+
+state 138
+
+    (37) expr -> MULT PARIZQ expr COMA . expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 157
+
+state 139
+
+    (38) expr -> DIV PARIZQ expr COMA . expr PARDER
+    (34) expr -> . NUMBER
+    (35) expr -> . VARIABLE
+    (36) expr -> . SUM PARIZQ expr COMA expr PARDER
+    (37) expr -> . MULT PARIZQ expr COMA expr PARDER
+    (38) expr -> . DIV PARIZQ expr COMA expr PARDER
+    (39) expr -> . RANDOM PARIZQ NUMBER PARDER
+
+    NUMBER          shift and go to state 64
+    VARIABLE        shift and go to state 65
+    SUM             shift and go to state 66
+    MULT            shift and go to state 67
+    DIV             shift and go to state 68
+    RANDOM          shift and go to state 69
+
+    expr                           shift and go to state 158
+
+state 140
+
+    (39) expr -> RANDOM PARIZQ NUMBER PARDER .
+
+    COMA            reduce using rule 39 (expr -> RANDOM PARIZQ NUMBER PARDER .)
+    PARDER          reduce using rule 39 (expr -> RANDOM PARIZQ NUMBER PARDER .)
+
+
+state 141
+
+    (30) boolean_expr -> AND PARIZQ expr COMA expr PARDER .
+
+    DEF             reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    PUT             reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    FOR             reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    CASE            reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    REPEAT          reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    WHILE           reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    EQUAL           reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    AND             reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    OR              reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    GREATER         reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    SMALLER         reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    CONUP           reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    CONDOWN         reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    CONRIGHT        reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    CONLEFT         reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    POSX            reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    POSY            reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    POS             reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    USECOLOR        reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    $end            reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    BRADER          reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+    PARDER          reduce using rule 30 (boolean_expr -> AND PARIZQ expr COMA expr PARDER .)
+
+
+state 142
+
+    (31) boolean_expr -> OR PARIZQ expr COMA expr PARDER .
+
+    DEF             reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    PUT             reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    FOR             reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    CASE            reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    REPEAT          reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    WHILE           reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    EQUAL           reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    AND             reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    OR              reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    GREATER         reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    SMALLER         reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    CONUP           reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    CONDOWN         reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    CONRIGHT        reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    CONLEFT         reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    POSX            reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    POSY            reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    POS             reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    USECOLOR        reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    $end            reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    BRADER          reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+    PARDER          reduce using rule 31 (boolean_expr -> OR PARIZQ expr COMA expr PARDER .)
+
+
+state 143
+
+    (32) boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .
+
+    DEF             reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    PUT             reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    FOR             reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    CASE            reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    REPEAT          reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    WHILE           reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    EQUAL           reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    AND             reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    OR              reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    GREATER         reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    SMALLER         reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    CONUP           reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    CONDOWN         reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    CONRIGHT        reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    CONLEFT         reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    POSX            reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    POSY            reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    POS             reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    USECOLOR        reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    $end            reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    BRADER          reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+    PARDER          reduce using rule 32 (boolean_expr -> GREATER PARIZQ expr COMA expr PARDER .)
+
+
+state 144
+
+    (33) boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .
+
+    DEF             reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    PUT             reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    FOR             reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    CASE            reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    REPEAT          reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    WHILE           reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    EQUAL           reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    AND             reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    OR              reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    GREATER         reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    SMALLER         reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    CONUP           reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    CONDOWN         reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    CONRIGHT        reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    CONLEFT         reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    POSX            reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    POSY            reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    POS             reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    USECOLOR        reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    $end            reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    BRADER          reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+    PARDER          reduce using rule 33 (boolean_expr -> SMALLER PARIZQ expr COMA expr PARDER .)
+
+
+state 145
+
+    (46) move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 159
+
+
+state 146
+
+    (13) assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .
+
+    DEF             reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    PUT             reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    FOR             reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    CASE            reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    REPEAT          reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    WHILE           reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    EQUAL           reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    AND             reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    OR              reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    GREATER         reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    SMALLER         reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    CONUP           reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    CONDOWN         reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    CONRIGHT        reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    CONLEFT         reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    POSX            reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    POSY            reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    POS             reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    USECOLOR        reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    $end            reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    BRADER          reduce using rule 13 (assign_stmt -> DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+
+
+state 147
+
+    (15) proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 160
+
+
+state 148
+
+    (16) proc_body -> BRAIZQ statements . BRADER
+
+    BRADER          shift and go to state 161
+
+
+state 149
+
+    (14) assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .
+
+    DEF             reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    PUT             reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    FOR             reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    CASE            reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    REPEAT          reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    WHILE           reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    EQUAL           reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    AND             reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    OR              reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    GREATER         reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    SMALLER         reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    CONUP           reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    CONDOWN         reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    CONRIGHT        reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    CONLEFT         reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    POSX            reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    POSY            reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    POS             reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    USECOLOR        reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    $end            reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+    BRADER          reduce using rule 14 (assign_stmt -> PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA .)
+
+
+state 150
+
+    (20) for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER . BRAIZQ statements BRADER END LOOP PUNTOCOMA
+
+    BRAIZQ          shift and go to state 162
+
+
+state 151
+
+    (21) case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .
+
+    DEF             reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    PUT             reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    FOR             reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    CASE            reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    REPEAT          reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    WHILE           reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    EQUAL           reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    AND             reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    OR              reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    GREATER         reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    SMALLER         reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    CONUP           reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    CONDOWN         reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    CONRIGHT        reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    CONLEFT         reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    POSX            reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    POSY            reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    POS             reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    USECOLOR        reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    $end            reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+    BRADER          reduce using rule 21 (case_stmt -> CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA .)
+
+
+state 152
+
+    (25) case_else -> ELSE BRAIZQ statements BRADER .
+
+    END             reduce using rule 25 (case_else -> ELSE BRAIZQ statements BRADER .)
+
+
+state 153
+
+    (24) when_clause -> WHEN NUMBER THEN BRAIZQ statements . BRADER
+
+    BRADER          shift and go to state 163
+
+
+state 154
+
+    (27) repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr . PARDER PUNTOCOMA
+
+    PARDER          shift and go to state 164
+
+
+state 155
+
+    (28) while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER . WHEND PUNTOCOMA
+
+    WHEND           shift and go to state 165
+
+
+state 156
+
+    (36) expr -> SUM PARIZQ expr COMA expr . PARDER
+
+    PARDER          shift and go to state 166
+
+
+state 157
+
+    (37) expr -> MULT PARIZQ expr COMA expr . PARDER
+
+    PARDER          shift and go to state 167
+
+
+state 158
+
+    (38) expr -> DIV PARIZQ expr COMA expr . PARDER
+
+    PARDER          shift and go to state 168
+
+
+state 159
+
+    (46) move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .
+
+    DEF             reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    PUT             reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    FOR             reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    CASE            reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    REPEAT          reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    WHILE           reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    EQUAL           reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    AND             reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    OR              reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    GREATER         reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    SMALLER         reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    CONUP           reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    CONDOWN         reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    CONRIGHT        reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    CONLEFT         reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    POSX            reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    POSY            reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    POS             reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    USECOLOR        reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    $end            reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+    BRADER          reduce using rule 46 (move_stmt -> POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA .)
+
+
+state 160
+
+    (15) proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .
+
+    DEF             reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    PUT             reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    FOR             reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    CASE            reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    REPEAT          reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    WHILE           reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    EQUAL           reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    AND             reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    OR              reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    GREATER         reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    SMALLER         reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    CONUP           reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    CONDOWN         reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    CONRIGHT        reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    CONLEFT         reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    POSX            reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    POSY            reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    POS             reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    USECOLOR        reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    $end            reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+    BRADER          reduce using rule 15 (proc_stmt -> DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA .)
+
+
+state 161
+
+    (16) proc_body -> BRAIZQ statements BRADER .
+
+    END             reduce using rule 16 (proc_body -> BRAIZQ statements BRADER .)
+
+
+state 162
+
+    (20) for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ . statements BRADER END LOOP PUNTOCOMA
+    (2) statements -> . statement statements
+    (3) statements -> . statement
+    (4) statement -> . assign_stmt
+    (5) statement -> . proc_stmt
+    (6) statement -> . for_loop
+    (7) statement -> . case_stmt
+    (8) statement -> . repeat_stmt
+    (9) statement -> . while_stmt
+    (10) statement -> . boolean_expr
+    (11) statement -> . move_stmt
+    (12) statement -> . color_stmt
+    (13) assign_stmt -> . DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (14) assign_stmt -> . PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
+    (15) proc_stmt -> . DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA
+    (20) for_loop -> . FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA
+    (21) case_stmt -> . CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA
+    (27) repeat_stmt -> . REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA
+    (28) while_stmt -> . WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA
+    (29) boolean_expr -> . EQUAL PARIZQ expr COMA expr PARDER
+    (30) boolean_expr -> . AND PARIZQ expr COMA expr PARDER
+    (31) boolean_expr -> . OR PARIZQ expr COMA expr PARDER
+    (32) boolean_expr -> . GREATER PARIZQ expr COMA expr PARDER
+    (33) boolean_expr -> . SMALLER PARIZQ expr COMA expr PARDER
+    (40) move_stmt -> . CONUP NUMBER PUNTOCOMA
+    (41) move_stmt -> . CONDOWN NUMBER PUNTOCOMA
+    (42) move_stmt -> . CONRIGHT NUMBER PUNTOCOMA
+    (43) move_stmt -> . CONLEFT NUMBER PUNTOCOMA
+    (44) move_stmt -> . POSX NUMBER PUNTOCOMA
+    (45) move_stmt -> . POSY NUMBER PUNTOCOMA
+    (46) move_stmt -> . POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA
+    (47) color_stmt -> . USECOLOR NUMBER PUNTOCOMA
+
+    DEF             shift and go to state 14
+    PUT             shift and go to state 15
+    FOR             shift and go to state 16
+    CASE            shift and go to state 17
+    REPEAT          shift and go to state 18
+    WHILE           shift and go to state 19
+    EQUAL           shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    GREATER         shift and go to state 23
+    SMALLER         shift and go to state 24
+    CONUP           shift and go to state 25
+    CONDOWN         shift and go to state 26
+    CONRIGHT        shift and go to state 27
+    CONLEFT         shift and go to state 28
+    POSX            shift and go to state 29
+    POSY            shift and go to state 30
+    POS             shift and go to state 31
+    USECOLOR        shift and go to state 32
+
+    statements                     shift and go to state 169
+    statement                      shift and go to state 4
+    assign_stmt                    shift and go to state 5
+    proc_stmt                      shift and go to state 6
+    for_loop                       shift and go to state 7
+    case_stmt                      shift and go to state 8
+    repeat_stmt                    shift and go to state 9
+    while_stmt                     shift and go to state 10
+    boolean_expr                   shift and go to state 11
+    move_stmt                      shift and go to state 12
+    color_stmt                     shift and go to state 13
+
+state 163
+
+    (24) when_clause -> WHEN NUMBER THEN BRAIZQ statements BRADER .
+
+    WHEN            reduce using rule 24 (when_clause -> WHEN NUMBER THEN BRAIZQ statements BRADER .)
+    ELSE            reduce using rule 24 (when_clause -> WHEN NUMBER THEN BRAIZQ statements BRADER .)
+    END             reduce using rule 24 (when_clause -> WHEN NUMBER THEN BRAIZQ statements BRADER .)
+
+
+state 164
+
+    (27) repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 170
+
+
+state 165
+
+    (28) while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 171
+
+
+state 166
+
+    (36) expr -> SUM PARIZQ expr COMA expr PARDER .
+
+    COMA            reduce using rule 36 (expr -> SUM PARIZQ expr COMA expr PARDER .)
+    PARDER          reduce using rule 36 (expr -> SUM PARIZQ expr COMA expr PARDER .)
+
+
+state 167
+
+    (37) expr -> MULT PARIZQ expr COMA expr PARDER .
+
+    COMA            reduce using rule 37 (expr -> MULT PARIZQ expr COMA expr PARDER .)
+    PARDER          reduce using rule 37 (expr -> MULT PARIZQ expr COMA expr PARDER .)
+
+
+state 168
+
+    (38) expr -> DIV PARIZQ expr COMA expr PARDER .
+
+    COMA            reduce using rule 38 (expr -> DIV PARIZQ expr COMA expr PARDER .)
+    PARDER          reduce using rule 38 (expr -> DIV PARIZQ expr COMA expr PARDER .)
+
+
+state 169
+
+    (20) for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements . BRADER END LOOP PUNTOCOMA
+
+    BRADER          shift and go to state 172
+
+
+state 170
+
+    (27) repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .
+
+    DEF             reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    PUT             reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    FOR             reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    CASE            reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    REPEAT          reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    WHILE           reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    EQUAL           reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    AND             reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    OR              reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    GREATER         reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    SMALLER         reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    CONUP           reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    CONDOWN         reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    CONRIGHT        reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    CONLEFT         reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    POSX            reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    POSY            reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    POS             reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    USECOLOR        reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    $end            reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+    BRADER          reduce using rule 27 (repeat_stmt -> REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA .)
+
+
+state 171
+
+    (28) while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .
+
+    DEF             reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    PUT             reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    FOR             reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    CASE            reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    REPEAT          reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    WHILE           reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    EQUAL           reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    AND             reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    OR              reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    GREATER         reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    SMALLER         reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    CONUP           reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    CONDOWN         reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    CONRIGHT        reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    CONLEFT         reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    POSX            reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    POSY            reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    POS             reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    USECOLOR        reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    $end            reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+    BRADER          reduce using rule 28 (while_stmt -> WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA .)
+
+
+state 172
+
+    (20) for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER . END LOOP PUNTOCOMA
+
+    END             shift and go to state 173
+
+
+state 173
+
+    (20) for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END . LOOP PUNTOCOMA
+
+    LOOP            shift and go to state 174
+
+
+state 174
+
+    (20) for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 175
+
+
+state 175
+
+    (20) for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .
+
+    DEF             reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    PUT             reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    FOR             reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    CASE            reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    REPEAT          reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    WHILE           reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    EQUAL           reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    AND             reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    OR              reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    GREATER         reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    SMALLER         reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    CONUP           reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    CONDOWN         reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    CONRIGHT        reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    CONLEFT         reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    POSX            reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    POSY            reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    POS             reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    USECOLOR        reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    $end            reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+    BRADER          reduce using rule 20 (for_loop -> FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA .)
+
