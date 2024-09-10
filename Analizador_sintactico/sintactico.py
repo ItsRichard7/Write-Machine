@@ -1,134 +1,244 @@
+import sys
+sys.path.append('./Analizador_lexico')  # Ajustar según la estructura de carpetas
+from lexico import tokens  # Importamos los tokens definidos
 import ply.yacc as yacc
-from Analizador_lexico.lexico import tokens  # Asegúrate de que todos los tokens estén definidos aquí
 
-# Definición de las reglas de producción
-
-def p_program(p):
-    '''program : COMMENT statements'''
+# 1. Definir una variable
+def p_def_variable(p):
+    '''def_variable : DEF PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA'''
     pass
 
-def p_statements(p):
-    '''statements : statement statements
-                  | statement'''
+# 2. Asignar valor con PUT
+def p_put_variable(p):
+    '''put_variable : PUT PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA'''
     pass
 
-def p_statement(p):
-    '''statement : assign_stmt
-                 | proc_stmt
-                 | for_loop
-                 | case_stmt
-                 | repeat_stmt
-                 | while_stmt
-                 | boolean_expr
-                 | move_stmt
-                 | color_stmt'''
+# 3. Incremente el valor de la variable con ADD
+def p_add_variable_uno(p):
+    '''add_variable : ADD PARIZQ VARIABLE PARDER PUNTOCOMA'''
     pass
 
-def p_assign_stmt(p):
-    '''assign_stmt : DEF PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA
-                   | PUT PARIZQ VARIABLE COMA NUMBER PARDER PUNTOCOMA'''
+def p_add_variable_dos(p):
+    '''add_variable : ADD PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA'''
     pass
 
-def p_proc_stmt(p):
-    '''proc_stmt : DEF VARIABLE PARIZQ param_list PARDER proc_body END PUNTOCOMA'''
+# 4. Movimientos: ContinueUp, ContinueDown, ContinueRight, ContinueLeft
+def p_continue_up(p):
+    '''continue_up : CONUP valor PUNTOCOMA'''
     pass
 
-def p_proc_body(p):
-    '''proc_body : BRAIZQ statements BRADER'''
+def p_continue_down(p):
+    '''continue_down : CONDOWN valor PUNTOCOMA'''
     pass
 
-def p_param_list(p):
-    '''param_list : VARIABLE
-                  | VARIABLE COMA param_list
-                  | empty'''
+def p_continue_right(p):
+    '''continue_right : CONRIGHT valor PUNTOCOMA'''
     pass
 
+def p_continue_left(p):
+    '''continue_left : CONLEFT valor PUNTOCOMA'''
+    pass
+
+# 5. Posicionar el lápiz: Pos, PosX, PosY
+def p_pos(p):
+    '''pos : POS PARIZQ valor COMA valor PARDER PUNTOCOMA'''
+    pass
+
+def p_posx(p):
+    '''posx : POSX valor PUNTOCOMA'''
+    pass
+
+def p_posy(p):
+    '''posy : POSY valor PUNTOCOMA'''
+    pass
+
+# 6. Cambiar el color con UseColor
+def p_use_color(p):
+    '''use_color : USECOLOR valor PUNTOCOMA'''
+    pass
+
+# 7. Subir o bajar el lápiz
+def p_down(p):
+    '''down : DOWN PUNTOCOMA'''
+    pass
+
+def p_up(p):
+    '''up : UP PUNTOCOMA'''
+    pass
+
+# 8. Volver al inicio
+def p_beginning(p):
+    '''beginning : BEGIN PUNTOCOMA'''
+    pass
+
+# 9. Sentencia FOR-LOOP
 def p_for_loop(p):
-    '''for_loop : FOR VARIABLE PARIZQ NUMBER COMA NUMBER PARDER BRAIZQ statements BRADER END LOOP PUNTOCOMA'''
+    '''for_loop : FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA'''
     pass
 
-def p_case_stmt(p):
-    '''case_stmt : CASE VARIABLE case_when_list case_else END CASE PUNTOCOMA'''
+# 10. Sentencia CASE-WHEN
+def p_case(p):
+    '''case : CASE VARIABLE when_cases end_case'''
     pass
 
-def p_case_when_list(p):
-    '''case_when_list : when_clause
-                      | when_clause case_when_list'''
+def p_when_cases(p):
+    '''when_cases : when_cases when_case
+                  | when_case'''
     pass
 
-def p_when_clause(p):
-    '''when_clause : WHEN NUMBER THEN BRAIZQ statements BRADER'''
+def p_when_case(p):
+    '''when_case : WHEN valor THEN BRAIZQ sentencias BRADER'''
     pass
 
-def p_case_else(p):
-    '''case_else : ELSE BRAIZQ statements BRADER
-                 | empty'''
+def p_end_case(p):
+    '''end_case : ELSE BRAIZQ sentencias BRADER END CASE PUNTOCOMA
+                | END CASE PUNTOCOMA'''
     pass
 
-def p_repeat_stmt(p):
-    '''repeat_stmt : REPEAT BRAIZQ statements BRADER UNTIL PARIZQ boolean_expr PARDER PUNTOCOMA'''
+# 11. Sentencia REPEAT-UNTIL
+def p_repeat_until(p):
+    '''repeat_until : REPEAT BRAIZQ sentencias BRADER UNTIL PARIZQ condicion PARDER PUNTOCOMA'''
     pass
 
-def p_while_stmt(p):
-    '''while_stmt : WHILE PARIZQ boolean_expr PARDER BRAIZQ statements BRADER WHEND PUNTOCOMA'''
+# 12. Sentencia WHILE-WHEND
+def p_while(p):
+    '''while : WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA'''
     pass
 
-def p_boolean_expr(p):
-    '''boolean_expr : EQUAL PARIZQ expr COMA expr PARDER
-                    | AND PARIZQ expr COMA expr PARDER
-                    | OR PARIZQ expr COMA expr PARDER
-                    | GREATER PARIZQ expr COMA expr PARDER
-                    | SMALLER PARIZQ expr COMA expr PARDER'''
+# 13. Funciones: Equal, And, Or, Greater, Smaller
+def p_equal(p):
+    '''equal : EQUAL PARIZQ valor COMA valor PARDER'''
     pass
 
+def p_and(p):
+    '''and : AND PARIZQ valor COMA valor PARDER'''
+    pass
+
+def p_or(p):
+    '''or : OR PARIZQ valor COMA valor PARDER'''
+    pass
+
+def p_greater(p):
+    '''greater : GREATER PARIZQ valor COMA valor PARDER'''
+    pass
+
+def p_smaller(p):
+    '''smaller : SMALLER PARIZQ valor COMA valor PARDER'''
+    pass
+
+# 14. Operaciones: Substr, Random, Mult, Div, Sum
+def p_substr(p):
+    '''substr : SUBSTR PARIZQ valor COMA valor PARDER'''
+    pass
+
+def p_random(p):
+    '''random : RANDOM PARIZQ valor PARDER'''
+    pass
+
+def p_mult(p):
+    '''mult : MULT PARIZQ valor COMA valor PARDER'''
+    pass
+
+def p_div(p):
+    '''div : DIV PARIZQ valor COMA valor PARDER'''
+    pass
+
+def p_sum(p):
+    '''sum : SUM PARIZQ valor COMA valor PARDER'''
+    pass
+
+# 15. Definir sentencias múltiples
+def p_sentencias(p):
+    '''sentencias : sentencias sentencia
+                  | sentencia'''
+    pass
+
+# Definir una sentencia que puede ser cualquier instrucción válida
+def p_sentencia(p):
+    '''sentencia : def_variable
+                 | put_variable
+                 | add_variable
+                 | continue_up
+                 | continue_down
+                 | continue_right
+                 | continue_left
+                 | pos
+                 | posx
+                 | posy
+                 | use_color
+                 | down
+                 | up
+                 | beginning
+                 | for_loop
+                 | case
+                 | repeat_until
+                 | while
+                 | equal
+                 | and
+                 | or
+                 | greater
+                 | smaller
+                 | substr
+                 | random
+                 | mult
+                 | div
+                 | sum'''
+    pass
+
+# 16. Manejo de valores que pueden ser números, variables o expresiones
+def p_valor_numero(p):
+    '''valor : NUMBER'''
+    p[0] = p[1]
+
+def p_valor_variable(p):
+    '''valor : VARIABLE'''
+    p[0] = p[1]
+
+def p_valor_expr(p):
+    '''valor : expr'''
+    p[0] = p[1]
+
+# Definir expresiones básicas (operaciones matemáticas)
 def p_expr(p):
-    '''expr : NUMBER
-            | VARIABLE
-            | SUM PARIZQ expr COMA expr PARDER
-            | MULT PARIZQ expr COMA expr PARDER
-            | DIV PARIZQ expr COMA expr PARDER
-            | RANDOM PARIZQ NUMBER PARDER'''
+    '''expr : valor MULT valor
+            | valor DIV valor
+            | valor SUM valor
+            | valor SUBSTR valor'''
+    p[0] = p[1]
+
+# Condiciones para bucles y otras sentencias
+def p_condicion(p):
+    '''condicion : equal
+                 | greater
+                 | smaller
+                 | and
+                 | or'''
     pass
 
-def p_move_stmt(p):
-    '''move_stmt : CONUP NUMBER PUNTOCOMA
-                 | CONDOWN NUMBER PUNTOCOMA
-                 | CONRIGHT NUMBER PUNTOCOMA
-                 | CONLEFT NUMBER PUNTOCOMA
-                 | POSX NUMBER PUNTOCOMA
-                 | POSY NUMBER PUNTOCOMA
-                 | POS PARIZQ NUMBER COMA NUMBER PARDER PUNTOCOMA'''
-    pass
-
-def p_color_stmt(p):
-    '''color_stmt : USECOLOR NUMBER PUNTOCOMA'''
-    pass
-
-def p_empty(p):
-    '''empty :'''
-    pass
-
+# Manejo de errores sintácticos
 def p_error(p):
     if p:
-        print(f"Error de sintaxis en token: '{p.value}' en la línea {p.lineno}")
+        print(f"Error sintáctico en línea {p.lineno}: token inesperado '{p.value}'")
     else:
-        print("Error de sintaxis al final de la entrada")
+        print("Error sintáctico: fin de archivo inesperado")
 
-# Construcción del parser
+# Construir el parser
 parser = yacc.yacc()
 
-# Prueba del analizador sintáctico
-data = '''
-// Este es el nombre del programa
-Def(zzz, 5);
-Proc myProc(zzz, zzz);
-    [PosX 10; Down;]
-End;
-'''
+# Función para analizar sintácticamente el código fuente
+def analizar_sintactico(data):
+    try:
+        parser.parse(data)
+        print("Análisis completado sin errores")
+    except SyntaxError as se:
+        print(str(se))
 
-result = parser.parse(data)
+# Ejemplo de prueba
+if __name__ == "__main__":
+    data = '''
+    Def(variable1, 5);
+    Add(variable1, 10);
+    ContinueUp 10;
+    '''
+    analizar_sintactico(data)
 
-if result:
-    print("Entrada válida")
-else:
-    print("Error en la entrada")

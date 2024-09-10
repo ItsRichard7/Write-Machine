@@ -84,8 +84,8 @@ t_PARIZQ = r'\('
 t_PARDER = r'\)'
 t_BRAIZQ = r'\['
 t_BRADER = r'\]'
-t_TRUE = r'True'
-t_FALSE = r'False'
+t_TRUE = r'TRUE'
+t_FALSE = r'FALSE'
 t_PUNTOCOMA = r';'
 t_COMA = r',' 
 t_END = r'End'
@@ -156,6 +156,7 @@ def analizar(data):
         for token in lexer:
             print(token)
 
+"""
 # Ejemplo de prueba
 data = '''// Este es el nombre del programa
 Def(xxx, 5);
@@ -166,3 +167,4 @@ End;
 '''
 
 analizar(data)
+"""
