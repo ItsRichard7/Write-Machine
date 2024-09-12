@@ -1,5 +1,4 @@
 import sys
-sys.path.append('./Analizador_lexico') # Ajustar según la estructura de carpetas
 from lexico import tokens  # Importamos los tokens definidos
 import ply.yacc as yacc
 
@@ -233,6 +232,8 @@ def analizar_sintactico(data):
     except SyntaxError as se:
         print(str(se))
 
+""" 
+
 # Ejemplo de prueba
 if __name__ == "__main__":
     data = '''
@@ -241,4 +242,4 @@ if __name__ == "__main__":
     ContinueUp 10;
     '''
     analizar_sintactico(data)
-
+"""

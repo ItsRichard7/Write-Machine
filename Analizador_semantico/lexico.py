@@ -87,7 +87,7 @@ t_BRADER = r'\]'
 t_TRUE = r'TRUE'
 t_FALSE = r'FALSE'
 t_PUNTOCOMA = r';'
-t_COMA = r',' 
+t_COMA = r','
 t_END = r'End'
 
 # Expresión regular para reconocer números enteros
