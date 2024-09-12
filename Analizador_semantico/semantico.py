@@ -99,4 +99,4 @@ if __name__ == "__main__":
     # Crear y ejecutar el analizador semántico
     analizador = AnalizadorSemantico()
     analizador.analizar(arbol_sintactico)
-    print("Análisis semántico completado correctamente.")
+    print("Análisis semántico completado correctamente")

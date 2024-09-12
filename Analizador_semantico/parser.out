@@ -1,0 +1,481 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    COMMENT
+    FALSE
+    PROC
+    TEXT
+    TRUE
+
+Grammar
+
+Rule 0     S' -> def_variable
+Rule 1     def_variable -> DEF PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA
+Rule 2     put_variable -> PUT PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA
+Rule 3     add_variable -> ADD PARIZQ VARIABLE PARDER PUNTOCOMA
+Rule 4     add_variable -> ADD PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA
+Rule 5     continue_up -> CONUP valor PUNTOCOMA
+Rule 6     continue_down -> CONDOWN valor PUNTOCOMA
+Rule 7     continue_right -> CONRIGHT valor PUNTOCOMA
+Rule 8     continue_left -> CONLEFT valor PUNTOCOMA
+Rule 9     pos -> POS PARIZQ valor COMA valor PARDER PUNTOCOMA
+Rule 10    posx -> POSX valor PUNTOCOMA
+Rule 11    posy -> POSY valor PUNTOCOMA
+Rule 12    use_color -> USECOLOR valor PUNTOCOMA
+Rule 13    down -> DOWN PUNTOCOMA
+Rule 14    up -> UP PUNTOCOMA
+Rule 15    beginning -> BEGIN PUNTOCOMA
+Rule 16    for_loop -> FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
+Rule 17    case -> CASE VARIABLE when_cases end_case
+Rule 18    when_cases -> when_cases when_case
+Rule 19    when_cases -> when_case
+Rule 20    when_case -> WHEN valor THEN BRAIZQ sentencias BRADER
+Rule 21    end_case -> ELSE BRAIZQ sentencias BRADER END CASE PUNTOCOMA
+Rule 22    end_case -> END CASE PUNTOCOMA
+Rule 23    repeat_until -> REPEAT BRAIZQ sentencias BRADER UNTIL PARIZQ condicion PARDER PUNTOCOMA
+Rule 24    while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+Rule 25    equal -> EQUAL PARIZQ valor COMA valor PARDER
+Rule 26    and -> AND PARIZQ valor COMA valor PARDER
+Rule 27    or -> OR PARIZQ valor COMA valor PARDER
+Rule 28    greater -> GREATER PARIZQ valor COMA valor PARDER
+Rule 29    smaller -> SMALLER PARIZQ valor COMA valor PARDER
+Rule 30    substr -> SUBSTR PARIZQ valor COMA valor PARDER
+Rule 31    random -> RANDOM PARIZQ valor PARDER
+Rule 32    mult -> MULT PARIZQ valor COMA valor PARDER
+Rule 33    div -> DIV PARIZQ valor COMA valor PARDER
+Rule 34    sum -> SUM PARIZQ valor COMA valor PARDER
+Rule 35    sentencias -> sentencias sentencia
+Rule 36    sentencias -> sentencia
+Rule 37    sentencia -> def_variable
+Rule 38    sentencia -> put_variable
+Rule 39    sentencia -> add_variable
+Rule 40    sentencia -> continue_up
+Rule 41    sentencia -> continue_down
+Rule 42    sentencia -> continue_right
+Rule 43    sentencia -> continue_left
+Rule 44    sentencia -> pos
+Rule 45    sentencia -> posx
+Rule 46    sentencia -> posy
+Rule 47    sentencia -> use_color
+Rule 48    sentencia -> down
+Rule 49    sentencia -> up
+Rule 50    sentencia -> beginning
+Rule 51    sentencia -> for_loop
+Rule 52    sentencia -> case
+Rule 53    sentencia -> repeat_until
+Rule 54    sentencia -> while
+Rule 55    sentencia -> equal
+Rule 56    sentencia -> and
+Rule 57    sentencia -> or
+Rule 58    sentencia -> greater
+Rule 59    sentencia -> smaller
+Rule 60    sentencia -> substr
+Rule 61    sentencia -> random
+Rule 62    sentencia -> mult
+Rule 63    sentencia -> div
+Rule 64    sentencia -> sum
+Rule 65    valor -> NUMBER
+Rule 66    valor -> VARIABLE
+Rule 67    valor -> expr
+Rule 68    expr -> valor MULT valor
+Rule 69    expr -> valor DIV valor
+Rule 70    expr -> valor SUM valor
+Rule 71    expr -> valor SUBSTR valor
+Rule 72    condicion -> equal
+Rule 73    condicion -> greater
+Rule 74    condicion -> smaller
+Rule 75    condicion -> and
+Rule 76    condicion -> or
+
+Terminals, with rules where they appear
+
+ADD                  : 3 4
+AND                  : 26
+BEGIN                : 15
+BRADER               : 16 20 21 23 24
+BRAIZQ               : 16 20 21 23 24
+CASE                 : 17 21 22
+COMA                 : 1 2 4 9 25 26 27 28 29 30 32 33 34
+COMMENT              : 
+CONDOWN              : 6
+CONLEFT              : 8
+CONRIGHT             : 7
+CONUP                : 5
+DEF                  : 1
+DIV                  : 33 69
+DOWN                 : 13
+ELSE                 : 21
+END                  : 16 21 22
+EQUAL                : 25
+FALSE                : 
+FOR                  : 16
+GREATER              : 28
+LOOP                 : 16 16
+MULT                 : 32 68
+NUMBER               : 65
+OR                   : 27
+PARDER               : 1 2 3 4 9 16 23 24 25 26 27 28 29 30 31 32 33 34
+PARIZQ               : 1 2 3 4 9 16 23 24 25 26 27 28 29 30 31 32 33 34
+POS                  : 9
+POSX                 : 10
+POSY                 : 11
+PROC                 : 
+PUNTOCOMA            : 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 21 22 23 24
+PUT                  : 2
+RANDOM               : 31
+REPEAT               : 23
+SMALLER              : 29
+SUBSTR               : 30 71
+SUM                  : 34 70
+TEXT                 : 
+THEN                 : 20
+TO                   : 16
+TRUE                 : 
+UNTIL                : 23
+UP                   : 14
+USECOLOR             : 12
+VARIABLE             : 1 2 3 4 16 17 66
+WHEN                 : 20
+WHEND                : 24
+WHILE                : 24
+error                : 
+
+Nonterminals, with rules where they appear
+
+add_variable         : 39
+and                  : 56 75
+beginning            : 50
+case                 : 52
+condicion            : 23 24
+continue_down        : 41
+continue_left        : 43
+continue_right       : 42
+continue_up          : 40
+def_variable         : 37 0
+div                  : 63
+down                 : 48
+end_case             : 17
+equal                : 55 72
+expr                 : 67
+for_loop             : 51
+greater              : 58 73
+mult                 : 62
+or                   : 57 76
+pos                  : 44
+posx                 : 45
+posy                 : 46
+put_variable         : 38
+random               : 61
+repeat_until         : 53
+sentencia            : 35 36
+sentencias           : 16 20 21 23 24 35
+smaller              : 59 74
+substr               : 60
+sum                  : 64
+up                   : 49
+use_color            : 47
+valor                : 1 2 4 5 6 7 8 9 9 10 11 12 16 16 20 25 25 26 26 27 27 28 28 29 29 30 30 31 32 32 33 33 34 34 68 68 69 69 70 70 71 71
+when_case            : 18 19
+when_cases           : 17 18
+while                : 54
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . def_variable
+    (1) def_variable -> . DEF PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA
+
+    DEF             shift and go to state 2
+
+    def_variable                   shift and go to state 1
+
+state 1
+
+    (0) S' -> def_variable .
+
+
+
+state 2
+
+    (1) def_variable -> DEF . PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA
+
+    PARIZQ          shift and go to state 3
+
+
+state 3
+
+    (1) def_variable -> DEF PARIZQ . VARIABLE COMA valor PARDER PUNTOCOMA
+
+    VARIABLE        shift and go to state 4
+
+
+state 4
+
+    (1) def_variable -> DEF PARIZQ VARIABLE . COMA valor PARDER PUNTOCOMA
+
+    COMA            shift and go to state 5
+
+
+state 5
+
+    (1) def_variable -> DEF PARIZQ VARIABLE COMA . valor PARDER PUNTOCOMA
+    (65) valor -> . NUMBER
+    (66) valor -> . VARIABLE
+    (67) valor -> . expr
+    (68) expr -> . valor MULT valor
+    (69) expr -> . valor DIV valor
+    (70) expr -> . valor SUM valor
+    (71) expr -> . valor SUBSTR valor
+
+    NUMBER          shift and go to state 8
+    VARIABLE        shift and go to state 6
+
+    valor                          shift and go to state 7
+    expr                           shift and go to state 9
+
+state 6
+
+    (66) valor -> VARIABLE .
+
+    PARDER          reduce using rule 66 (valor -> VARIABLE .)
+    MULT            reduce using rule 66 (valor -> VARIABLE .)
+    DIV             reduce using rule 66 (valor -> VARIABLE .)
+    SUM             reduce using rule 66 (valor -> VARIABLE .)
+    SUBSTR          reduce using rule 66 (valor -> VARIABLE .)
+
+
+state 7
+
+    (1) def_variable -> DEF PARIZQ VARIABLE COMA valor . PARDER PUNTOCOMA
+    (68) expr -> valor . MULT valor
+    (69) expr -> valor . DIV valor
+    (70) expr -> valor . SUM valor
+    (71) expr -> valor . SUBSTR valor
+
+    PARDER          shift and go to state 10
+    MULT            shift and go to state 11
+    DIV             shift and go to state 12
+    SUM             shift and go to state 13
+    SUBSTR          shift and go to state 14
+
+
+state 8
+
+    (65) valor -> NUMBER .
+
+    PARDER          reduce using rule 65 (valor -> NUMBER .)
+    MULT            reduce using rule 65 (valor -> NUMBER .)
+    DIV             reduce using rule 65 (valor -> NUMBER .)
+    SUM             reduce using rule 65 (valor -> NUMBER .)
+    SUBSTR          reduce using rule 65 (valor -> NUMBER .)
+
+
+state 9
+
+    (67) valor -> expr .
+
+    PARDER          reduce using rule 67 (valor -> expr .)
+    MULT            reduce using rule 67 (valor -> expr .)
+    DIV             reduce using rule 67 (valor -> expr .)
+    SUM             reduce using rule 67 (valor -> expr .)
+    SUBSTR          reduce using rule 67 (valor -> expr .)
+
+
+state 10
+
+    (1) def_variable -> DEF PARIZQ VARIABLE COMA valor PARDER . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 15
+
+
+state 11
+
+    (68) expr -> valor MULT . valor
+    (65) valor -> . NUMBER
+    (66) valor -> . VARIABLE
+    (67) valor -> . expr
+    (68) expr -> . valor MULT valor
+    (69) expr -> . valor DIV valor
+    (70) expr -> . valor SUM valor
+    (71) expr -> . valor SUBSTR valor
+
+    NUMBER          shift and go to state 8
+    VARIABLE        shift and go to state 6
+
+    valor                          shift and go to state 16
+    expr                           shift and go to state 9
+
+state 12
+
+    (69) expr -> valor DIV . valor
+    (65) valor -> . NUMBER
+    (66) valor -> . VARIABLE
+    (67) valor -> . expr
+    (68) expr -> . valor MULT valor
+    (69) expr -> . valor DIV valor
+    (70) expr -> . valor SUM valor
+    (71) expr -> . valor SUBSTR valor
+
+    NUMBER          shift and go to state 8
+    VARIABLE        shift and go to state 6
+
+    valor                          shift and go to state 17
+    expr                           shift and go to state 9
+
+state 13
+
+    (70) expr -> valor SUM . valor
+    (65) valor -> . NUMBER
+    (66) valor -> . VARIABLE
+    (67) valor -> . expr
+    (68) expr -> . valor MULT valor
+    (69) expr -> . valor DIV valor
+    (70) expr -> . valor SUM valor
+    (71) expr -> . valor SUBSTR valor
+
+    NUMBER          shift and go to state 8
+    VARIABLE        shift and go to state 6
+
+    valor                          shift and go to state 18
+    expr                           shift and go to state 9
+
+state 14
+
+    (71) expr -> valor SUBSTR . valor
+    (65) valor -> . NUMBER
+    (66) valor -> . VARIABLE
+    (67) valor -> . expr
+    (68) expr -> . valor MULT valor
+    (69) expr -> . valor DIV valor
+    (70) expr -> . valor SUM valor
+    (71) expr -> . valor SUBSTR valor
+
+    NUMBER          shift and go to state 8
+    VARIABLE        shift and go to state 6
+
+    valor                          shift and go to state 19
+    expr                           shift and go to state 9
+
+state 15
+
+    (1) def_variable -> DEF PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA .
+
+    $end            reduce using rule 1 (def_variable -> DEF PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA .)
+
+
+state 16
+
+    (68) expr -> valor MULT valor .
+    (68) expr -> valor . MULT valor
+    (69) expr -> valor . DIV valor
+    (70) expr -> valor . SUM valor
+    (71) expr -> valor . SUBSTR valor
+
+  ! shift/reduce conflict for MULT resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for SUM resolved as shift
+  ! shift/reduce conflict for SUBSTR resolved as shift
+    PARDER          reduce using rule 68 (expr -> valor MULT valor .)
+    MULT            shift and go to state 11
+    DIV             shift and go to state 12
+    SUM             shift and go to state 13
+    SUBSTR          shift and go to state 14
+
+  ! MULT            [ reduce using rule 68 (expr -> valor MULT valor .) ]
+  ! DIV             [ reduce using rule 68 (expr -> valor MULT valor .) ]
+  ! SUM             [ reduce using rule 68 (expr -> valor MULT valor .) ]
+  ! SUBSTR          [ reduce using rule 68 (expr -> valor MULT valor .) ]
+
+
+state 17
+
+    (69) expr -> valor DIV valor .
+    (68) expr -> valor . MULT valor
+    (69) expr -> valor . DIV valor
+    (70) expr -> valor . SUM valor
+    (71) expr -> valor . SUBSTR valor
+
+  ! shift/reduce conflict for MULT resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for SUM resolved as shift
+  ! shift/reduce conflict for SUBSTR resolved as shift
+    PARDER          reduce using rule 69 (expr -> valor DIV valor .)
+    MULT            shift and go to state 11
+    DIV             shift and go to state 12
+    SUM             shift and go to state 13
+    SUBSTR          shift and go to state 14
+
+  ! MULT            [ reduce using rule 69 (expr -> valor DIV valor .) ]
+  ! DIV             [ reduce using rule 69 (expr -> valor DIV valor .) ]
+  ! SUM             [ reduce using rule 69 (expr -> valor DIV valor .) ]
+  ! SUBSTR          [ reduce using rule 69 (expr -> valor DIV valor .) ]
+
+
+state 18
+
+    (70) expr -> valor SUM valor .
+    (68) expr -> valor . MULT valor
+    (69) expr -> valor . DIV valor
+    (70) expr -> valor . SUM valor
+    (71) expr -> valor . SUBSTR valor
+
+  ! shift/reduce conflict for MULT resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for SUM resolved as shift
+  ! shift/reduce conflict for SUBSTR resolved as shift
+    PARDER          reduce using rule 70 (expr -> valor SUM valor .)
+    MULT            shift and go to state 11
+    DIV             shift and go to state 12
+    SUM             shift and go to state 13
+    SUBSTR          shift and go to state 14
+
+  ! MULT            [ reduce using rule 70 (expr -> valor SUM valor .) ]
+  ! DIV             [ reduce using rule 70 (expr -> valor SUM valor .) ]
+  ! SUM             [ reduce using rule 70 (expr -> valor SUM valor .) ]
+  ! SUBSTR          [ reduce using rule 70 (expr -> valor SUM valor .) ]
+
+
+state 19
+
+    (71) expr -> valor SUBSTR valor .
+    (68) expr -> valor . MULT valor
+    (69) expr -> valor . DIV valor
+    (70) expr -> valor . SUM valor
+    (71) expr -> valor . SUBSTR valor
+
+  ! shift/reduce conflict for MULT resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for SUM resolved as shift
+  ! shift/reduce conflict for SUBSTR resolved as shift
+    PARDER          reduce using rule 71 (expr -> valor SUBSTR valor .)
+    MULT            shift and go to state 11
+    DIV             shift and go to state 12
+    SUM             shift and go to state 13
+    SUBSTR          shift and go to state 14
+
+  ! MULT            [ reduce using rule 71 (expr -> valor SUBSTR valor .) ]
+  ! DIV             [ reduce using rule 71 (expr -> valor SUBSTR valor .) ]
+  ! SUM             [ reduce using rule 71 (expr -> valor SUBSTR valor .) ]
+  ! SUBSTR          [ reduce using rule 71 (expr -> valor SUBSTR valor .) ]
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for MULT in state 16 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 16 resolved as shift
+WARNING: shift/reduce conflict for SUM in state 16 resolved as shift
+WARNING: shift/reduce conflict for SUBSTR in state 16 resolved as shift
+WARNING: shift/reduce conflict for MULT in state 17 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 17 resolved as shift
+WARNING: shift/reduce conflict for SUM in state 17 resolved as shift
+WARNING: shift/reduce conflict for SUBSTR in state 17 resolved as shift
+WARNING: shift/reduce conflict for MULT in state 18 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 18 resolved as shift
+WARNING: shift/reduce conflict for SUM in state 18 resolved as shift
+WARNING: shift/reduce conflict for SUBSTR in state 18 resolved as shift
+WARNING: shift/reduce conflict for MULT in state 19 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 19 resolved as shift
+WARNING: shift/reduce conflict for SUM in state 19 resolved as shift
+WARNING: shift/reduce conflict for SUBSTR in state 19 resolved as shift
