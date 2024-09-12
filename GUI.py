@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import scrolledtext, filedialog
 from PIL import Image, ImageTk  # Importa Pillow
 import os
+import PIL
 
 
 global archivo
@@ -72,15 +73,15 @@ Botones del menú
 """
 # Botón play
 runImage = Image.open("Images/run.png")
-runImage = runImage.resize((28, 28), Image.ANTIALIAS)
-runImageTk = ImageTk.PhotoImage(runImage)
+runImage = runImage.resize((28, 28), PIL.Image.Resampling.LANCZOS)
+runImageTk = ImageTk.PhotoImage(runImage)   
 
 runButton = tk.Button(menuFrame, image=runImageTk, command=run_code, bg="#3b3d3f", relief=tk.FLAT, activebackground="#4c5052")
 runButton.place(x=widthWindow-200, y=7)
 
 # Botón del árbol de parseo
 treeImage = Image.open("Images/tree.png")
-treeImage = treeImage.resize((28, 28), Image.ANTIALIAS)
+treeImage = treeImage.resize((28, 28), PIL.Image.Resampling.LANCZOS)
 treeImageTk = ImageTk.PhotoImage(treeImage)
 
 treeButton = tk.Button(menuFrame, image=treeImageTk, command=run_code, bg="#3b3d3f", relief=tk.FLAT, activebackground="#4c5052")
@@ -88,7 +89,7 @@ treeButton.place(x=widthWindow-150, y=7)
 
 # Botón de tabla de símbolos
 tableImage = Image.open("Images/table.png")
-tableImage = tableImage.resize((28, 28), Image.ANTIALIAS)
+tableImage = tableImage.resize((28, 28), PIL.Image.Resampling.LANCZOS)
 tableImageTk = ImageTk.PhotoImage(tableImage)
 
 tableButton = tk.Button(menuFrame, image=tableImageTk, command=run_code, bg="#3b3d3f", relief=tk.FLAT, activebackground="#4c5052")
