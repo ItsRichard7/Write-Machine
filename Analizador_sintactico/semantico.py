@@ -1,6 +1,6 @@
 class AnalizadorSemantico:
     def __init__(self):
-        # Esta tabla de símbolos almacenará las variables declaradas y sus tipos
+        # Esta tabla de símbolos almacenará las variables declaradas, sus tipos y valores
         self.tabla_simbolos = {}
 
     def analizar(self, nodo):
@@ -9,6 +9,7 @@ class AnalizadorSemantico:
         """
         if isinstance(nodo, tuple):
             tipo_nodo = nodo[0]
+            print(f"Analizando nodo: {tipo_nodo}")
 
             # Analizar declaraciones de variables
             if tipo_nodo == 'def_variable':
@@ -25,17 +26,38 @@ class AnalizadorSemantico:
             elif tipo_nodo == 'for_loop':
                 self.analizar_bucle(nodo)
 
+            # Si el nodo contiene más subnodos (sentencias), procesarlos también
+            for subnodo in nodo[1:]:
+                self.analizar(subnodo)
+
             # Manejar otros tipos de sentencias aquí...
 
     def analizar_declaracion_variable(self, nodo):
         """
-        Verifica si la variable ya fue declarada y la agrega a la tabla de símbolos.
+        Agrega o actualiza la variable en la tabla de símbolos, validando su tipo.
         """
-        nombre_variable = nodo[2]
+        nombre_variable = nodo[1]
+        valor_variable = nodo[2][1]  # Suponiendo que el valor está en nodo[2]
+
+        # Determinar el tipo de la variable basada en el valor
+        tipo_variable = 'entero' if isinstance(valor_variable, int) else 'booleano' if valor_variable in ["TRUE", "FALSE"] else None
+
+        if tipo_variable is None:
+            raise Exception(f"Error semántico: el valor '{valor_variable}' no es un tipo válido (se esperaba entero o booleano).")
+
+        print(f"Analizando declaración de variable: {nombre_variable} con valor {valor_variable} y tipo {tipo_variable}")
+
+        # Validar si la variable ya existe y si el tipo coincide
         if nombre_variable in self.tabla_simbolos:
-            raise Exception(f"Error semántico: la variable '{nombre_variable}' ya fue declarada.")
-        self.tabla_simbolos[nombre_variable] = 'entero'  # Asumimos que todas las variables son enteros por ahora
-        print(f"Declarada la variable '{nombre_variable}' como 'entero'.")
+            tipo_existente = self.tabla_simbolos[nombre_variable]['tipo']
+            if tipo_existente != tipo_variable:
+                raise Exception(f"Error semántico: no se puede redeclarar la variable '{nombre_variable}' como '{tipo_variable}' porque ya fue declarada como '{tipo_existente}'.")
+        
+        # Actualizar o agregar la variable con su tipo y valor
+        self.tabla_simbolos[nombre_variable] = {'tipo': tipo_variable, 'valor': valor_variable}
+        
+        print(f"Variable '{nombre_variable}' actualizada/declarada con valor {valor_variable} y tipo {tipo_variable}.")
+
 
     def analizar_uso_variable(self, nombre_variable):
         """
@@ -43,7 +65,8 @@ class AnalizadorSemantico:
         """
         if nombre_variable not in self.tabla_simbolos:
             raise Exception(f"Error semántico: la variable '{nombre_variable}' se usa antes de ser declarada.")
-        print(f"Variable '{nombre_variable}' está siendo usada correctamente y fue declarada.")
+        valor_actual = self.tabla_simbolos[nombre_variable]['valor']
+        print(f"Variable '{nombre_variable}' está siendo usada correctamente. Valor actual: {valor_actual}.")
 
     def analizar_bucle(self, nodo):
         """
@@ -88,7 +111,7 @@ if __name__ == "__main__":
 
     data = '''
     Def(variable1, 5);
-    Add(variable1, 10);
+    Def(variable1, 9); 
     ContinueUp 10;
     '''
 
@@ -100,3 +123,4 @@ if __name__ == "__main__":
     analizador = AnalizadorSemantico()
     analizador.analizar(arbol_sintactico)
     print("Análisis semántico completado correctamente")
+    print("Tabla de Símbolos:", analizador.tabla_simbolos)
