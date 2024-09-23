@@ -9,7 +9,6 @@ class AnalizadorSemantico:
         """
         if isinstance(nodo, tuple):
             tipo_nodo = nodo[0]
-            print(f"Analizando nodo: {tipo_nodo}")
 
             # Analizar declaraciones de variables
             if tipo_nodo == 'def_variable':
@@ -17,10 +16,16 @@ class AnalizadorSemantico:
 
             # Analizar expresiones como PUT, ADD, operaciones, etc.
             elif tipo_nodo == 'put_variable':
-                self.analizar_uso_variable(nodo[2])
+                self.analizar_uso_variable(nodo[1], nodo[2][1])
 
-            elif tipo_nodo == 'add_variable':
-                self.analizar_uso_variable(nodo[2])
+            elif tipo_nodo == 'add_variable_uno':
+                self.analizar_operacion_add(nodo[1])
+
+            elif tipo_nodo == 'add_variable_dos':
+                self.analizar_operacion_add(nodo[1], nodo[2][1])
+
+            elif tipo_nodo == 'continue_up':
+                print("llego")
 
             # Analizar estructuras como bucles (loops), case, etc.
             elif tipo_nodo == 'for_loop':
@@ -34,40 +39,103 @@ class AnalizadorSemantico:
 
     def analizar_declaracion_variable(self, nodo):
         """
-        Agrega o actualiza la variable en la tabla de símbolos, validando su tipo.
+        Verifica si la variable ya fue declarada, la agrega a la tabla de símbolos y asigna su valor.
         """
         nombre_variable = nodo[1]
-        valor_variable = nodo[2][1]  # Suponiendo que el valor está en nodo[2]
+        valor_variable = nodo[2][1]  # Suponiendo que el valor es el segundo elemento en el subnodo
+        print(f"Analizando declaración de variable: {nombre_variable} con valor {valor_variable}")
 
-        # Determinar el tipo de la variable basada en el valor
-        tipo_variable = 'entero' if isinstance(valor_variable, int) else 'booleano' if valor_variable in ["TRUE", "FALSE"] else None
-
-        if tipo_variable is None:
+        # Verificar si el valor es un entero o un booleano (TRUE o FALSE)
+        if isinstance(valor_variable, int):
+            tipo_variable = 'entero'
+        elif valor_variable in ["TRUE", "FALSE"]:
+            tipo_variable = 'booleano'
+        else:
             raise Exception(f"Error semántico: el valor '{valor_variable}' no es un tipo válido (se esperaba entero o booleano).")
 
-        print(f"Analizando declaración de variable: {nombre_variable} con valor {valor_variable} y tipo {tipo_variable}")
-
-        # Validar si la variable ya existe y si el tipo coincide
+        # Verificar si la variable ya fue declarada
         if nombre_variable in self.tabla_simbolos:
-            tipo_existente = self.tabla_simbolos[nombre_variable]['tipo']
-            if tipo_existente != tipo_variable:
-                raise Exception(f"Error semántico: no se puede redeclarar la variable '{nombre_variable}' como '{tipo_variable}' porque ya fue declarada como '{tipo_existente}'.")
+            raise Exception(f"Error semántico: la variable '{nombre_variable}' ya fue declarada.")
         
-        # Actualizar o agregar la variable con su tipo y valor
+        # Agregar la variable a la tabla de símbolos
         self.tabla_simbolos[nombre_variable] = {'tipo': tipo_variable, 'valor': valor_variable}
-        
-        print(f"Variable '{nombre_variable}' actualizada/declarada con valor {valor_variable} y tipo {tipo_variable}.")
+        print(f"Declarada la variable '{nombre_variable}' como '{tipo_variable}' con valor {valor_variable}.")
 
 
-    def analizar_uso_variable(self, nombre_variable):
+    def analizar_uso_variable(self, nombre_variable, nuevo_valor=None):
         """
-        Verifica si la variable ha sido declarada antes de su uso.
+        Verifica si la variable ha sido declarada antes de su uso y valida el tipo de la variable.
         """
         if nombre_variable not in self.tabla_simbolos:
             raise Exception(f"Error semántico: la variable '{nombre_variable}' se usa antes de ser declarada.")
+        
+        # Obtener el tipo y el valor actual de la variable
+        tipo_actual = self.tabla_simbolos[nombre_variable]['tipo']
         valor_actual = self.tabla_simbolos[nombre_variable]['valor']
+        
+        # Imprimir el valor actual de la variable
         print(f"Variable '{nombre_variable}' está siendo usada correctamente. Valor actual: {valor_actual}.")
 
+        # Si hay un nuevo valor proporcionado, verificar su tipo
+        if nuevo_valor is not None:
+            nuevo_tipo = 'entero' if isinstance(nuevo_valor, int) else 'booleano' if nuevo_valor in ["TRUE", "FALSE"] else None
+            
+            if nuevo_tipo is None:
+                raise Exception(f"Error semántico: el nuevo valor '{nuevo_valor}' no es un tipo válido (se esperaba entero o booleano).")
+            
+            # Verificar la consistencia de tipos
+            if nuevo_tipo != tipo_actual:
+                raise Exception(f"Error semántico: no se puede asignar el valor '{nuevo_valor}' de tipo '{nuevo_tipo}' a la variable '{nombre_variable}' que es de tipo '{tipo_actual}'.")
+
+            # Si el tipo es correcto, actualiza el valor
+            self.tabla_simbolos[nombre_variable]['valor'] = nuevo_valor
+            print(f"Valor de la variable '{nombre_variable}' actualizado a {nuevo_valor}.")
+    
+    def analizar_operacion_add(self, nombre_variable, valor_b=1):
+        """
+        Verifica que los valores en la operación Add sean enteros,
+        realiza la suma con el valor de la variable y actualiza la tabla de símbolos.
+        """
+        # Verificar que el primer operando sea una variable y obtener su valor
+        if nombre_variable not in self.tabla_simbolos:
+            raise Exception(f"Error semántico: la variable '{nombre_variable}' no ha sido declarada.")
+        
+        valor_a_sumar = self.tabla_simbolos[nombre_variable]['valor']
+        tipo_a = self.tabla_simbolos[nombre_variable]['tipo']
+        
+        # Determinar el valor del segundo operando
+        if isinstance(valor_b, str):  # Si es una variable
+            if valor_b == 'TRUE' or valor_b == 'FALSE':
+                raise Exception(f"Error semántico: no se puede sumar un valor booleano.")
+            
+            elif valor_b not in self.tabla_simbolos:
+                raise Exception(f"Error semántico: la variable '{valor_b}' no ha sido declarada.")
+            
+            valor_b_sumar = self.tabla_simbolos[valor_b]['valor']
+            tipo_b = self.tabla_simbolos[valor_b]['tipo']
+            
+            # Verificar que ambos tipos sean enteros
+            if tipo_a != 'entero' or tipo_b != 'entero':
+                raise Exception(f"Error semántico: las variables deben ser de tipo entero. '{nombre_variable}' es de tipo '{tipo_a}' y '{valor_b}' es de tipo '{tipo_b}'.")
+        else:  # Si es un número
+            valor_b_sumar = valor_b  # Asumimos que ya es un entero
+            if not isinstance(valor_b_sumar, int):
+                raise Exception(f"Error semántico: el valor a sumar debe ser un entero. Se recibió: '{valor_b_sumar}'.")
+        
+        # Verificar que el tipo de valor_a_sumar sea entero
+        if tipo_a != 'entero':
+            raise Exception(f"Error semántico: no se puede sumar a la variable '{nombre_variable}' de tipo '{tipo_a}'.")
+
+        # Realizar la suma
+        nuevo_valor = valor_a_sumar + valor_b_sumar
+        
+        # Actualizar el valor en la tabla de símbolos
+        self.tabla_simbolos[nombre_variable]['valor'] = nuevo_valor
+        print(f"Variable '{nombre_variable}' actualizada. Nuevo valor: {nuevo_valor}.")
+
+
+
+            
     def analizar_bucle(self, nodo):
         """
         Realiza las comprobaciones para las variables de control de un bucle y asegura que los límites del bucle sean correctos.
@@ -110,8 +178,9 @@ if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-    Def(variable1, 5);
-    Def(variable1, 9); 
+    Def(variable1, 9);
+    Def(variable2, TRUE); 
+    Add(variable1, 5);
     ContinueUp 10;
     '''
 

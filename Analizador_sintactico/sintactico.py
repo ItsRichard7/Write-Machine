@@ -279,7 +279,7 @@ def analizar_sintactico(data):
 if __name__ == "__main__":
     data = '''// Ejemplo de código fuente
     Def(variable1, 5);
-    Add(variable1, 10);
+    Add(variable1, 9); 
     ContinueUp 10;
     '''
     analizar_sintactico(data)
