@@ -24,9 +24,24 @@ class AnalizadorSemantico:
             elif tipo_nodo == 'add_variable_dos':
                 self.analizar_operacion_add(nodo[1], nodo[2][1])
 
-            elif tipo_nodo == 'continue_up':
-                print("llego")
+            elif tipo_nodo == 'continue_up' or tipo_nodo == 'continue_down' or tipo_nodo == 'continue_left' or tipo_nodo == 'continue_right':
+                self.verificar_entero(nodo[1][1])
 
+            elif tipo_nodo == 'pos':
+                self.analizar_pos(nodo)
+
+            elif tipo_nodo == 'posx' or tipo_nodo == 'posy':
+                self.verificar_entero(nodo[1][1])
+
+            elif tipo_nodo == 'use_color':
+                self.analizar_use_color(nodo)
+            
+            elif tipo_nodo == 'down':
+                print("Mover lapicero hacia abajo.")
+
+            elif tipo_nodo == 'up':
+                print("Mover lapicero hacia arriba.")
+                
             # Analizar estructuras como bucles (loops), case, etc.
             elif tipo_nodo == 'for_loop':
                 self.analizar_bucle(nodo)
@@ -134,8 +149,46 @@ class AnalizadorSemantico:
         print(f"Variable '{nombre_variable}' actualizada. Nuevo valor: {nuevo_valor}.")
 
 
+     # Función para verificar si el valor es una variable o un número
+    def verificar_entero(self, valor):
+        if isinstance(valor, str):  # Si es una variable
+            if valor not in self.tabla_simbolos:
+                raise Exception(f"Error semántico: la variable '{valor}' no ha sido declarada.")
+            tipo_variable = self.tabla_simbolos[valor]['tipo']
+            if tipo_variable != 'entero':
+                raise Exception(f"Error semántico: la variable '{valor}' debe ser de tipo entero. Es de tipo '{tipo_variable}'.")
+        else:  # Se asume que el valor es un número
+            if not isinstance(valor, int):
+                raise Exception(f"Error semántico: se esperaba un entero, se recibió: '{valor}'.")
 
+
+    def analizar_pos(self, nodo):
+        """
+        Verifica que ambos valores en la operación Pos sean enteros.
+        """
+        valor_a = nodo[1][1]  # Primer argumento
+        valor_b = nodo[2][1]  # Segundo argumento
+
+        # Verificar ambos valores
+        self.verificar_entero(valor_a)
+        self.verificar_entero(valor_b)
+
+        print(f"Nueva posicion(x:{valor_a}, y:{valor_b}).")
+
+    def analizar_use_color(self, nodo):
+        """
+        Verifica que ambos valores en la operación Pos sean enteros.
+        """
+        valor_a = nodo[1][1]  # Primer argumento
+
+        # Verificar ambos valores
+        self.verificar_entero(valor_a)
+        
+        if valor_a > 2 or valor_a < 1:
+            raise Exception(f"Error semántico: el valor de 'use_color' debe ser 1 o 2. Se recibió: '{valor_a}'.")
             
+        print(f"Color actual: {valor_a}.")
+
     def analizar_bucle(self, nodo):
         """
         Realiza las comprobaciones para las variables de control de un bucle y asegura que los límites del bucle sean correctos.
@@ -178,18 +231,20 @@ if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-    Def(variable1, 9);
-    Def(variable2, TRUE); 
-    Add(variable1, 5);
-    ContinueUp 10;
+    Def(variable1, 7);
+    Pos(80,90);
+    Pos(80,variable1);
+    PosX 50;
+    PosY 5;
+    UseColor 1;
     '''
 
     # Parsear el código para generar el árbol sintáctico (AST)
     arbol_sintactico = parser.parse(data)
-    print("Árbol Sintáctico Generado:", arbol_sintactico)
+    #print("Árbol Sintáctico Generado:", arbol_sintactico)
 
     # Crear y ejecutar el analizador semántico
     analizador = AnalizadorSemantico()
     analizador.analizar(arbol_sintactico)
-    print("Análisis semántico completado correctamente")
+    #print("Análisis semántico completado correctamente")
     print("Tabla de Símbolos:", analizador.tabla_simbolos)
