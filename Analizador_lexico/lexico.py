@@ -35,6 +35,7 @@ tokens = [
     'PUNTOCOMA',
     'NUMBER',
     'VARIABLE',
+    'TO',
     'COMMENT',
     'TEXT',
     'FOR',
@@ -71,6 +72,7 @@ t_BEGIN = r'Beginning;'
 t_EQUAL = r'Equal'
 t_AND = r'And'
 t_OR = r'Or'
+t_TO = r'to'
 t_GREATER = r'Greater'
 t_SMALLER = r'Smaller'
 t_SUBSTR = r'Substr'
@@ -82,8 +84,8 @@ t_PARIZQ = r'\('
 t_PARDER = r'\)'
 t_BRAIZQ = r'\['
 t_BRADER = r'\]'
-t_TRUE = r'True'
-t_FALSE = r'False'
+t_TRUE = r'TRUE'
+t_FALSE = r'FALSE'
 t_PUNTOCOMA = r';'
 t_COMA = r',' 
 t_END = r'End'
@@ -154,6 +156,7 @@ def analizar(data):
         for token in lexer:
             print(token)
 
+"""
 # Ejemplo de prueba
 data = '''// Este es el nombre del programa
 Def(xxx, 5);
@@ -164,3 +167,4 @@ End;
 '''
 
 analizar(data)
+"""
