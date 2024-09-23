@@ -41,10 +41,16 @@ class AnalizadorSemantico:
 
             elif tipo_nodo == 'up':
                 print("Mover lapicero hacia arriba.")
-                
+
+            elif tipo_nodo == 'beginning':
+                print("Mover lapicero a [1,1].")
+
             # Analizar estructuras como bucles (loops), case, etc.
             elif tipo_nodo == 'for_loop':
                 self.analizar_bucle(nodo)
+            
+            elif tipo_nodo == 'case':
+                self.analizar_case(nodo)
 
             # Si el nodo contiene más subnodos (sentencias), procesarlos también
             for subnodo in nodo[1:]:
@@ -208,9 +214,12 @@ class AnalizadorSemantico:
                 f"Error semántico: el valor inicial del bucle ({inicio_bucle}) debe ser menor al valor final ({fin_bucle}).")
 
         print(f"Bucle válido desde {inicio_bucle} hasta {fin_bucle} con la variable '{var_bucle}'.")
+    
+    def analizar_case(self, nodo):
+        print(nodo)
 
     def analizar_expresion(self, nodo_expresion):
-        """
+        """UseColor 1
         Comprueba si expresiones como ADD, PUT y otras están siendo usadas con variables declaradas.
         """
         if nodo_expresion[0] == 'add_variable':
@@ -231,17 +240,21 @@ if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-    Def(variable1, 7);
-    Pos(80,90);
-    Pos(80,variable1);
-    PosX 50;
-    PosY 5;
-    UseColor 1;
+    Def(var1,1);
+    Def(var2,2);
+    Case var1
+        When 1 Then
+        [ Add(var1, 1); ]
+    When 2 Then
+        [ Add(var2, 1); ]
+    When 3 Then
+        [ Add(var1, 3); ]
+    End Case;
     '''
 
     # Parsear el código para generar el árbol sintáctico (AST)
     arbol_sintactico = parser.parse(data)
-    #print("Árbol Sintáctico Generado:", arbol_sintactico)
+    print("Árbol Sintáctico Generado:", arbol_sintactico)
 
     # Crear y ejecutar el analizador semántico
     analizador = AnalizadorSemantico()
