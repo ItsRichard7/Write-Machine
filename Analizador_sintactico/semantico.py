@@ -514,7 +514,7 @@ class AnalizadorSemantico:
 
         # Comparar los valores y devolver el resultado
         resultado = valor1 + valor2
-        print(f"Resultado de la suma {valor1} + {valor2}= {resultado}")
+        print(f"Resultado de la suma {valor1} + {valor2} = {resultado}")
         return resultado
 
     def analizar_condicional(self, nodo_condicional):
