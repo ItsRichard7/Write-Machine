@@ -1,3 +1,4 @@
+import random
 class AnalizadorSemantico:
     def __init__(self):
         # Esta tabla de símbolos almacenará las variables declaradas, sus tipos y valores
@@ -67,6 +68,21 @@ class AnalizadorSemantico:
 
             elif tipo_nodo == 'smaller':
                 self.analizar_smaller(nodo)
+
+            elif tipo_nodo == 'substract':
+                self.analizar_substract(nodo)
+
+            elif tipo_nodo == 'random':
+                self.analizar_random(nodo)
+
+            elif tipo_nodo == 'mult':
+                self.analizar_mult(nodo)
+
+            elif tipo_nodo == 'div':
+                self.analizar_div(nodo)
+
+            elif tipo_nodo == 'sum':
+                self.analizar_sum(nodo)
             
             # Si el nodo contiene más subnodos (sentencias), procesarlos también
             for subnodo in nodo[1:]:
@@ -323,8 +339,6 @@ class AnalizadorSemantico:
         operando1 = nodo[1]
         operando2 = nodo[2]
 
-        
-
         # Obtener valores de ambos operandos
         valor1 = self.obtener_valor(operando1)
         valor2 = self.obtener_valor(operando2)
@@ -410,6 +424,99 @@ class AnalizadorSemantico:
         print(f"Resultado de la comparación {valor1} < {valor2}: {resultado}")
         return resultado
 
+    def analizar_substract(self, nodo):
+        # nodo: ('substract', operand1, operand2)
+        operando1 = nodo[1]
+        operando2 = nodo[2]
+
+        # Obtener valores de ambos operandos
+        valor1 = self.obtener_valor(operando1)
+        valor2 = self.obtener_valor(operando2)
+
+        # Verificar que ambos valores sean enteros
+        self.verificar_entero(valor1)
+        self.verificar_entero(valor2)
+
+        # Comparar los valores y devolver el resultado
+        resultado = valor1 - valor2
+        print(f"Resultado de la resta {valor1} - {valor2} = {resultado}")
+        return resultado
+
+    def analizar_random(self, nodo):
+        # nodo: ('random', operand1)
+        operando = nodo[1]
+
+        # Obtener valores de ambos operandos
+        valor = self.obtener_valor(operando)
+
+        # Verificar que ambos valores sean enteros
+        self.verificar_entero(valor)
+
+        # Comparar los valores y devolver el resultado
+        resultado = random.randint(0, valor)
+        print(f"Resultado de numero random es  {valor} = {resultado}")
+        return resultado
+
+
+    def analizar_mult(self, nodo):
+        # nodo: ('mult', operand1, operand2)
+        operando1 = nodo[1]
+        operando2 = nodo[2]
+
+        # Obtener valores de ambos operandos
+        valor1 = self.obtener_valor(operando1)
+        valor2 = self.obtener_valor(operando2)
+
+        # Verificar que ambos valores sean enteros
+        self.verificar_entero(valor1)
+        self.verificar_entero(valor2)
+
+        # Comparar los valores y devolver el resultado
+        resultado = valor1 * valor2
+        print(f"Resultado de la multiplicacion {valor1} * {valor2} = {resultado}")
+        return resultado
+
+
+    def analizar_div(self, nodo):
+        # nodo: ('div', operand1, operand2)
+        operando1 = nodo[1]
+        operando2 = nodo[2]
+
+        # Obtener valores de ambos operandos
+        valor1 = self.obtener_valor(operando1)
+        valor2 = self.obtener_valor(operando2)
+
+        # Verificar que ambos valores sean enteros
+        self.verificar_entero(valor1)
+        self.verificar_entero(valor2)
+
+        # Comparar los valores y devolver el resultado
+        if valor2 == 0:
+            raise Exception("Error: operando 2 no válido.")
+        else:
+            resultado = valor1 / valor2
+            print(f"Resultado de la division {valor1} / {valor2} = {resultado}")
+        return resultado
+
+
+    def analizar_sum(self, nodo):
+        # nodo: ('sum', operand1, operand2)
+        operando1 = nodo[1]
+        operando2 = nodo[2]
+
+        # Obtener valores de ambos operandos
+        valor1 = self.obtener_valor(operando1)
+        valor2 = self.obtener_valor(operando2)
+
+        # Verificar que ambos valores sean enteros
+        self.verificar_entero(valor1)
+        self.verificar_entero(valor2)
+
+        # Comparar los valores y devolver el resultado
+        resultado = valor1 + valor2
+        print(f"Resultado de la suma {valor1} + {valor2}= {resultado}")
+        return resultado
+
     def analizar_condicional(self, nodo_condicional):
         """
         Realiza las comprobaciones para condicionales como IF, WHILE, REPEAT-UNTIL, etc.
@@ -426,10 +533,12 @@ if __name__ == "__main__":
 
     data = '''
     Def(var1,2);
-    Def(var2,2);
-    Equal(var1,var2)
-    Equal(var1,1)
-    Or(FALSE,FALSE)
+    Def(var2,4);
+    Substr(var1,var2)
+    Random(var1)
+    Mult(var1,var2)
+    Div(var1,var2)
+    Sum(var1,var2)
     '''
 
     # Parsear el código para generar el árbol sintáctico (AST)
