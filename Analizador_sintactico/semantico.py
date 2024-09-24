@@ -51,7 +51,7 @@ class AnalizadorSemantico:
             
             elif tipo_nodo == 'case':
                 self.analizar_case(nodo)
-
+                return
             # Si el nodo contiene más subnodos (sentencias), procesarlos también
             for subnodo in nodo[1:]:
                 self.analizar(subnodo)
@@ -214,9 +214,58 @@ class AnalizadorSemantico:
                 f"Error semántico: el valor inicial del bucle ({inicio_bucle}) debe ser menor al valor final ({fin_bucle}).")
 
         print(f"Bucle válido desde {inicio_bucle} hasta {fin_bucle} con la variable '{var_bucle}'.")
-    
+
+
     def analizar_case(self, nodo):
-        print(nodo)
+        
+        nombre_variable = nodo[1]
+        self.verificar_entero(nombre_variable)
+        valor_actual = self.tabla_simbolos[nombre_variable]['valor']
+
+        casos = self.buscar_todos_when_cases(nodo)
+        for i in range(len(casos)):
+            caso = casos[i][1][1]
+            if not isinstance(caso, int):
+                raise Exception(f"Error semántico: el caso debe de ser entero, se obtuvo {caso}.")
+            else:
+                if caso == valor_actual:
+                    print(f"El caso {caso} se cumple.")
+                    sentencia = self.obtener_sentencias_a_ejecutar(casos[i], nodo)
+                    self.analizar(sentencia)
+                    break
+
+    def obtener_sentencias_a_ejecutar(self, when_case, arbol):
+        # Busca el nodo 'when_case' en el árbol y devuelve las sentencias
+        if isinstance(arbol, tuple):
+            # Verifica si el árbol tiene la estructura del 'when_case'
+            if arbol[0] == 'when_case' and arbol[1][1] == when_case[1][1]:
+                # Devuelve las sentencias asociadas a este 'when_case'
+                return arbol[2]  # 'arbol[2]' contiene las sentencias
+
+            # Recursivamente recorrer los hijos del árbol
+            for hijo in arbol[1:]:
+                sentencias = self.obtener_sentencias_a_ejecutar(when_case, hijo)
+                if sentencias:
+                    return sentencias
+        return None
+
+    def buscar_todos_when_cases(self, arbol):
+     # Lista para acumular los resultados
+        resultados = []
+
+        # Verificar si es una tupla
+        if isinstance(arbol, tuple):
+            # Si el nodo es un 'when_case', agregarlo a los resultados
+            if arbol[0] == 'when_case':
+                resultados.append(arbol[:2])  # Agregar solo la parte que necesitas
+
+            # Recursivamente recorrer los hijos del árbol
+            for hijo in arbol[1:]:
+                resultados.extend(self.buscar_todos_when_cases(hijo))
+
+        # Devolver todos los resultados como una tupla
+        return tuple(resultados)
+    
 
     def analizar_expresion(self, nodo_expresion):
         """UseColor 1
@@ -233,6 +282,8 @@ class AnalizadorSemantico:
         """
         # Realizar las comprobaciones adecuadas para el nodo de condicional
         pass
+   
+
 
 
 # Ejemplo de uso en integración con el árbol sintáctico de sintactico.py
@@ -254,6 +305,7 @@ if __name__ == "__main__":
 
     # Parsear el código para generar el árbol sintáctico (AST)
     arbol_sintactico = parser.parse(data)
+    
     print("Árbol Sintáctico Generado:", arbol_sintactico)
 
     # Crear y ejecutar el analizador semántico
