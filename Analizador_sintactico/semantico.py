@@ -52,6 +52,22 @@ class AnalizadorSemantico:
             elif tipo_nodo == 'case':
                 self.analizar_case(nodo)
                 return
+
+            elif tipo_nodo == 'equal':
+                self.analizar_equal(nodo)
+
+            elif tipo_nodo == 'and':
+                self.analizar_and(nodo)
+
+            elif tipo_nodo == 'or':
+                self.analizar_or(nodo)
+
+            elif tipo_nodo == 'greater':
+                self.analizar_greater(nodo)
+
+            elif tipo_nodo == 'smaller':
+                self.analizar_smaller(nodo)
+            
             # Si el nodo contiene más subnodos (sentencias), procesarlos también
             for subnodo in nodo[1:]:
                 self.analizar(subnodo)
@@ -64,7 +80,6 @@ class AnalizadorSemantico:
         """
         nombre_variable = nodo[1]
         valor_variable = nodo[2][1]  # Suponiendo que el valor es el segundo elemento en el subnodo
-        print(f"Analizando declaración de variable: {nombre_variable} con valor {valor_variable}")
 
         # Verificar si el valor es un entero o un booleano (TRUE o FALSE)
         if isinstance(valor_variable, int):
@@ -155,7 +170,6 @@ class AnalizadorSemantico:
         print(f"Variable '{nombre_variable}' actualizada. Nuevo valor: {nuevo_valor}.")
 
 
-     # Función para verificar si el valor es una variable o un número
     def verificar_entero(self, valor):
         if isinstance(valor, str):  # Si es una variable
             if valor not in self.tabla_simbolos:
@@ -166,6 +180,22 @@ class AnalizadorSemantico:
         else:  # Se asume que el valor es un número
             if not isinstance(valor, int):
                 raise Exception(f"Error semántico: se esperaba un entero, se recibió: '{valor}'.")
+
+     # Función para verificar si el valor es una variable o un número
+    def verificar_booleano(self, valor):
+        if isinstance(valor, str):  # Si es una variable
+            if valor == 'TRUE':
+                return True
+            elif valor == 'FALSE':
+                    return False
+            elif valor not in self.tabla_simbolos:
+                raise Exception(f"Error semántico: la variable '{valor}' no ha sido declarada.")
+            else:
+                booleano = self.tabla_simbolos[valor]['valor']
+                if isinstance(booleano, bool):
+                    return booleano
+                else:
+                    raise Exception(f"Error semántico: la variable '{valor}' debe ser de tipo booleano.")
 
 
     def analizar_pos(self, nodo):
@@ -275,6 +305,110 @@ class AnalizadorSemantico:
             nombre_variable = nodo_expresion[2]
             self.analizar_uso_variable(nombre_variable)
             print(f"Analizada la operación ADD para la variable '{nombre_variable}'.")
+    
+    # Función para obtener el valor de un operando, ya sea variable o número literal
+    def obtener_valor(self,operando):
+        if isinstance(operando, tuple) and operando[0] == 'variable':  # Si es una variable
+            if operando[1] in self.tabla_simbolos:
+                return self.tabla_simbolos[operando[1]]['valor']
+            else:
+                raise Exception(f"Error: la variable '{operando}' no está definida.")
+        elif isinstance(operando, tuple) and operando[0] == 'number' or operando[0] == 'logico':  
+            return operando[1]  # Retorna el valor numérico
+        else:
+            raise Exception("Error: operando no válido.")
+
+    def analizar_equal(self, nodo):
+        # nodo: ('equal', operand1, operand2)
+        operando1 = nodo[1]
+        operando2 = nodo[2]
+
+        
+
+        # Obtener valores de ambos operandos
+        valor1 = self.obtener_valor(operando1)
+        valor2 = self.obtener_valor(operando2)
+
+        # Verificar que ambos valores sean enteros
+        self.verificar_entero(valor1)
+        self.verificar_entero(valor2)
+
+        # Comparar los valores y devolver el resultado
+        resultado = valor1 == valor2
+        print(f"Resultado de la comparación {valor1} == {valor2}: {resultado}")
+        return resultado
+    
+    def analizar_and(self, nodo):
+        # nodo: ('equal', operand1, operand2)
+        operando1 = nodo[1]
+        operando2 = nodo[2]
+
+        # Obtener valores de ambos operandos
+        valor1 = self.obtener_valor(operando1)
+        valor2 = self.obtener_valor(operando2)
+
+        booleano1 = self.verificar_booleano(valor1)
+        booleano2 = self.verificar_booleano(valor2)
+
+        # Comparar los valores y devolver el resultado
+        resultado = booleano1 and booleano2
+        print(f"Resultado del and {booleano1} and {booleano2}: {resultado}")
+        return resultado
+    
+    def analizar_or(self, nodo):
+        # nodo: ('equal', operand1, operand2)
+        operando1 = nodo[1]
+        operando2 = nodo[2]
+
+        # Obtener valores de ambos operandos
+        valor1 = self.obtener_valor(operando1)
+        valor2 = self.obtener_valor(operando2)
+
+        # Verificar que ambos valores sean enteros
+        booleano1 = self.verificar_booleano(valor1)
+        booleano2 = self.verificar_booleano(valor2)
+
+        # Comparar los valores y devolver el resultado
+        resultado = booleano1 or booleano2
+        print(f"Resultado del or {booleano1} or {booleano2}: {resultado}")
+        return resultado
+    
+    def analizar_greater(self, nodo):
+        # nodo: ('equal', operand1, operand2)
+        operando1 = nodo[1]
+        operando2 = nodo[2]
+
+        # Obtener valores de ambos operandos
+        valor1 = self.obtener_valor(operando1)
+        valor2 = self.obtener_valor(operando2)
+
+        # Verificar que ambos valores sean enteros
+        self.verificar_entero(valor1)
+        self.verificar_entero(valor2)
+
+        # Comparar los valores y devolver el resultado
+        resultado = valor1 > valor2
+        print(f"Resultado de la comparación {valor1} > {valor2}: {resultado}")
+        return resultado
+
+
+    def analizar_smaller(self, nodo):
+        # nodo: ('equal', operand1, operand2)
+        operando1 = nodo[1]
+        operando2 = nodo[2]
+
+        # Obtener valores de ambos operandos
+        valor1 = self.obtener_valor(operando1)
+        valor2 = self.obtener_valor(operando2)
+
+        # Verificar que ambos valores sean enteros
+        self.verificar_entero(valor1)
+        self.verificar_entero(valor2)
+
+        # Comparar los valores y devolver el resultado
+        resultado = valor1 < valor2
+        print(f"Resultado de la comparación {valor1} < {valor2}: {resultado}")
+        return resultado
 
     def analizar_condicional(self, nodo_condicional):
         """
@@ -291,16 +425,11 @@ if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-    Def(var1,1);
+    Def(var1,2);
     Def(var2,2);
-    Case var1
-        When 1 Then
-        [ Add(var1, 1); ]
-    When 2 Then
-        [ Add(var2, 1); ]
-    When 3 Then
-        [ Add(var1, 3); ]
-    End Case;
+    Equal(var1,var2)
+    Equal(var1,1)
+    Or(FALSE,FALSE)
     '''
 
     # Parsear el código para generar el árbol sintáctico (AST)

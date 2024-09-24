@@ -278,12 +278,7 @@ def analizar_sintactico(data):
 # Ejemplo de prueba
 if __name__ == "__main__":
     data = '''// Ejemplo de código fuente
-    Def(var2,0);
-    Repeat
- [ContinueUp 90;
-   Add(var2,1);]
-Until
- (Equal(var2,5););
+    Or(FALSE, TRUE)
 
     '''
     analizar_sintactico(data)
