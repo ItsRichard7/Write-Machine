@@ -135,7 +135,7 @@ def t_newline(t):
 
 # Manejo de errores de token
 def t_error(t):
-    print(f"Carácter no válido: '{t.value[0]}' en la línea {t.lexer.lineno}")
+    print(f"Error léxico: carácter no válido '{t.value[0]}' en la línea {t.lexer.lineno}")
     t.lexer.skip(1)
 
 # Crear y construir el analizador léxico
@@ -168,8 +168,6 @@ def analizar(data):
         for token in lexer:
             print(token)
 
-"""
-# Ejemplo de prueba
 data = '''// Este es el nombre del programa
 Def(xxx, 5);
 UseColor 255;
@@ -179,4 +177,3 @@ End;
 '''
 
 analizar(data)
-"""

@@ -113,7 +113,6 @@ class AnalizadorSemantico:
         self.tabla_simbolos[nombre_variable] = {'tipo': tipo_variable, 'valor': valor_variable}
         print(f"Declarada la variable '{nombre_variable}' como '{tipo_variable}' con valor {valor_variable}.")
 
-
     def analizar_uso_variable(self, nombre_variable, nuevo_valor=None):
         """
         Verifica si la variable ha sido declarada antes de su uso y valida el tipo de la variable.
@@ -185,7 +184,6 @@ class AnalizadorSemantico:
         self.tabla_simbolos[nombre_variable]['valor'] = nuevo_valor
         print(f"Variable '{nombre_variable}' actualizada. Nuevo valor: {nuevo_valor}.")
 
-
     def verificar_entero(self, valor):
         if isinstance(valor, str):  # Si es una variable
             if valor not in self.tabla_simbolos:
@@ -212,7 +210,6 @@ class AnalizadorSemantico:
                     return booleano
                 else:
                     raise Exception(f"Error semántico: la variable '{valor}' debe ser de tipo booleano.")
-
 
     def analizar_pos(self, nodo):
         """
@@ -260,7 +257,6 @@ class AnalizadorSemantico:
                 f"Error semántico: el valor inicial del bucle ({inicio_bucle}) debe ser menor al valor final ({fin_bucle}).")
 
         print(f"Bucle válido desde {inicio_bucle} hasta {fin_bucle} con la variable '{var_bucle}'.")
-
 
     def analizar_case(self, nodo):
         
@@ -311,7 +307,6 @@ class AnalizadorSemantico:
 
         # Devolver todos los resultados como una tupla
         return tuple(resultados)
-    
 
     def analizar_expresion(self, nodo_expresion):
         """UseColor 1
@@ -405,7 +400,6 @@ class AnalizadorSemantico:
         print(f"Resultado de la comparación {valor1} > {valor2}: {resultado}")
         return resultado
 
-
     def analizar_smaller(self, nodo):
         # nodo: ('equal', operand1, operand2)
         operando1 = nodo[1]
@@ -457,7 +451,6 @@ class AnalizadorSemantico:
         print(f"Resultado de numero random es  {valor} = {resultado}")
         return resultado
 
-
     def analizar_mult(self, nodo):
         # nodo: ('mult', operand1, operand2)
         operando1 = nodo[1]
@@ -475,7 +468,6 @@ class AnalizadorSemantico:
         resultado = valor1 * valor2
         print(f"Resultado de la multiplicacion {valor1} * {valor2} = {resultado}")
         return resultado
-
 
     def analizar_div(self, nodo):
         # nodo: ('div', operand1, operand2)
@@ -497,7 +489,6 @@ class AnalizadorSemantico:
             resultado = valor1 / valor2
             print(f"Resultado de la division {valor1} / {valor2} = {resultado}")
         return resultado
-
 
     def analizar_sum(self, nodo):
         # nodo: ('sum', operand1, operand2)
@@ -523,16 +514,13 @@ class AnalizadorSemantico:
         """
         # Realizar las comprobaciones adecuadas para el nodo de condicional
         pass
-   
-
-
 
 # Ejemplo de uso en integración con el árbol sintáctico de sintactico.py
 if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-    Def(var1,2);
+    Df(var1,2);
     Def(var2,4);
     Substr(var1,var2)
     Random(var1)
@@ -540,7 +528,7 @@ if __name__ == "__main__":
     Div(var1,var2)
     Sum(var1,var2)
     '''
-
+    
     # Parsear el código para generar el árbol sintáctico (AST)
     arbol_sintactico = parser.parse(data)
     
