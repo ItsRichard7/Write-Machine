@@ -12,6 +12,9 @@ global archivo
 archivo = "1"
 
 def run_code():
+    consolePanel.config(state=tk.NORMAL)  # Habilitar la consola para que sea editable
+    consolePanel.delete('1.0', tk.END)  # Eliminar todo el texto desde la primera posición hasta el final
+    consolePanel.config(state=tk.DISABLED)  # Deshabilitar nuevamente para evitar ediciones manuales
     errores.clear()  # Limpiamos la lista de errores
     code = codePanel.get("1.0", tk.END).strip()
     print("'" + code + "'")
@@ -33,7 +36,8 @@ def run_code():
                 if errores:
                    show_errors(errores)
                 else:
-                    print("Código compilado con éxito <3")
+                    consolePanel.insert(tk.END, "Código compilado con éxito <3 \n", 'exito')
+                    consolePanel.tag_config('exito', foreground="white", font=("Consolas", 13, "bold"))  # Configuración del estilo para los errores
     else:
         show_errors(errores)
 
@@ -41,7 +45,7 @@ def show_errors(errors):
     """Muestra los errores en el panel de consola."""
     consolePanel.config(state=tk.NORMAL)  # Habilitar el panel de consola
     for message in errors:
-        consolePanel.insert(tk.END, f"Error: {message}\n", 'error')  # Insertar cada error
+        consolePanel.insert(tk.END, f"{message}\n", 'error')  # Insertar cada error
     consolePanel.tag_config('error', foreground="#c26364", font=("Consolas", 13, "bold"))  # Configuración del estilo para los errores
     consolePanel.config(state=tk.DISABLED)  # Deshabilitar el panel de consola para evitar ediciones
 
