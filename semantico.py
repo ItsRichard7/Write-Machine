@@ -1,4 +1,6 @@
+from lexico import errores
 import random
+
 class AnalizadorSemantico:
     def __init__(self):
         # Esta tabla de símbolos almacenará las variables declaradas, sus tipos y valores
@@ -103,11 +105,15 @@ class AnalizadorSemantico:
         elif valor_variable in ["TRUE", "FALSE"]:
             tipo_variable = 'booleano'
         else:
-            raise Exception(f"Error semántico: el valor '{valor_variable}' no es un tipo válido (se esperaba entero o booleano).")
-
+            error = (f"Error semántico: el valor '{valor_variable}' no es un tipo válido (se esperaba entero o booleano).")
+            errores.append(error)
+            raise Exception(error)
+            
         # Verificar si la variable ya fue declarada
         if nombre_variable in self.tabla_simbolos:
-            raise Exception(f"Error semántico: la variable '{nombre_variable}' ya fue declarada.")
+            error = (f"Error semántico: la variable '{nombre_variable}' ya fue declarada.")
+            errores.append(error)
+            raise Exception(error)
         
         # Agregar la variable a la tabla de símbolos
         self.tabla_simbolos[nombre_variable] = {'tipo': tipo_variable, 'valor': valor_variable}
@@ -118,7 +124,9 @@ class AnalizadorSemantico:
         Verifica si la variable ha sido declarada antes de su uso y valida el tipo de la variable.
         """
         if nombre_variable not in self.tabla_simbolos:
-            raise Exception(f"Error semántico: la variable '{nombre_variable}' se usa antes de ser declarada.")
+            error = (f"Error semántico: la variable '{nombre_variable}' se usa antes de ser declarada.")
+            errores.append(error)
+            raise Exception(error)
         
         # Obtener el tipo y el valor actual de la variable
         tipo_actual = self.tabla_simbolos[nombre_variable]['tipo']
@@ -132,11 +140,15 @@ class AnalizadorSemantico:
             nuevo_tipo = 'entero' if isinstance(nuevo_valor, int) else 'booleano' if nuevo_valor in ["TRUE", "FALSE"] else None
             
             if nuevo_tipo is None:
-                raise Exception(f"Error semántico: el nuevo valor '{nuevo_valor}' no es un tipo válido (se esperaba entero o booleano).")
+                error = (f"Error semántico: el nuevo valor '{nuevo_valor}' no es un tipo válido (se esperaba entero o booleano).")
+                errores.append(error)
+                raise Exception(error)
             
             # Verificar la consistencia de tipos
             if nuevo_tipo != tipo_actual:
-                raise Exception(f"Error semántico: no se puede asignar el valor '{nuevo_valor}' de tipo '{nuevo_tipo}' a la variable '{nombre_variable}' que es de tipo '{tipo_actual}'.")
+                error = (f"Error semántico: no se puede asignar el valor '{nuevo_valor}' de tipo '{nuevo_tipo}' a la variable '{nombre_variable}' que es de tipo '{tipo_actual}'.")
+                errores.append(error)
+                raise Exception(error)
 
             # Si el tipo es correcto, actualiza el valor
             self.tabla_simbolos[nombre_variable]['valor'] = nuevo_valor
@@ -149,7 +161,9 @@ class AnalizadorSemantico:
         """
         # Verificar que el primer operando sea una variable y obtener su valor
         if nombre_variable not in self.tabla_simbolos:
-            raise Exception(f"Error semántico: la variable '{nombre_variable}' no ha sido declarada.")
+            error = (f"Error semántico: la variable '{nombre_variable}' no ha sido declarada.")
+            errores.append(error)
+            raise Exception(error)
         
         valor_a_sumar = self.tabla_simbolos[nombre_variable]['valor']
         tipo_a = self.tabla_simbolos[nombre_variable]['tipo']
@@ -157,25 +171,35 @@ class AnalizadorSemantico:
         # Determinar el valor del segundo operando
         if isinstance(valor_b, str):  # Si es una variable
             if valor_b == 'TRUE' or valor_b == 'FALSE':
-                raise Exception(f"Error semántico: no se puede sumar un valor booleano.")
+                error = (f"Error semántico: no se puede sumar un valor booleano.")
+                errores.append(error)
+                raise Exception(error)
             
             elif valor_b not in self.tabla_simbolos:
-                raise Exception(f"Error semántico: la variable '{valor_b}' no ha sido declarada.")
+                error = (f"Error semántico: la variable '{valor_b}' no ha sido declarada.")
+                errores.append(error)
+                raise Exception(error)
             
             valor_b_sumar = self.tabla_simbolos[valor_b]['valor']
             tipo_b = self.tabla_simbolos[valor_b]['tipo']
             
             # Verificar que ambos tipos sean enteros
             if tipo_a != 'entero' or tipo_b != 'entero':
-                raise Exception(f"Error semántico: las variables deben ser de tipo entero. '{nombre_variable}' es de tipo '{tipo_a}' y '{valor_b}' es de tipo '{tipo_b}'.")
+                error = (f"Error semántico: las variables deben ser de tipo entero. '{nombre_variable}' es de tipo '{tipo_a}' y '{valor_b}' es de tipo '{tipo_b}'.")
+                errores.append(error)
+                raise Exception(error)
         else:  # Si es un número
             valor_b_sumar = valor_b  # Asumimos que ya es un entero
             if not isinstance(valor_b_sumar, int):
-                raise Exception(f"Error semántico: el valor a sumar debe ser un entero. Se recibió: '{valor_b_sumar}'.")
+                error = (f"Error semántico: el valor a sumar debe ser un entero. Se recibió: '{valor_b_sumar}'.")
+                errores.append(error)
+                raise Exception(error)
         
         # Verificar que el tipo de valor_a_sumar sea entero
         if tipo_a != 'entero':
-            raise Exception(f"Error semántico: no se puede sumar a la variable '{nombre_variable}' de tipo '{tipo_a}'.")
+            error = (f"Error semántico: no se puede sumar a la variable '{nombre_variable}' de tipo '{tipo_a}'.")
+            errores.append(error)
+            raise Exception(error)
 
         # Realizar la suma
         nuevo_valor = valor_a_sumar + valor_b_sumar
@@ -187,13 +211,19 @@ class AnalizadorSemantico:
     def verificar_entero(self, valor):
         if isinstance(valor, str):  # Si es una variable
             if valor not in self.tabla_simbolos:
-                raise Exception(f"Error semántico: la variable '{valor}' no ha sido declarada.")
+                error = (f"Error semántico: la variable '{valor}' no ha sido declarada.")
+                errores.append(error)
+                raise Exception(error)
             tipo_variable = self.tabla_simbolos[valor]['tipo']
             if tipo_variable != 'entero':
-                raise Exception(f"Error semántico: la variable '{valor}' debe ser de tipo entero. Es de tipo '{tipo_variable}'.")
+                error = (f"Error semántico: la variable '{valor}' debe ser de tipo entero. Es de tipo '{tipo_variable}'.")
+                errores.append(error)
+                raise Exception(error)
         else:  # Se asume que el valor es un número
             if not isinstance(valor, int):
-                raise Exception(f"Error semántico: se esperaba un entero, se recibió: '{valor}'.")
+                error = (f"Error semántico: se esperaba un entero, se recibió: '{valor}'.")
+                errores.append(error)
+                raise Exception(error)
 
      # Función para verificar si el valor es una variable o un número
     def verificar_booleano(self, valor):
@@ -203,13 +233,17 @@ class AnalizadorSemantico:
             elif valor == 'FALSE':
                     return False
             elif valor not in self.tabla_simbolos:
-                raise Exception(f"Error semántico: la variable '{valor}' no ha sido declarada.")
+                error = (f"Error semántico: la variable '{valor}' no ha sido declarada.")
+                errores.append(error)
+                raise Exception(error)
             else:
                 booleano = self.tabla_simbolos[valor]['valor']
                 if isinstance(booleano, bool):
                     return booleano
                 else:
-                    raise Exception(f"Error semántico: la variable '{valor}' debe ser de tipo booleano.")
+                    error = (f"Error semántico: la variable '{valor}' debe ser de tipo booleano.")
+                    errores.append(error)
+                    raise Exception(error)
 
     def analizar_pos(self, nodo):
         """
@@ -234,7 +268,9 @@ class AnalizadorSemantico:
         self.verificar_entero(valor_a)
         
         if valor_a > 2 or valor_a < 1:
-            raise Exception(f"Error semántico: el valor de 'use_color' debe ser 1 o 2. Se recibió: '{valor_a}'.")
+            error = (f"Error semántico: el valor de 'use_color' debe ser 1 o 2. Se recibió: '{valor_a}'.")
+            errores.append(error)
+            raise Exception(error)
             
         print(f"Color actual: {valor_a}.")
 
@@ -249,12 +285,14 @@ class AnalizadorSemantico:
         fin_bucle = nodo[6]
 
         if not isinstance(inicio_bucle, int) or not isinstance(fin_bucle, int):
-            raise Exception(
-                f"Error semántico: los límites del bucle deben ser enteros, se obtuvo {inicio_bucle} a {fin_bucle}.")
+            error = (f"Error semántico: los límites del bucle deben ser enteros, se obtuvo {inicio_bucle} a {fin_bucle}.")
+            errores.append(error)
+            raise Exception(error)
 
         if inicio_bucle >= fin_bucle:
-            raise Exception(
-                f"Error semántico: el valor inicial del bucle ({inicio_bucle}) debe ser menor al valor final ({fin_bucle}).")
+            error = (f"Error semántico: el valor inicial del bucle ({inicio_bucle}) debe ser menor al valor final ({fin_bucle}).")
+            errores.append(error)
+            raise Exception(error)
 
         print(f"Bucle válido desde {inicio_bucle} hasta {fin_bucle} con la variable '{var_bucle}'.")
 
@@ -268,7 +306,9 @@ class AnalizadorSemantico:
         for i in range(len(casos)):
             caso = casos[i][1][1]
             if not isinstance(caso, int):
-                raise Exception(f"Error semántico: el caso debe de ser entero, se obtuvo {caso}.")
+                error = (f"Error semántico: el caso debe de ser entero, se obtuvo {caso}.")
+                errores.append(error)
+                raise Exception(error)
             else:
                 if caso == valor_actual:
                     print(f"El caso {caso} se cumple.")
@@ -323,11 +363,15 @@ class AnalizadorSemantico:
             if operando[1] in self.tabla_simbolos:
                 return self.tabla_simbolos[operando[1]]['valor']
             else:
-                raise Exception(f"Error: la variable '{operando}' no está definida.")
+                error = (f"Error: la variable '{operando}' no está definida.")
+                errores.append(error)
+                raise Exception(error)
         elif isinstance(operando, tuple) and operando[0] == 'number' or operando[0] == 'logico':  
             return operando[1]  # Retorna el valor numérico
         else:
-            raise Exception("Error: operando no válido.")
+            error = ("Error: operando no válido.")
+            errores.append(error)
+            raise Exception(error)
 
     def analizar_equal(self, nodo):
         # nodo: ('equal', operand1, operand2)
@@ -484,7 +528,9 @@ class AnalizadorSemantico:
 
         # Comparar los valores y devolver el resultado
         if valor2 == 0:
-            raise Exception("Error: operando 2 no válido.")
+            error = ("Error: operando 2 no válido.")
+            errores.append(error)
+            raise Exception(error)
         else:
             resultado = valor1 / valor2
             print(f"Resultado de la division {valor1} / {valor2} = {resultado}")

@@ -198,12 +198,6 @@ def p_sum(p):
     p[0] = ('sum', p[3], p[5])
 
 # Manejo de valores que pueden ser números, variables o expresiones
-def p_valor(p):
-    '''valor : NUMBER
-             | TRUE
-             | FALSE'''
-    p[0] = p[1]
-
 def p_valor_numero(p):
     '''valor : NUMBER'''
     p[0] = ('number', p[1])
@@ -290,6 +284,7 @@ if __name__ == "__main__":
     Def(var2,0);
     Put(var2, 10);
     '''
+    
     analizar_sintactico(data)
 
 
