@@ -520,7 +520,7 @@ if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-    Df(var1,2);
+    Def(var1,2);
     Def(var2,4);
     Substr(var1,var2)
     Random(var1)
@@ -528,7 +528,7 @@ if __name__ == "__main__":
     Div(var1,var2)
     Sum(var1,var2)
     '''
-    
+
     # Parsear el código para generar el árbol sintáctico (AST)
     arbol_sintactico = parser.parse(data)
     

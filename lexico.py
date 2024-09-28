@@ -1,4 +1,8 @@
 import ply.lex as lex
+import re
+
+# Lista para almacenar los errores léxicos
+errores = []
 
 # Definición de tokens
 tokens = [
@@ -135,40 +139,37 @@ def t_newline(t):
 
 # Manejo de errores de token
 def t_error(t):
-    print(f"Error léxico: carácter no válido '{t.value[0]}' en la línea {t.lexer.lineno}")
+    error_msg = f"Error léxico: carácter no válido '{t.value[0]}' en la línea {t.lexer.lineno}"
+    errores.append(error_msg)
     t.lexer.skip(1)
 
 # Crear y construir el analizador léxico
 lexer = lex.lex()
 
 # Verificación de que la primera línea sea un comentario
-def verificar_comentario_inicial(lexer, data):
-    lexer.first_comment = False  # Inicializamos la bandera
-    lexer.input(data)  # Alimentamos el lexer con el código
-
-    # Revisamos todos los tokens en la primera línea
-    while True:
-        tok = lexer.token()
-        if not tok or tok.lineno > 1:
-            break
-        # Si es un comentario en la primera línea, marcamos como válido
-        if tok.type == 'COMMENT':
-            lexer.first_comment = True
-
-    # Si no se encontró el comentario, lanzamos el error
-    if not lexer.first_comment:
-        print(f"Error en la línea {lexer.lineno}: La primera línea debe ser un comentario.")
+def verificar_comentario_inicial(data):
+    primera_linea = data.splitlines()[0].strip()  # Obtenemos la primera línea del código fuente
+    if re.match(r'//', primera_linea):  # Verificamos si la primera línea es un comentario
+        return True
+    else:
+        error_msg = "Error: La primera línea debe ser un comentario."
+        errores.append(error_msg)
         return False
-    return True
 
 # Función que recibe el código fuente y lo analiza léxicamente
 def analizar(data):
-    if verificar_comentario_inicial(lexer, data):
+    errores.clear()  # Limpiamos la lista de errores
+    if verificar_comentario_inicial(data):
         lexer.input(data)  # Reiniciamos el lexer para el análisis completo
-        for token in lexer:
-            print(token)
-
-data = '''// Este es el nombre del programa
+        """for token in lexer:
+            print(token)"""
+    # Imprimir errores si los hay
+    if errores:
+        print("Errores encontrados:")
+        for error in errores:
+            print(error)
+            
+data = '''// Este es un comentario
 Def(xxx, 5);
 UseColor 255;
 Proc myProc(zzz, www)

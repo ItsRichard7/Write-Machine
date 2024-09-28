@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import scrolledtext, filedialog
 from PIL import Image, ImageTk  # Importa Pillow
+from lexico import errores, lexer, verificar_comentario_inicial
+from sintactico import visualizar_arbol, parser
+from semantico import AnalizadorSemantico
 import os
 import PIL
 
@@ -9,12 +12,38 @@ global archivo
 archivo = "1"
 
 def run_code():
+    errores.clear()  # Limpiamos la lista de errores
     code = codePanel.get("1.0", tk.END).strip()
+    print("'" + code + "'")
     consolePanel.config(state=tk.NORMAL)
-    #consolePanel.delete('1.0', tk.END)
-    consolePanel.insert(tk.END, "Código ingresado:\n")
-    consolePanel.insert(tk.END, code + '\n')
-    consolePanel.config(state=tk.DISABLED)
+    if verificar_comentario_inicial(code):
+        lexer.input(code)
+        if errores:
+            show_errors(errores)
+        else:
+            for tok in lexer:
+                print(tok)
+            arbol = parser.parse(code)
+            if errores:
+                show_errors(errores)
+            else:
+                visualizar_arbol(arbol)
+                analizador = AnalizadorSemantico()
+                analizador.analizar(arbol)
+                if errores:
+                   show_errors(errores)
+                else:
+                    print("Código compilado con éxito <3")
+    else:
+        show_errors(errores)
+
+def show_errors(errors):
+    """Muestra los errores en el panel de consola."""
+    consolePanel.config(state=tk.NORMAL)  # Habilitar el panel de consola
+    for message in errors:
+        consolePanel.insert(tk.END, f"Error: {message}\n", 'error')  # Insertar cada error
+    consolePanel.tag_config('error', foreground="#c26364", font=("Consolas", 13, "bold"))  # Configuración del estilo para los errores
+    consolePanel.config(state=tk.DISABLED)  # Deshabilitar el panel de consola para evitar ediciones
 
 def update_line_numbers(event=None):
     numbersText.config(state=tk.NORMAL)
@@ -133,22 +162,6 @@ filesLabel.pack(fill=tk.X)
 editableFile = tk.Button(filesPanel, text="Archivo editable", font=("Consolas", 11, "bold"), bg="#4b6eaf", fg="#3b3d3f", width=30,
                          height=2, relief=tk.FLAT, activebackground="#aaacad", command=lambda: [codePanel.delete("1.0", tk.END),update_line_numbers()])
 editableFile.pack()
-
-
-"""
-Panel de errores
-"""
-warningsPanel = tk.Frame(leftPanel, bg="#3c3f41", height=400)
-warningsPanel.pack()
-
-warningsLabel = tk.Label(warningsPanel, text="Errores y precauciones", bg="#3c3f41", fg="#828485", font=("Consolas", 13, "bold"), width=50)
-warningsLabel.pack(fill=tk.X, padx=10, pady=5)
-
-error1 = tk.Label(warningsPanel, text="Error 1: En la línea 3", font=("Consolas", 11), bg="#48494a", fg="#c26364", padx=100, pady=5)
-error1.pack(fill=tk.X)
-
-error2 = tk.Label(warningsPanel, text="Error 2: En la línea 13", font=("Consolas", 11), bg="#48494a", fg="#c26364", padx=100, pady=5)
-error2.pack(fill=tk.X)
 
 
 """

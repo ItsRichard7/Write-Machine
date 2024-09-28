@@ -1,4 +1,4 @@
-from lexico import tokens  # Importamos los tokens definidos
+from lexico import tokens, errores  # Importamos los tokens definidos
 import ply.yacc as yacc
 import pydot
 
@@ -198,6 +198,12 @@ def p_sum(p):
     p[0] = ('sum', p[3], p[5])
 
 # Manejo de valores que pueden ser números, variables o expresiones
+def p_valor(p):
+    '''valor : NUMBER
+             | TRUE
+             | FALSE'''
+    p[0] = p[1]
+
 def p_valor_numero(p):
     '''valor : NUMBER'''
     p[0] = ('number', p[1])
@@ -235,9 +241,10 @@ def p_condicion(p):
 # Manejo de errores sintácticos
 def p_error(p):
     if p:
-        print(f"Error sintáctico en línea {p.lineno}: token inesperado '{p.value}'")
+        error = f"Error sintáctico en línea {p.lineno-1}: token inesperado '{p.value}'"
     else:
-        print("Error sintáctico: fin de archivo inesperado")
+        error = "Error sintáctico: fin de archivo inesperado"
+    errores.append(error)
 
 # Construir el parser
 parser = yacc.yacc()
@@ -267,24 +274,21 @@ def visualizar_arbol(arbol):
 def analizar_sintactico(data):
     try:
         resultado = parser.parse(data)
-        if resultado:
+        if errores:
+            for error in errores:
+                print(error)
+        else:
             visualizar_arbol(resultado)
             print("Árbol de parseo generado y guardado como 'arbol_parseo.png'")
-        else:
-            print("No se generó un árbol.")
     except SyntaxError as se:
         print(str(se))
 
 # Ejemplo de prueba
 if __name__ == "__main__":
-    data = '''// Ejemplo de código fuente
-    Def(var2,0);
-    Repeat
- [ContinueUp 90;
-   Add(var2,1);]
-Until
- (Equal(var2,5););
 
+    data = '''
+    Def(var2,0);
+    Put(var2, 10);
     '''
     analizar_sintactico(data)
 
