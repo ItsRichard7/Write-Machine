@@ -50,7 +50,6 @@ def run_code(arbol, tabla):
     else:
         show_errors(errores)
 
-
 def generar_tabla_simbolos():
     pass
 

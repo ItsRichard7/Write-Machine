@@ -142,10 +142,11 @@ def p_when_case(p):
 def p_end_case(p):
     '''end_case : ELSE BRAIZQ sentencias BRADER END CASE PUNTOCOMA
                 | END CASE PUNTOCOMA'''
-    if len(p) == 8:
+    if len(p) == 8:  # Caso con ELSE
         p[0] = ('end_case', p[3])
-    else:
+    else:  # Caso sin ELSE
         p[0] = ('end_case',)
+
 
 # 2.11. Sentencia REPEAT-UNTIL
 def p_repeat_until(p):
@@ -357,7 +358,12 @@ def analizar_sintactico(data):
 if __name__ == "__main__":
 
     data = '''
-    ContinueUp 5*3;
+    Case var2
+        When TRUE Then
+            [Add(var2, 1);]
+        Else
+            [Add(var1, 1);]
+        End Case;
     '''
     
     analizar_sintactico(data)
