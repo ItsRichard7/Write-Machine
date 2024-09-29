@@ -155,7 +155,7 @@ def p_repeat_until(p):
 
 # 2.12. Sentencia WHILE-WHEND
 def p_while(p):
-    '''while : WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA'''
+    '''while : WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA'''
     p[0] = ('while', p[3], p[6])
 
 # 2.13. Funciones: Equal, And, Or, Greater, Smaller
@@ -366,10 +366,9 @@ def analizar_sintactico(data):
 if __name__ == "__main__":
 
     data = '''
-    Repeat
+    While [Equal(var1,2*5)]
         [ContinueRight 90;]
-    Until
-        [bucle == 2];
+    Whend;
     '''
     
     analizar_sintactico(data)

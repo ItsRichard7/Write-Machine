@@ -63,7 +63,7 @@ Rule 52    when_case -> WHEN valor THEN BRAIZQ sentencias BRADER
 Rule 53    end_case -> ELSE BRAIZQ sentencias BRADER END CASE PUNTOCOMA
 Rule 54    end_case -> END CASE PUNTOCOMA
 Rule 55    repeat_until -> REPEAT BRAIZQ sentencias BRADER UNTIL BRAIZQ condicion BRADER PUNTOCOMA
-Rule 56    while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+Rule 56    while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
 Rule 57    equal -> EQUAL PARIZQ valor COMA valor PARDER
 Rule 58    and -> AND PARIZQ valor COMA valor PARDER
 Rule 59    or -> OR PARIZQ valor COMA valor PARDER
@@ -114,8 +114,8 @@ Terminals, with rules where they appear
 ADD                  : 35 36 80 81
 AND                  : 58
 BEGIN                : 47
-BRADER               : 48 52 53 55 55 56 67 68
-BRAIZQ               : 48 52 53 55 55 56 67 68
+BRADER               : 48 52 53 55 55 56 56 67 68
+BRAIZQ               : 48 52 53 55 55 56 56 67 68
 CASE                 : 49 53 54
 COMA                 : 33 34 36 41 57 58 59 60 61 62 64 65 66 70 74 81
 COMMENT              : 
@@ -145,8 +145,8 @@ OP_SMALLER           : 93
 OP_SUB               : 85
 OP_SUM               : 84
 OR                   : 59
-PARDER               : 33 34 35 36 41 48 56 57 58 59 60 61 62 63 64 65 66 67 68 71 72 80 81
-PARIZQ               : 33 34 35 36 41 48 56 57 58 59 60 61 62 63 64 65 66 67 68 71 72 80 81
+PARDER               : 33 34 35 36 41 48 57 58 59 60 61 62 63 64 65 66 67 68 71 72 80 81
+PARIZQ               : 33 34 35 36 41 48 57 58 59 60 61 62 63 64 65 66 67 68 71 72 80 81
 POS                  : 41
 POSX                 : 42
 POSY                 : 43
@@ -269,7 +269,7 @@ state 0
     (48) for_loop -> . FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
     (49) case -> . CASE VARIABLE when_cases end_case
     (55) repeat_until -> . REPEAT BRAIZQ sentencias BRADER UNTIL BRAIZQ condicion BRADER PUNTOCOMA
-    (56) while -> . WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> . WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
     (57) equal -> . EQUAL PARIZQ valor COMA valor PARDER
     (58) and -> . AND PARIZQ valor COMA valor PARDER
     (59) or -> . OR PARIZQ valor COMA valor PARDER
@@ -409,7 +409,7 @@ state 2
     (48) for_loop -> . FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
     (49) case -> . CASE VARIABLE when_cases end_case
     (55) repeat_until -> . REPEAT BRAIZQ sentencias BRADER UNTIL BRAIZQ condicion BRADER PUNTOCOMA
-    (56) while -> . WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> . WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
     (57) equal -> . EQUAL PARIZQ valor COMA valor PARDER
     (58) and -> . AND PARIZQ valor COMA valor PARDER
     (59) or -> . OR PARIZQ valor COMA valor PARDER
@@ -2020,9 +2020,9 @@ state 50
 
 state 51
 
-    (56) while -> WHILE . PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> WHILE . BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
 
-    PARIZQ          shift and go to state 93
+    BRAIZQ          shift and go to state 93
 
 
 state 52
@@ -2735,7 +2735,7 @@ state 92
     (48) for_loop -> . FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
     (49) case -> . CASE VARIABLE when_cases end_case
     (55) repeat_until -> . REPEAT BRAIZQ sentencias BRADER UNTIL BRAIZQ condicion BRADER PUNTOCOMA
-    (56) while -> . WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> . WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
     (57) equal -> . EQUAL PARIZQ valor COMA valor PARDER
     (58) and -> . AND PARIZQ valor COMA valor PARDER
     (59) or -> . OR PARIZQ valor COMA valor PARDER
@@ -2817,7 +2817,7 @@ state 92
 
 state 93
 
-    (56) while -> WHILE PARIZQ . condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> WHILE BRAIZQ . condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
     (91) condicion -> . valor OP_EQUAL valor
     (92) condicion -> . valor OP_GREATER valor
     (93) condicion -> . valor OP_SMALLER valor
@@ -3973,9 +3973,9 @@ state 128
 
 state 129
 
-    (56) while -> WHILE PARIZQ condicion . PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> WHILE BRAIZQ condicion . BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
 
-    PARDER          shift and go to state 167
+    BRADER          shift and go to state 167
 
 
 state 130
@@ -4005,7 +4005,6 @@ state 131
 
     (96) condicion -> equal .
 
-    PARDER          reduce using rule 96 (condicion -> equal .)
     BRADER          reduce using rule 96 (condicion -> equal .)
 
 
@@ -4013,7 +4012,6 @@ state 132
 
     (97) condicion -> greater .
 
-    PARDER          reduce using rule 97 (condicion -> greater .)
     BRADER          reduce using rule 97 (condicion -> greater .)
 
 
@@ -4021,7 +4019,6 @@ state 133
 
     (98) condicion -> smaller .
 
-    PARDER          reduce using rule 98 (condicion -> smaller .)
     BRADER          reduce using rule 98 (condicion -> smaller .)
 
 
@@ -4029,7 +4026,6 @@ state 134
 
     (99) condicion -> and .
 
-    PARDER          reduce using rule 99 (condicion -> and .)
     BRADER          reduce using rule 99 (condicion -> and .)
 
 
@@ -4037,7 +4033,6 @@ state 135
 
     (100) condicion -> or .
 
-    PARDER          reduce using rule 100 (condicion -> or .)
     BRADER          reduce using rule 100 (condicion -> or .)
 
 
@@ -4723,7 +4718,7 @@ state 166
 
 state 167
 
-    (56) while -> WHILE PARIZQ condicion PARDER . BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> WHILE BRAIZQ condicion BRADER . BRAIZQ sentencias BRADER WHEND PUNTOCOMA
 
     BRAIZQ          shift and go to state 200
 
@@ -5724,7 +5719,7 @@ state 196
     (48) for_loop -> . FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
     (49) case -> . CASE VARIABLE when_cases end_case
     (55) repeat_until -> . REPEAT BRAIZQ sentencias BRADER UNTIL BRAIZQ condicion BRADER PUNTOCOMA
-    (56) while -> . WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> . WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
     (57) equal -> . EQUAL PARIZQ valor COMA valor PARDER
     (58) and -> . AND PARIZQ valor COMA valor PARDER
     (59) or -> . OR PARIZQ valor COMA valor PARDER
@@ -5827,7 +5822,7 @@ state 199
 
 state 200
 
-    (56) while -> WHILE PARIZQ condicion PARDER BRAIZQ . sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> WHILE BRAIZQ condicion BRADER BRAIZQ . sentencias BRADER WHEND PUNTOCOMA
     (1) sentencias -> . sentencia
     (2) sentencias -> . sentencia sentencias
     (3) sentencia -> . def_variable
@@ -5878,7 +5873,7 @@ state 200
     (48) for_loop -> . FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
     (49) case -> . CASE VARIABLE when_cases end_case
     (55) repeat_until -> . REPEAT BRAIZQ sentencias BRADER UNTIL BRAIZQ condicion BRADER PUNTOCOMA
-    (56) while -> . WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> . WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
     (57) equal -> . EQUAL PARIZQ valor COMA valor PARDER
     (58) and -> . AND PARIZQ valor COMA valor PARDER
     (59) or -> . OR PARIZQ valor COMA valor PARDER
@@ -5966,7 +5961,6 @@ state 201
     (84) expr -> valor . OP_SUM valor
     (85) expr -> valor . OP_SUB valor
 
-    PARDER          reduce using rule 91 (condicion -> valor OP_EQUAL valor .)
     BRADER          reduce using rule 91 (condicion -> valor OP_EQUAL valor .)
     OP_MULT         shift and go to state 112
     OP_DIV          shift and go to state 113
@@ -5982,7 +5976,6 @@ state 202
     (84) expr -> valor . OP_SUM valor
     (85) expr -> valor . OP_SUB valor
 
-    PARDER          reduce using rule 92 (condicion -> valor OP_GREATER valor .)
     BRADER          reduce using rule 92 (condicion -> valor OP_GREATER valor .)
     OP_MULT         shift and go to state 112
     OP_DIV          shift and go to state 113
@@ -5998,7 +5991,6 @@ state 203
     (84) expr -> valor . OP_SUM valor
     (85) expr -> valor . OP_SUB valor
 
-    PARDER          reduce using rule 93 (condicion -> valor OP_SMALLER valor .)
     BRADER          reduce using rule 93 (condicion -> valor OP_SMALLER valor .)
     OP_MULT         shift and go to state 112
     OP_DIV          shift and go to state 113
@@ -6014,7 +6006,6 @@ state 204
     (84) expr -> valor . OP_SUM valor
     (85) expr -> valor . OP_SUB valor
 
-    PARDER          reduce using rule 94 (condicion -> valor OP_AND valor .)
     BRADER          reduce using rule 94 (condicion -> valor OP_AND valor .)
     OP_MULT         shift and go to state 112
     OP_DIV          shift and go to state 113
@@ -6030,7 +6021,6 @@ state 205
     (84) expr -> valor . OP_SUM valor
     (85) expr -> valor . OP_SUB valor
 
-    PARDER          reduce using rule 95 (condicion -> valor OP_OR valor .)
     BRADER          reduce using rule 95 (condicion -> valor OP_OR valor .)
     OP_MULT         shift and go to state 112
     OP_DIV          shift and go to state 113
@@ -6243,7 +6233,7 @@ state 217
     (48) for_loop -> . FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
     (49) case -> . CASE VARIABLE when_cases end_case
     (55) repeat_until -> . REPEAT BRAIZQ sentencias BRADER UNTIL BRAIZQ condicion BRADER PUNTOCOMA
-    (56) while -> . WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> . WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
     (57) equal -> . EQUAL PARIZQ valor COMA valor PARDER
     (58) and -> . AND PARIZQ valor COMA valor PARDER
     (59) or -> . OR PARIZQ valor COMA valor PARDER
@@ -6479,7 +6469,7 @@ state 226
     (48) for_loop -> . FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
     (49) case -> . CASE VARIABLE when_cases end_case
     (55) repeat_until -> . REPEAT BRAIZQ sentencias BRADER UNTIL BRAIZQ condicion BRADER PUNTOCOMA
-    (56) while -> . WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> . WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
     (57) equal -> . EQUAL PARIZQ valor COMA valor PARDER
     (58) and -> . AND PARIZQ valor COMA valor PARDER
     (59) or -> . OR PARIZQ valor COMA valor PARDER
@@ -6631,7 +6621,7 @@ state 227
 
 state 228
 
-    (56) while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias . BRADER WHEND PUNTOCOMA
+    (56) while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias . BRADER WHEND PUNTOCOMA
 
     BRADER          shift and go to state 250
 
@@ -6672,7 +6662,6 @@ state 229
     VARIABLE        reduce using rule 57 (equal -> EQUAL PARIZQ valor COMA valor PARDER .)
     $end            reduce using rule 57 (equal -> EQUAL PARIZQ valor COMA valor PARDER .)
     BRADER          reduce using rule 57 (equal -> EQUAL PARIZQ valor COMA valor PARDER .)
-    PARDER          reduce using rule 57 (equal -> EQUAL PARIZQ valor COMA valor PARDER .)
 
 
 state 230
@@ -6711,7 +6700,6 @@ state 230
     VARIABLE        reduce using rule 58 (and -> AND PARIZQ valor COMA valor PARDER .)
     $end            reduce using rule 58 (and -> AND PARIZQ valor COMA valor PARDER .)
     BRADER          reduce using rule 58 (and -> AND PARIZQ valor COMA valor PARDER .)
-    PARDER          reduce using rule 58 (and -> AND PARIZQ valor COMA valor PARDER .)
 
 
 state 231
@@ -6750,7 +6738,6 @@ state 231
     VARIABLE        reduce using rule 59 (or -> OR PARIZQ valor COMA valor PARDER .)
     $end            reduce using rule 59 (or -> OR PARIZQ valor COMA valor PARDER .)
     BRADER          reduce using rule 59 (or -> OR PARIZQ valor COMA valor PARDER .)
-    PARDER          reduce using rule 59 (or -> OR PARIZQ valor COMA valor PARDER .)
 
 
 state 232
@@ -6789,7 +6776,6 @@ state 232
     VARIABLE        reduce using rule 60 (greater -> GREATER PARIZQ valor COMA valor PARDER .)
     $end            reduce using rule 60 (greater -> GREATER PARIZQ valor COMA valor PARDER .)
     BRADER          reduce using rule 60 (greater -> GREATER PARIZQ valor COMA valor PARDER .)
-    PARDER          reduce using rule 60 (greater -> GREATER PARIZQ valor COMA valor PARDER .)
 
 
 state 233
@@ -6828,7 +6814,6 @@ state 233
     VARIABLE        reduce using rule 61 (smaller -> SMALLER PARIZQ valor COMA valor PARDER .)
     $end            reduce using rule 61 (smaller -> SMALLER PARIZQ valor COMA valor PARDER .)
     BRADER          reduce using rule 61 (smaller -> SMALLER PARIZQ valor COMA valor PARDER .)
-    PARDER          reduce using rule 61 (smaller -> SMALLER PARIZQ valor COMA valor PARDER .)
 
 
 state 234
@@ -7099,7 +7084,7 @@ state 239
     (48) for_loop -> . FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
     (49) case -> . CASE VARIABLE when_cases end_case
     (55) repeat_until -> . REPEAT BRAIZQ sentencias BRADER UNTIL BRAIZQ condicion BRADER PUNTOCOMA
-    (56) while -> . WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> . WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
     (57) equal -> . EQUAL PARIZQ valor COMA valor PARDER
     (58) and -> . AND PARIZQ valor COMA valor PARDER
     (59) or -> . OR PARIZQ valor COMA valor PARDER
@@ -7389,7 +7374,7 @@ state 249
 
 state 250
 
-    (56) while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER . WHEND PUNTOCOMA
+    (56) while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER . WHEND PUNTOCOMA
 
     WHEND           shift and go to state 257
 
@@ -7440,7 +7425,7 @@ state 256
 
 state 257
 
-    (56) while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND . PUNTOCOMA
+    (56) while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND . PUNTOCOMA
 
     PUNTOCOMA       shift and go to state 263
 
@@ -7512,7 +7497,7 @@ state 260
     (48) for_loop -> . FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
     (49) case -> . CASE VARIABLE when_cases end_case
     (55) repeat_until -> . REPEAT BRAIZQ sentencias BRADER UNTIL BRAIZQ condicion BRADER PUNTOCOMA
-    (56) while -> . WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
+    (56) while -> . WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
     (57) equal -> . EQUAL PARIZQ valor COMA valor PARDER
     (58) and -> . AND PARIZQ valor COMA valor PARDER
     (59) or -> . OR PARIZQ valor COMA valor PARDER
@@ -7639,40 +7624,40 @@ state 262
 
 state 263
 
-    (56) while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .
+    (56) while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .
 
-    DEF             reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    PUT             reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    ADD             reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    CONUP           reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    CONDOWN         reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    CONRIGHT        reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    CONLEFT         reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    POS             reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    POSX            reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    POSY            reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    USECOLOR        reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    DOWN            reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    UP              reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    BEGIN           reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    FOR             reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    CASE            reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    REPEAT          reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    WHILE           reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    EQUAL           reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    AND             reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    OR              reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    GREATER         reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    SMALLER         reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    SUBSTR          reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    RANDOM          reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    MULT            reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    DIV             reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    SUM             reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    PROC            reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    VARIABLE        reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    $end            reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
-    BRADER          reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    DEF             reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    PUT             reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    ADD             reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    CONUP           reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    CONDOWN         reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    CONRIGHT        reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    CONLEFT         reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    POS             reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    POSX            reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    POSY            reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    USECOLOR        reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    DOWN            reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    UP              reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    BEGIN           reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    FOR             reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    CASE            reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    REPEAT          reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    WHILE           reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    EQUAL           reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    AND             reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    OR              reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    GREATER         reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    SMALLER         reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    SUBSTR          reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    RANDOM          reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    MULT            reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    DIV             reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    SUM             reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    PROC            reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    VARIABLE        reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    $end            reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
+    BRADER          reduce using rule 56 (while -> WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
 
 
 state 264
