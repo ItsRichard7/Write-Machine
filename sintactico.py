@@ -150,7 +150,7 @@ def p_end_case(p):
 
 # 2.11. Sentencia REPEAT-UNTIL
 def p_repeat_until(p):
-    '''repeat_until : REPEAT BRAIZQ sentencias BRADER UNTIL PARIZQ condicion PARDER PUNTOCOMA'''
+    '''repeat_until : REPEAT BRAIZQ sentencias BRADER UNTIL BRAIZQ condicion BRADER PUNTOCOMA'''
     p[0] = ('repeat_until', p[3], p[7])
 
 # 2.12. Sentencia WHILE-WHEND
@@ -285,12 +285,20 @@ def p_expr(p):
 
 # Condiciones para bucles y otras sentencias
 def p_condicion(p):
-    '''condicion : equal
+    '''condicion : valor OP_EQUAL valor
+                 | valor OP_GREATER valor
+                 | valor OP_SMALLER valor
+                 | valor OP_AND valor
+                 | valor OP_OR valor
+                 | equal
                  | greater
                  | smaller
                  | and
                  | or'''
-    p[0] = p[1]
+    if len(p) == 4:
+        p[0] = (p[2], p[1], p[3])
+    else:
+        p[0] = p[1]
 
 # Manejo de errores sintácticos
 def p_error(p):
@@ -358,12 +366,10 @@ def analizar_sintactico(data):
 if __name__ == "__main__":
 
     data = '''
-    Case var2
-        When TRUE Then
-            [Add(var2, 1);]
-        Else
-            [Add(var1, 1);]
-        End Case;
+    Repeat
+        [ContinueRight 90;]
+    Until
+        [bucle == 2];
     '''
     
     analizar_sintactico(data)

@@ -58,7 +58,12 @@ tokens = [
     'OP_MULT',    # Operador de multiplicación *
     'OP_DIV',     # Operador de división /
     'OP_SUM',     # Operador de suma +
-    'OP_SUB'      # Operador de resta -
+    'OP_SUB',      # Operador de resta -
+    'OP_EQUAL',
+    'OP_GREATER',
+    'OP_SMALLER',
+    'OP_AND',
+    'OP_OR'
 ]
 
 # Expresiones regulares para tokens simples
@@ -94,6 +99,12 @@ t_OP_MULT = r'\*'  # Operador estándar de multiplicación *
 t_OP_DIV = r'/'    # Operador estándar de división /
 t_OP_SUM = r'\+'   # Operador estándar de suma +
 t_OP_SUB = r'-'    # Operador estándar de resta -
+
+t_OP_EQUAL = r'=='     # Operador de igualdad
+t_OP_GREATER = r'>'     # Operador mayor que
+t_OP_SMALLER = r'<'     # Operador menor que
+t_OP_AND = r'&&'        # Operador lógico AND
+t_OP_OR = r'\|\|'       # Operador lógico OR
 
 t_FOR = r'For'
 t_LOOP = r'Loop'
