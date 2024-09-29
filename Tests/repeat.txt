@@ -1,0 +1,7 @@
+    // Prueba para la funcionalidad Repeat-Until
+    Proc main()[
+        Repeat
+            [ContinueRight 90;]
+        Until
+            [bucle == 2];
+    ]
