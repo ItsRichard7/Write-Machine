@@ -55,6 +55,10 @@ tokens = [
     'WHEND',
     'PROC',
     'COMA',
+    'OP_MULT',    # Operador de multiplicación *
+    'OP_DIV',     # Operador de división /
+    'OP_SUM',     # Operador de suma +
+    'OP_SUB'      # Operador de resta -
 ]
 
 # Expresiones regulares para tokens simples
@@ -85,6 +89,11 @@ t_RANDOM = r'Random'
 t_MULT = r'Mult'
 t_DIV = r'Div'
 t_SUM = r'Sum'
+
+t_OP_MULT = r'\*'  # Operador estándar de multiplicación *
+t_OP_DIV = r'/'    # Operador estándar de división /
+t_OP_SUM = r'\+'   # Operador estándar de suma +
+t_OP_SUB = r'-'    # Operador estándar de resta -
 
 t_FOR = r'For'
 t_LOOP = r'Loop'

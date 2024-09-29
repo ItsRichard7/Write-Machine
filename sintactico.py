@@ -257,10 +257,10 @@ def p_valor_logico(p):
 def p_expr(p):
     '''expr : ADD PARIZQ VARIABLE PARDER
             | ADD PARIZQ VARIABLE COMA valor PARDER
-            | valor MULT valor
-            | valor DIV valor
-            | valor SUM valor
-            | valor SUBSTR valor
+            | valor OP_MULT valor
+            | valor OP_DIV valor
+            | valor OP_SUM valor
+            | valor OP_SUB valor
             | substr
             | random
             | mult
@@ -357,7 +357,7 @@ def analizar_sintactico(data):
 if __name__ == "__main__":
 
     data = '''
-    Put(mivar, Substr(100, 45));
+    ContinueUp 5*3;
     '''
     
     analizar_sintactico(data)
