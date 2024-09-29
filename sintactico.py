@@ -6,12 +6,12 @@ import pydot
 
 # Definir sentencias múltiples
 def p_sentencias(p):
-    '''sentencias : sentencia sentencias
-                  | sentencia'''
-    if len(p) == 3:
-        p[0] = ('sentencias', p[1], p[2])
+    '''sentencias : sentencia
+                  | sentencia sentencias'''
+    if len(p) == 2:
+        p[0] = ('sentencias', p[1])  # Crear lista de una sola sentencia
     else:
-        p[0] = ('sentencias', p[1])
+        p[0] = ('sentencias', p[1] + p[2])  # Concatenar listas de sentencias
 
 # Definir una sentencia que puede ser cualquier instrucción válida
 def p_sentencia(p):
@@ -118,7 +118,7 @@ def p_beginning(p):
 # 2.9. Sentencia FOR-LOOP
 def p_for_loop(p):
     '''for_loop : FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA'''
-    p[0] = ('for_loop', p[2], p[4], p[6], p[9])
+    p[0] = ('for_loop', p[2], p[4], p[6], p[10])
 
 # 2.10. Sentencia CASE-WHEN
 def p_case(p):
@@ -217,11 +217,26 @@ def p_valor_logico(p):
 
 # Definir expresiones básicas (operaciones matemáticas)
 def p_expr(p):
-    '''expr : valor MULT valor
+    '''expr : ADD PARIZQ VARIABLE PARDER
+            | ADD PARIZQ VARIABLE COMA valor PARDER
+            | valor MULT valor
             | valor DIV valor
             | valor SUM valor
             | valor SUBSTR valor'''
-    p[0] = (p[2], p[1], p[3])
+    
+    # Caso para "ADD VARIABLE"
+    if p[1] == 'Add' and len(p) == 5:  # Para ADD con un solo parámetro
+        p[0] = ('add_variable_uno', p[3])
+    
+    # Caso para "ADD VARIABLE, valor"
+    elif p[1] == 'Add' and len(p) == 7:  # Para ADD con dos parámetros
+        p[0] = ('add_variable_dos', p[3], p[5])
+    
+    # Caso para operaciones binarias
+    else:
+        p[0] = (p[2], p[1], p[3])  # p[2] es el operador, p[1] y p[3] son los operandos
+
+
 
 # Condiciones para bucles y otras sentencias
 def p_condicion(p):
@@ -243,7 +258,6 @@ def p_error(p):
 # Construir el parser
 parser = yacc.yacc()
 
-# Función para crear el árbol de parseo
 def crear_nodo_arbol(nodo, grafo, padre=None):
     if isinstance(nodo, tuple):
         nodo_actual = pydot.Node(str(id(nodo)), label=nodo[0])
@@ -251,7 +265,11 @@ def crear_nodo_arbol(nodo, grafo, padre=None):
         if padre:
             grafo.add_edge(pydot.Edge(padre, nodo_actual))
         for subnodo in nodo[1:]:
-            crear_nodo_arbol(subnodo, grafo, nodo_actual)
+            if isinstance(subnodo, list):
+                for item in subnodo:
+                    crear_nodo_arbol(item, grafo, nodo_actual)
+            else:
+                crear_nodo_arbol(subnodo, grafo, nodo_actual)
     else:
         nodo_hoja = pydot.Node(str(id(nodo)), label=str(nodo))
         grafo.add_node(nodo_hoja)
@@ -264,6 +282,7 @@ def visualizar_arbol(arbol):
     crear_nodo_arbol(arbol, grafo)
     grafo.write_png("arbol_parseo.png")
 
+
 # Función para analizar sintácticamente el código fuente
 def analizar_sintactico(data):
     try:
@@ -272,6 +291,7 @@ def analizar_sintactico(data):
             for error in errores:
                 print(error)
         else:
+            print(resultado)
             visualizar_arbol(resultado)
             print("Árbol de parseo generado y guardado como 'arbol_parseo.png'")
     except SyntaxError as se:
@@ -281,8 +301,10 @@ def analizar_sintactico(data):
 if __name__ == "__main__":
 
     data = '''
-    Def(var2,0);
-    Put(var2, 10);
+    For var1(1 to 5) Loop
+        [PosY Add(var2, var1);
+        ContinueRight 9;]
+    End Loop;
     '''
     
     analizar_sintactico(data)
