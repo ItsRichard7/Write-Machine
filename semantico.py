@@ -28,16 +28,28 @@ class AnalizadorSemantico:
                 self.analizar_operacion_add(nodo[1], nodo[2][1])
 
             elif tipo_nodo == 'continue_up' or tipo_nodo == 'continue_down' or tipo_nodo == 'continue_left' or tipo_nodo == 'continue_right':
-                self.verificar_entero(nodo[1][1])
+                if len(nodo[1]) > 2:
+                    mov = self.verificar_operacion(nodo[1])
+                    print(f"Mover lapicero con {tipo_nodo} por {mov} unidades.")
+                else:
+                    self.verificar_entero(nodo[1][1])
+                    print(f"Mover lapicero hacia {tipo_nodo} por {nodo[1][1]} unidades.")
 
             elif tipo_nodo == 'pos':
                 self.analizar_pos(nodo)
 
             elif tipo_nodo == 'posx' or tipo_nodo == 'posy':
-                self.verificar_entero(nodo[1][1])
+                self.analizar_pos_xy(nodo)
 
             elif tipo_nodo == 'use_color':
-                self.analizar_use_color(nodo)
+                self.verificar_entero(nodo[1][1])
+                valor = self.obtener_valor(nodo[1])
+                if valor != 1 and valor != 2:
+                    error = (f"Error semántico: el valor de UseColor debe ser 1 o 2, se obtuvo {valor}.")
+                    errores.append(error)
+                    raise Exception(error)
+                else: 
+                    print(f"Usar color {valor}.")
             
             elif tipo_nodo == 'down':
                 print("Mover lapicero hacia abajo.")
@@ -50,10 +62,14 @@ class AnalizadorSemantico:
 
             # Analizar estructuras como bucles (loops), case, etc.
             elif tipo_nodo == 'for_loop':
-                self.analizar_bucle(nodo)
+                self.analizar_for(nodo)
             
             elif tipo_nodo == 'case':
                 self.analizar_case(nodo)
+                return
+            
+            elif tipo_nodo == 'for':
+                self.analizar_for(nodo)
                 return
 
             elif tipo_nodo == 'equal':
@@ -219,6 +235,7 @@ class AnalizadorSemantico:
                 error = (f"Error semántico: la variable '{valor}' debe ser de tipo entero. Es de tipo '{tipo_variable}'.")
                 errores.append(error)
                 raise Exception(error)
+            
         else:  # Se asume que el valor es un número
             if not isinstance(valor, int):
                 error = (f"Error semántico: se esperaba un entero, se recibió: '{valor}'.")
@@ -244,35 +261,86 @@ class AnalizadorSemantico:
                     error = (f"Error semántico: la variable '{valor}' debe ser de tipo booleano.")
                     errores.append(error)
                     raise Exception(error)
+                
+    def verificar_operacion(self, node):
+        # Si el nodo es un número, lo devolvemos
+        if node[0] == 'number':
+            return node[1]
+        
+        # Si el nodo es una operación (multiplicación, división, suma o resta)
+        operator = node[0]
+        left = self.obtener_valor(node[1])  # Evalúa el operando izquierdo
+        right = self.obtener_valor(node[2])  # Evalúa el operando derecho
+
+        # Verificar que ambos operandos sean enteros
+        if not isinstance(left, int) or not isinstance(right, int):
+            raise Exception(f"Error: Los operandos deben ser enteros. Recibido: {left} y {right}")
+        
+        result = 0
+        
+        # Realiza la operación en función del operador
+        if operator == '*':
+            result = left * right
+        elif operator == '/':
+            # Aseguramos que no se divida por cero
+            if right == 0:
+                raise ZeroDivisionError("Error: División por cero")
+            result = round(left / right)
+        elif operator == '+':
+            result = left + right
+        elif operator == '-':
+            result = left - right
+        
+        return result
+        
 
     def analizar_pos(self, nodo):
         """
         Verifica que ambos valores en la operación Pos sean enteros.
         """
-        valor_a = nodo[1][1]  # Primer argumento
-        valor_b = nodo[2][1]  # Segundo argumento
 
-        # Verificar ambos valores
-        self.verificar_entero(valor_a)
-        self.verificar_entero(valor_b)
+        valor_a = 0
+        valor_b = 0
 
-        print(f"Nueva posicion(x:{valor_a}, y:{valor_b}).")
+        if len(nodo[1]) > 2:
+            valor_a = self.verificar_operacion(nodo[1])
+            if len(nodo[2]) > 2:
+                valor_b = self.verificar_operacion(nodo[2])
+            else:
+                valor_b = nodo[2][1]
+        elif len(nodo[2]) > 2:
+            valor_b = self.verificar_operacion(nodo[2])
+            if len(nodo[1]) > 2:
+                valor_a = self.verificar_operacion(nodo[1])
+            else:
+                valor_b = nodo[2][1]
+        else:
+            valor_a = self.obtener_valor(nodo[1])  # Primer argumento
+            valor_b = self.obtener_valor(nodo[2])  # Segundo argumento            print(f"Resultado de {left} - {right} = {result}")
 
-    def analizar_use_color(self, nodo):
+            # Verificar ambos valores
+            self.verificar_entero(valor_a)
+            self.verificar_entero(valor_b)
+
+        print(f"Posicionar lapicero en [{valor_a}, {valor_b}].")
+
+    def analizar_pos_xy(self, nodo):
         """
         Verifica que ambos valores en la operación Pos sean enteros.
         """
-        valor_a = nodo[1][1]  # Primer argumento
 
-        # Verificar ambos valores
-        self.verificar_entero(valor_a)
-        
-        if valor_a > 2 or valor_a < 1:
-            error = (f"Error semántico: el valor de 'use_color' debe ser 1 o 2. Se recibió: '{valor_a}'.")
-            errores.append(error)
-            raise Exception(error)
-            
-        print(f"Color actual: {valor_a}.")
+        valor_a = 0 
+        print(nodo)
+
+        if len(nodo[1]) > 2:
+            valor_a = self.verificar_operacion(nodo[1])
+        else:
+            valor_a = self.obtener_valor(nodo[1])  # Primer argumento
+
+            # Verificar ambos valores
+            self.verificar_entero(valor_a)
+
+        print(f"Posicionar usando {nodo[0]} en {valor_a}.")
 
     def analizar_bucle(self, nodo):
         """
@@ -347,6 +415,45 @@ class AnalizadorSemantico:
 
         # Devolver todos los resultados como una tupla
         return tuple(resultados)
+    
+    def analizar_for(self, nodo):
+        var = nodo[1]
+        indice_menor = nodo[2][1]
+        indice_mayor = nodo[3][1]
+        if var not in self.tabla_simbolos: 
+            self.tabla_simbolos[var] = {'tipo': "entero", 'valor': indice_menor}
+            while indice_menor < indice_mayor:
+                for i in range(len(self.extraer_sentencias(nodo))):
+                    sentencia = self.extraer_sentencias(nodo)[i]
+                    print("sentencia: ", sentencia)
+                    self.analizar(sentencia)
+                indice_menor += 1
+                self.tabla_simbolos[var]['valor'] = indice_menor
+        else:
+            error = (f"Error semántico: la variable '{var}' ya ha sido declarada.")
+            errores.append(error)
+            raise Exception(error)
+        
+        
+            
+
+
+    def extraer_sentencias(self,node):
+        # Lista para almacenar las sentencias encontradas
+        sentencias_encontradas = []
+
+        # Si el nodo es una tupla y su primer elemento es 'sentencia', lo agregamos a la lista
+        if isinstance(node, tuple) and node[0] == 'sentencia':
+            sentencias_encontradas.append(node)
+        
+        # Si el nodo es una tupla, lo recorremos recursivamente
+        if isinstance(node, tuple):
+            for subnode in node:
+                # Llamada recursiva para explorar las subestructuras del árbol
+                sentencias_encontradas.extend(self.extraer_sentencias(subnode))
+        
+        # Devolvemos las sentencias encontradas
+        return sentencias_encontradas
 
     def analizar_expresion(self, nodo_expresion):
         """UseColor 1
@@ -359,7 +466,9 @@ class AnalizadorSemantico:
     
     # Función para obtener el valor de un operando, ya sea variable o número literal
     def obtener_valor(self,operando):
-        if isinstance(operando, tuple) and operando[0] == 'variable':  # Si es una variable
+        if isinstance(operando, int):
+            return operando  
+        elif isinstance(operando, tuple) and operando[0] == 'variable':  # Si es una variable
             if operando[1] in self.tabla_simbolos:
                 return self.tabla_simbolos[operando[1]]['valor']
             else:
@@ -566,14 +675,14 @@ if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-    Def(var1,2);
-    Def(var2,4);
-    Substr(var1,var2)
-    Random(var1)
-    Mult(var1,var2)
-    Div(var1,var2)
-    Sum(var1,var2)
+    //comentario
+    Def(var2,1);
+    For var1(1 to 5) Loop
+        [Add(var2,var1);
+        ContinueRight 9;]
+    End Loop;
     '''
+    
 
     # Parsear el código para generar el árbol sintáctico (AST)
     arbol_sintactico = parser.parse(data)
@@ -583,5 +692,6 @@ if __name__ == "__main__":
     # Crear y ejecutar el analizador semántico
     analizador = AnalizadorSemantico()
     analizador.analizar(arbol_sintactico)
+   
     #print("Análisis semántico completado correctamente")
     print("Tabla de Símbolos:", analizador.tabla_simbolos)
