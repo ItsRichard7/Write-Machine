@@ -160,8 +160,9 @@ def t_newline(t):
 
 # Manejo de errores de token
 def t_error(t):
-    error_msg = f"Error léxico: carácter no válido '{t.value[0]}' en la línea {t.lexer.lineno}"
-    errores.append(error_msg)
+    error = f"Error léxico: carácter no válido '{t.value[0]}' en la línea {t.lexer.lineno}"
+    if error not in errores:
+        errores.append(error)
     t.lexer.skip(1)
 
 # Crear y construir el analizador léxico

@@ -306,7 +306,8 @@ def p_error(p):
         error = f"Error sintáctico en línea {p.lineno-1}: token inesperado '{p.value}'"
     else:
         error = "Error sintáctico: fin de archivo inesperado"
-    errores.append(error)
+    if error not in errores:
+        errores.append(error)
 
 # Construir el parser
 parser = yacc.yacc()
@@ -366,9 +367,7 @@ def analizar_sintactico(data):
 if __name__ == "__main__":
 
     data = '''
-    While [Equal(var1,2*5)]
-        [ContinueRight 90;]
-    Whend;
+    ContinueRight Sum(1, 2);
     '''
     
     analizar_sintactico(data)

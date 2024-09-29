@@ -1,4 +1,40 @@
-// Procedimiento principal
+// Programa de Prueba
+Proc linea1()
+    [
+        //Define variable local
+        Def(varLocal1, 1);
+        PosY varLocal1;
+    ];
+end;
+
+Proc posiciona(valorX, valorY)
+    [
+        Def(PosX, valorX);
+        Def(PosY, valorY);
+    ];
+end;
+
+Proc impCruz(x, y)
+    [
+        Down;
+        Pos(x,y);
+        For var1(1 to 11) Loop
+            [PoxY Add(var2, var1);
+            ContinueRight 9;]
+        End Loop;
+        Up;
+        PosX Substr(x, 6);
+        PosY Substr(y, 5);
+        Down;
+        For var1(1 to 5) Loop
+            [PoxY Add(var2, var1);
+            ContinueRight 9;]
+        End Loop;
+        Up;
+        Beginning;
+        ];
+end;
+
 Proc main()
     [
         // Define variable global

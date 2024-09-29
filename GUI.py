@@ -22,12 +22,14 @@ def run_code(arbol, tabla):
     consolePanel.config(state=tk.NORMAL)
     
     if verificar_comentario_inicial(code):
+        lexer.lineno = 1
         lexer.input(code)
         if errores:
             show_errors(errores)
         else:
             for tok in lexer:
                 print(tok)
+            lexer.lineno = 1
             arb_sint = parser.parse(code)
             if errores:
                 show_errors(errores)
@@ -36,6 +38,7 @@ def run_code(arbol, tabla):
                     visualizar_arbol(arb_sint)  # Generar el archivo "arbol_parseo.png"
                     mostrar_imagen_con_scroll("arbol_parseo.png")
                     consolePanel.insert(tk.END, "Árbol de parseo generado con éxito <3 \n", 'exito')
+                lexer.lineno = 1
                 analizador = AnalizadorSemantico()
                 analizador.analizar(arb_sint)
                 if errores:
