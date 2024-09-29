@@ -33,7 +33,7 @@ class AnalizadorSemantico:
                     print(f"Mover lapicero con {tipo_nodo} por {mov} unidades.")
                 else:
                     self.verificar_entero(nodo[1][1])
-                    print(f"Mover lapicero hacia {tipo_nodo} por {nodo[1][1]} unidades.")
+                    print(f"Mover lapicero con {tipo_nodo} por {nodo[1][1]} unidades.")
 
             elif tipo_nodo == 'pos':
                 self.analizar_pos(nodo)
@@ -74,6 +74,10 @@ class AnalizadorSemantico:
 
             elif tipo_nodo == 'while':
                 self.analizar_while(nodo)
+                return
+            
+            elif tipo_nodo == 'repeat_until':
+                self.analizar_repeat(nodo)
                 return
 
             elif tipo_nodo == 'equal':
@@ -297,6 +301,35 @@ class AnalizadorSemantico:
         
         return result
         
+    def verificar_operacion_booleana(self, node):
+        # Si el nodo es un número, lo devolvemos
+        if node[0] == 'number':
+            return node[1]
+        
+        # Si el nodo es una operación (multiplicación, división, suma o resta)
+        operator = node[0]
+        left = self.obtener_valor(node[1])  # Evalúa el operando izquierdo
+        right = self.obtener_valor(node[2])  # Evalúa el operando derecho
+
+        # Verificar que ambos operandos sean enteros
+        if not isinstance(left, int) or not isinstance(right, int):
+            raise Exception(f"Error: Los operandos deben ser booleanos. Recibido: {left} y {right}")
+        
+        result = 0
+        
+        # Realiza la operación en función del operador
+        if operator == '>':
+            result = left > right
+        elif operator == '<':
+            result = left < right
+        elif operator == '==':
+            result = left == right
+        elif operator == '>=':
+            result = left >= right
+        elif operator == '<=':
+            result = left <= right
+        
+        return result
 
     def analizar_pos(self, nodo):
         """
@@ -438,36 +471,59 @@ class AnalizadorSemantico:
     
     def analizar_while(self, nodo):
         operacion = nodo[1][0]
-        result = False
-        if operacion == 'equal':
-            result = self.analizar_equal(nodo[1])
-        elif operacion == 'greater':
-            result = self.analizar_greater(nodo[1])
-        elif operacion == 'smaller':
-            result = self.analizar_smaller(nodo[1])
-        elif operacion == 'and':
-            result = self.analizar_and(nodo[1])
-        elif operacion == 'or':
-            result = self.analizar_or(nodo[1])
+        result = True
         
-        if result:
-            print(self.extraer_sentencias(nodo))
+        while result:
+
+            if operacion == 'equal':
+                result = self.analizar_equal(nodo[1])
+            elif operacion == 'greater':
+                result = self.analizar_greater(nodo[1])
+            elif operacion == 'smaller':
+                result = self.analizar_smaller(nodo[1])
+            elif operacion == 'and':
+                result = self.analizar_and(nodo[1])
+            elif operacion == 'or':
+                result = self.analizar_or(nodo[1])
+            elif operacion == '<' or operacion == '>' or operacion == '==' or operacion == '<=' or operacion == '>=':
+                result = self.verificar_operacion_booleana(nodo[-1])
+
             for i in range(len(self.extraer_sentencias(nodo))):
                 sentencia = self.extraer_sentencias(nodo)[i]
                 print("sentencia: ", sentencia)
                 self.analizar(sentencia)
             self.analizar_while(nodo)
 
-        
+    def analizar_repeat(self, nodo):
+        operacion = nodo[-1][0]
+        sentencias = self.extraer_sentencias(nodo)
+        resultado = True
 
-    def analizar_expresion(self, nodo_expresion):
-        """UseColor 1
-        Comprueba si expresiones como ADD, PUT y otras están siendo usadas con variables declaradas.
-        """
-        if nodo_expresion[0] == 'add_variable':
-            nombre_variable = nodo_expresion[2]
-            self.analizar_uso_variable(nombre_variable)
-            print(f"Analizada la operación ADD para la variable '{nombre_variable}'.")
+        while resultado:
+            
+            for i in range(len(sentencias)):
+                sentencia = sentencias[i]
+                self.analizar(sentencia)
+
+            if operacion == 'equal':
+                resultado = self.analizar_equal(nodo[-1])
+            elif operacion == 'greater':
+                resultado = self.analizar_greater(nodo[-1])
+            elif operacion == 'smaller':
+                resultado = self.analizar_smaller(nodo[-1])
+            elif operacion == 'and':
+                resultado = self.analizar_and(nodo[-1])
+            elif operacion == 'or':
+                resultado = self.analizar_or(nodo[-1])
+            elif operacion == '<' or operacion == '>' or operacion == '==' or operacion == '<=' or operacion == '>=':
+                resultado = self.verificar_operacion_booleana(nodo[-1])
+            else:
+                error = (f"Error semántico: operación no válida.")
+                errores.append(error)
+                raise Exception(error)
+
+
+        
     
     # Función para obtener el valor de un operando, ya sea variable o número literal
     def obtener_valor(self,operando):
@@ -522,38 +578,73 @@ class AnalizadorSemantico:
         return resultado
     
     def analizar_and(self, nodo):
-        # nodo: ('equal', operand1, operand2)
+         # nodo: ('equal', operand1, operand2)
         operando1 = nodo[1]
         operando2 = nodo[2]
+        print(len(operando1))
+        print(operando1)
+        valor1 = 0
+        valor2 = 0
 
-        # Obtener valores de ambos operandos
-        valor1 = self.obtener_valor(operando1)
-        valor2 = self.obtener_valor(operando2)
+        if len(operando1) > 2:
+            valor1 = self.verificar_operacion_booleana(operando1)
+            if len(operando2) > 2:
+                valor2 = self.verificar_operacion_booleana(operando2)
+            else:
+                valor2 = self.obtener_valor(operando2)
 
-        booleano1 = self.verificar_booleano(valor1)
-        booleano2 = self.verificar_booleano(valor2)
+        elif len(operando2) > 2:
+            valor2 = self.verificar_operacion_booleana(operando2)
+            if len(operando1) > 2:
+                valor1 = self.verificar_operacion_booleana(operando1)
+            else:
+                valor1 = self.obtener_valor(operando1)
+        else:
+            # Obtener valores de ambos operandos
+            valor1 = self.obtener_valor(operando1)
+            valor2 = self.obtener_valor(operando2)
+
+            # Verificar que ambos valores sean enteros
+            self.verificar_booleano(valor1)
+            self.verificar_booleano(valor2)
 
         # Comparar los valores y devolver el resultado
-        resultado = booleano1 and booleano2
-        print(f"Resultado del and {booleano1} and {booleano2}: {resultado}")
+        resultado = valor1 and valor2
+        print(f"Resultado de la comparación {valor1} and {valor2}: {resultado}")
         return resultado
     
     def analizar_or(self, nodo):
-        # nodo: ('equal', operand1, operand2)
+         # nodo: ('equal', operand1, operand2)
         operando1 = nodo[1]
         operando2 = nodo[2]
+        valor1 = 0
+        valor2 = 0
 
-        # Obtener valores de ambos operandos
-        valor1 = self.obtener_valor(operando1)
-        valor2 = self.obtener_valor(operando2)
+        if len(operando1) > 2:
+            valor1 = self.verificar_operacion_booleana(operando1)
+            if len(operando2) > 2:
+                valor2 = self.verificar_operacion_booleana(operando2)
+            else:
+                valor2 = self.obtener_valor(operando2)
 
-        # Verificar que ambos valores sean enteros
-        booleano1 = self.verificar_booleano(valor1)
-        booleano2 = self.verificar_booleano(valor2)
+        elif len(operando2) > 2:
+            valor2 = self.verificar_operacion_booleana(operando2)
+            if len(operando1) > 2:
+                valor1 = self.verificar_operacion_booleana(operando1)
+            else:
+                valor1 = self.obtener_valor(operando1)
+        else:
+            # Obtener valores de ambos operandos
+            valor1 = self.obtener_valor(operando1)
+            valor2 = self.obtener_valor(operando2)
+
+            # Verificar que ambos valores sean enteros
+            self.verificar_booleano(valor1)
+            self.verificar_booleano(valor2)
 
         # Comparar los valores y devolver el resultado
-        resultado = booleano1 or booleano2
-        print(f"Resultado del or {booleano1} or {booleano2}: {resultado}")
+        resultado = valor1 or valor2
+        print(f"Resultado de la comparación {valor1} or {valor2}: {resultado}")
         return resultado
     
     def analizar_greater(self, nodo):
@@ -728,11 +819,13 @@ if __name__ == "__main__":
 
     data = '''
     //comentario
-    Def(var1, 10);
-    While [Equal(var1,2*5)]
-        [ContinueUp 90;
-        Add(var1);]
-    Whend;
+    Def(var1,0);
+    Repeat
+        [ContinueUp Substr(100, 45);
+        ContinueRight 90;
+        ContinueDown 90;]
+    Until
+        [var1 > 0];
     '''
     
 

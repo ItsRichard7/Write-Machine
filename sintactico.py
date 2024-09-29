@@ -371,7 +371,11 @@ if __name__ == "__main__":
 
     data = '''
     //comentario
-    And(10>2,2>5)
+    //comentario
+     Repeat
+    [ContinueUp 90;]
+    Until
+    [bucle == 2];
     '''
     
     analizar_sintactico(data)
