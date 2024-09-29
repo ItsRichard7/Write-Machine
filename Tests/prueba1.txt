@@ -1,0 +1,14 @@
+Proc main()
+    [
+        // Define variable global
+        Def(varGlobal1, 1);
+        //Llama al procedimiento linea1
+        linea1();
+        //Llama al procedimiento posiciona
+        posiciona(1,1);
+        //El color es 1
+        UseColor varGlobal1;
+        //Llama al procedimiento para dibujar una Cruz
+        impCruz(5,5);
+    ];
+    End;

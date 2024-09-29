@@ -11,7 +11,7 @@ def p_sentencias(p):
     if len(p) == 2:
         p[0] = ('sentencias', p[1])  # Crear lista de una sola sentencia
     else:
-        p[0] = ('sentencias', p[1] + p[2])  # Concatenar listas de sentencias
+        p[0] = ('sentencias', p[1], p[2])  # Concatenar listas de sentencias
 
 # Definir una sentencia que puede ser cualquier instrucción válida
 def p_sentencia(p):
@@ -42,7 +42,9 @@ def p_sentencia(p):
                  | random
                  | mult
                  | div
-                 | sum'''
+                 | sum
+                 | proc 
+                 | invocacion_proc'''
     p[0] = ('sentencia', p[1])
 
 # 2. Reglas más específicas
@@ -197,6 +199,42 @@ def p_sum(p):
     '''sum : SUM PARIZQ valor COMA valor PARDER'''
     p[0] = ('sum', p[3], p[5])
 
+# 2.15. Definir un procedimiento (Proc)
+def p_proc(p):
+    '''proc : PROC VARIABLE PARIZQ lista_parametros PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA
+            | PROC VARIABLE PARIZQ PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA'''
+    if len(p) == 12:  # Caso sin parámetros
+        p[0] = ('proc', p[2], p[4], p[7])  # p[2]: nombre del proc, p[6]: cuerpo del proc
+    else:  # Caso con parámetros
+        p[0] = ('proc', p[2], p[6])  # p[4]: lista de parámetros
+
+# 2.16. Definir lista de parámetros de un procedimiento
+def p_lista_parametros(p):
+    '''lista_parametros : VARIABLE
+                        | VARIABLE COMA lista_parametros'''
+    if len(p) == 2:  # Un solo parámetro
+        p[0] = [p[1]]
+    else:  # Lista de parámetros
+        p[0] = [p[1]] + p[3]
+
+# 2.17. Invocación de un procedimiento
+def p_invocacion_proc(p):
+    '''invocacion_proc : VARIABLE PARIZQ lista_argumentos PARDER PUNTOCOMA
+                       | VARIABLE PARIZQ PARDER PUNTOCOMA'''
+    if len(p) == 6:  # Sin argumentos
+        p[0] = ('invocacion_proc', p[1], p[3])  # p[1]: nombre del procedimiento
+    else:  # Con argumentos
+        p[0] = ('invocacion_proc', p[1])  # p[3]: lista de argumentos
+
+# 2.18. Lista de argumentos para invocación de procedimientos
+def p_lista_argumentos(p):
+    '''lista_argumentos : valor
+                        | valor COMA lista_argumentos'''
+    if len(p) == 2:  # Un solo argumento
+        p[0] = [p[1]]
+    else:  # Varios argumentos
+        p[0] = [p[1]] + p[3]
+
 # Manejo de valores que pueden ser números, variables o expresiones
 def p_valor_numero(p):
     '''valor : NUMBER'''
@@ -258,9 +296,20 @@ def p_error(p):
 # Construir el parser
 parser = yacc.yacc()
 
+# Definir un contador global para generar identificadores únicos para los nodos
+contador_nodos = 0
+
+def generar_id_nodo():
+    global contador_nodos
+    contador_nodos += 1
+    return contador_nodos
+
 def crear_nodo_arbol(nodo, grafo, padre=None):
+    # Generar un identificador único para cada nodo
+    nodo_id = generar_id_nodo()
+    
     if isinstance(nodo, tuple):
-        nodo_actual = pydot.Node(str(id(nodo)), label=nodo[0])
+        nodo_actual = pydot.Node(str(nodo_id), label=nodo[0])
         grafo.add_node(nodo_actual)
         if padre:
             grafo.add_edge(pydot.Edge(padre, nodo_actual))
@@ -271,10 +320,11 @@ def crear_nodo_arbol(nodo, grafo, padre=None):
             else:
                 crear_nodo_arbol(subnodo, grafo, nodo_actual)
     else:
-        nodo_hoja = pydot.Node(str(id(nodo)), label=str(nodo))
+        nodo_hoja = pydot.Node(str(nodo_id), label=str(nodo))
         grafo.add_node(nodo_hoja)
         if padre:
             grafo.add_edge(pydot.Edge(padre, nodo_hoja))
+
 
 # Función para visualizar el árbol
 def visualizar_arbol(arbol):
@@ -301,10 +351,20 @@ def analizar_sintactico(data):
 if __name__ == "__main__":
 
     data = '''
-    For var1(1 to 5) Loop
-        [PosY Add(var2, var1);
-        ContinueRight 9;]
-    End Loop;
+    Proc main()
+    [
+        // Define variable global
+        Def(varGlobal1, 1);
+        //Llama al procedimiento linea1
+        linea1();
+        //Llama al procedimiento posiciona
+        posiciona(1,1);
+        //El color es 1
+        UseColor varGlobal1;
+        //Llama al procedimiento para dibujar una Cruz
+        impCruz(5,5);
+    ];
+    End;
     '''
     
     analizar_sintactico(data)
