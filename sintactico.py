@@ -160,15 +160,18 @@ def p_while(p):
 
 # 2.13. Funciones: Equal, And, Or, Greater, Smaller
 def p_equal(p):
-    '''equal : EQUAL PARIZQ valor COMA valor PARDER'''
+    '''equal : EQUAL PARIZQ valor COMA valor PARDER
+             | EQUAL PARIZQ condicion COMA condicion PARDER'''
     p[0] = ('equal', p[3], p[5])
 
 def p_and(p):
-    '''and : AND PARIZQ valor COMA valor PARDER'''
+    '''and : AND PARIZQ valor COMA valor PARDER
+           | AND PARIZQ condicion COMA condicion PARDER'''
     p[0] = ('and', p[3], p[5])
 
 def p_or(p):
-    '''or : OR PARIZQ valor COMA valor PARDER'''
+    '''or : OR PARIZQ valor COMA valor PARDER
+          | OR PARIZQ condicion COMA condicion PARDER'''
     p[0] = ('or', p[3], p[5])
 
 def p_greater(p):
@@ -368,7 +371,7 @@ if __name__ == "__main__":
 
     data = '''
     //comentario
-    Greater(10, 2*5)
+    And(10>2,2>5)
     '''
     
     analizar_sintactico(data)
