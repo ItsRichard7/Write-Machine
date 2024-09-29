@@ -72,6 +72,10 @@ class AnalizadorSemantico:
                 self.analizar_for(nodo)
                 return
 
+            elif tipo_nodo == 'while':
+                self.analizar_while(nodo)
+                return
+
             elif tipo_nodo == 'equal':
                 self.analizar_equal(nodo)
 
@@ -342,28 +346,6 @@ class AnalizadorSemantico:
 
         print(f"Posicionar usando {nodo[0]} en {valor_a}.")
 
-    def analizar_bucle(self, nodo):
-        """
-        Realiza las comprobaciones para las variables de control de un bucle y asegura que los límites del bucle sean correctos.
-        """
-        var_bucle = nodo[2]
-        self.analizar_uso_variable(var_bucle)
-
-        inicio_bucle = nodo[4]
-        fin_bucle = nodo[6]
-
-        if not isinstance(inicio_bucle, int) or not isinstance(fin_bucle, int):
-            error = (f"Error semántico: los límites del bucle deben ser enteros, se obtuvo {inicio_bucle} a {fin_bucle}.")
-            errores.append(error)
-            raise Exception(error)
-
-        if inicio_bucle >= fin_bucle:
-            error = (f"Error semántico: el valor inicial del bucle ({inicio_bucle}) debe ser menor al valor final ({fin_bucle}).")
-            errores.append(error)
-            raise Exception(error)
-
-        print(f"Bucle válido desde {inicio_bucle} hasta {fin_bucle} con la variable '{var_bucle}'.")
-
     def analizar_case(self, nodo):
         
         nombre_variable = nodo[1]
@@ -420,6 +402,8 @@ class AnalizadorSemantico:
         var = nodo[1]
         indice_menor = nodo[2][1]
         indice_mayor = nodo[3][1]
+        self.verificar_entero(indice_menor)
+        self.verificar_entero(indice_mayor)
         if var not in self.tabla_simbolos: 
             self.tabla_simbolos[var] = {'tipo': "entero", 'valor': indice_menor}
             while indice_menor < indice_mayor:
@@ -435,9 +419,6 @@ class AnalizadorSemantico:
             raise Exception(error)
         
         
-            
-
-
     def extraer_sentencias(self,node):
         # Lista para almacenar las sentencias encontradas
         sentencias_encontradas = []
@@ -454,6 +435,30 @@ class AnalizadorSemantico:
         
         # Devolvemos las sentencias encontradas
         return sentencias_encontradas
+    
+    def analizar_while(self, nodo):
+        operacion = nodo[1][0]
+        result = False
+        if operacion == 'equal':
+            result = self.analizar_equal(nodo[1])
+        elif operacion == 'greater':
+            result = self.analizar_greater(nodo[1])
+        elif operacion == 'smaller':
+            result = self.analizar_smaller(nodo[1])
+        elif operacion == 'and':
+            result = self.analizar_and(nodo[1])
+        elif operacion == 'or':
+            result = self.analizar_or(nodo[1])
+        
+        if result:
+            print(self.extraer_sentencias(nodo))
+            for i in range(len(self.extraer_sentencias(nodo))):
+                sentencia = self.extraer_sentencias(nodo)[i]
+                print("sentencia: ", sentencia)
+                self.analizar(sentencia)
+            self.analizar_while(nodo)
+
+        
 
     def analizar_expresion(self, nodo_expresion):
         """UseColor 1
@@ -486,14 +491,30 @@ class AnalizadorSemantico:
         # nodo: ('equal', operand1, operand2)
         operando1 = nodo[1]
         operando2 = nodo[2]
+        valor1 = 0
+        valor2 = 0
 
-        # Obtener valores de ambos operandos
-        valor1 = self.obtener_valor(operando1)
-        valor2 = self.obtener_valor(operando2)
+        if len(operando1) > 2:
+            valor1 = self.verificar_operacion(operando1)
+            if len(operando2) > 2:
+                valor2 = self.verificar_operacion(operando2)
+            else:
+                valor2 = self.obtener_valor(operando2)
 
-        # Verificar que ambos valores sean enteros
-        self.verificar_entero(valor1)
-        self.verificar_entero(valor2)
+        elif len(operando2) > 2:
+            valor2 = self.verificar_operacion(operando2)
+            if len(operando1) > 2:
+                valor1 = self.verificar_operacion(operando1)
+            else:
+                valor1 = self.obtener_valor(operando1)
+        else:
+            # Obtener valores de ambos operandos
+            valor1 = self.obtener_valor(operando1)
+            valor2 = self.obtener_valor(operando2)
+
+            # Verificar que ambos valores sean enteros
+            self.verificar_entero(valor1)
+            self.verificar_entero(valor2)
 
         # Comparar los valores y devolver el resultado
         resultado = valor1 == valor2
@@ -539,14 +560,30 @@ class AnalizadorSemantico:
         # nodo: ('equal', operand1, operand2)
         operando1 = nodo[1]
         operando2 = nodo[2]
+        valor1 = 0
+        valor2 = 0
 
-        # Obtener valores de ambos operandos
-        valor1 = self.obtener_valor(operando1)
-        valor2 = self.obtener_valor(operando2)
+        if len(operando1) > 2:
+            valor1 = self.verificar_operacion(operando1)
+            if len(operando2) > 2:
+                valor2 = self.verificar_operacion(operando2)
+            else:
+                valor2 = self.obtener_valor(operando2)
 
-        # Verificar que ambos valores sean enteros
-        self.verificar_entero(valor1)
-        self.verificar_entero(valor2)
+        elif len(operando2) > 2:
+            valor2 = self.verificar_operacion(operando2)
+            if len(operando1) > 2:
+                valor1 = self.verificar_operacion(operando1)
+            else:
+                valor1 = self.obtener_valor(operando1)
+        else:
+            # Obtener valores de ambos operandos
+            valor1 = self.obtener_valor(operando1)
+            valor2 = self.obtener_valor(operando2)
+
+            # Verificar que ambos valores sean enteros
+            self.verificar_entero(valor1)
+            self.verificar_entero(valor2)
 
         # Comparar los valores y devolver el resultado
         resultado = valor1 > valor2
@@ -554,17 +591,32 @@ class AnalizadorSemantico:
         return resultado
 
     def analizar_smaller(self, nodo):
-        # nodo: ('equal', operand1, operand2)
         operando1 = nodo[1]
         operando2 = nodo[2]
+        valor1 = 0
+        valor2 = 0
 
-        # Obtener valores de ambos operandos
-        valor1 = self.obtener_valor(operando1)
-        valor2 = self.obtener_valor(operando2)
+        if len(operando1) > 2:
+            valor1 = self.verificar_operacion(operando1)
+            if len(operando2) > 2:
+                valor2 = self.verificar_operacion(operando2)
+            else:
+                valor2 = self.obtener_valor(operando2)
 
-        # Verificar que ambos valores sean enteros
-        self.verificar_entero(valor1)
-        self.verificar_entero(valor2)
+        elif len(operando2) > 2:
+            valor2 = self.verificar_operacion(operando2)
+            if len(operando1) > 2:
+                valor1 = self.verificar_operacion(operando1)
+            else:
+                valor1 = self.obtener_valor(operando1)
+        else:
+            # Obtener valores de ambos operandos
+            valor1 = self.obtener_valor(operando1)
+            valor2 = self.obtener_valor(operando2)
+
+            # Verificar que ambos valores sean enteros
+            self.verificar_entero(valor1)
+            self.verificar_entero(valor2)
 
         # Comparar los valores y devolver el resultado
         resultado = valor1 < valor2
@@ -676,11 +728,11 @@ if __name__ == "__main__":
 
     data = '''
     //comentario
-    Def(var2,1);
-    For var1(1 to 5) Loop
-        [Add(var2,var1);
-        ContinueRight 9;]
-    End Loop;
+    Def(var1, 10);
+    While [Equal(var1,2*5)]
+        [ContinueUp 90;
+        Add(var1);]
+    Whend;
     '''
     
 

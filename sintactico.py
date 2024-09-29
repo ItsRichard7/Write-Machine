@@ -367,7 +367,8 @@ def analizar_sintactico(data):
 if __name__ == "__main__":
 
     data = '''
-    ContinueRight Sum(1, 2);
+    //comentario
+    Greater(10, 2*5)
     '''
     
     analizar_sintactico(data)
