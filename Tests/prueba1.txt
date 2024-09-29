@@ -1,3 +1,4 @@
+// Procedimiento principal
 Proc main()
     [
         // Define variable global
@@ -11,4 +12,4 @@ Proc main()
         //Llama al procedimiento para dibujar una Cruz
         impCruz(5,5);
     ];
-    End;
+End;
