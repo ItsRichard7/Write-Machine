@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import scrolledtext, filedialog, Toplevel, Canvas, Scrollbar
-from PIL import Image, ImageTk  # Importa Pillow
+from PIL import Image, ImageTk
 from lexico import errores, lexer, verificar_comentario_inicial
 from sintactico import visualizar_arbol, parser
 from semantico import AnalizadorSemantico
@@ -45,16 +45,14 @@ def run_code(arbol, tabla):
                    show_errors(errores)
                 else:
                     if tabla:
-                        analizador.generar_tabla_simbolos()
+                        analizador.generar_tabla_simbolos(analizador.tabla_simbolos)
                         consolePanel.insert(tk.END, "Tabla de símbolos generada con éxito <3 \n", 'exito')
                         consolePanel.tag_config('exito', foreground="white", font=("Consolas", 13, "bold"))
+                        mostrar_imagen_con_scroll("tabla_simbolos.png")
                     consolePanel.insert(tk.END, "Código compilado con éxito <3 \n", 'exito')
                     consolePanel.tag_config('exito', foreground="white", font=("Consolas", 13, "bold"))  # Configuración del estilo para los errores
     else:
         show_errors(errores)
-
-def generar_tabla_simbolos():
-    pass
 
 def show_errors(errors):
     """Muestra los errores en el panel de consola."""

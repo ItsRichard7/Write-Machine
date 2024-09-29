@@ -1,5 +1,6 @@
 from lexico import errores
 import random
+from PIL import Image, ImageDraw, ImageFont
 
 class AnalizadorSemantico:
     def __init__(self):
@@ -60,7 +61,7 @@ class AnalizadorSemantico:
             elif tipo_nodo == 'beginning':
                 print("Mover lapicero a [1,1].")
 
-            # Analizar estructuras como bucles (loops), case, etc.
+            # Analizar for_loop
             elif tipo_nodo == 'for_loop':
                 self.analizar_for(nodo)
             
@@ -116,6 +117,7 @@ class AnalizadorSemantico:
 
             # Manejar otros tipos de sentencias aquí...
 
+    # Analizar declaraciones de variables
     def analizar_declaracion_variable(self, nodo):
         """
         Verifica si la variable ya fue declarada, la agrega a la tabla de símbolos y asigna su valor.
@@ -177,6 +179,10 @@ class AnalizadorSemantico:
             # Si el tipo es correcto, actualiza el valor
             self.tabla_simbolos[nombre_variable]['valor'] = nuevo_valor
             print(f"Valor de la variable '{nombre_variable}' actualizado a {nuevo_valor}.")
+        else:
+            error = f"Error semántico: la variable '{nombre_variable}' no se le esta asignando un valor."
+            errores.append(error)
+            raise Exception(error)
     
     def analizar_operacion_add(self, nombre_variable, valor_b=1):
         """
@@ -811,22 +817,70 @@ class AnalizadorSemantico:
         resultado = valor1 + valor2
         print(f"Resultado de la suma {valor1} + {valor2} = {resultado}")
         return resultado
+    
+    def generar_tabla_simbolos(self, tabla_simbolos):
+        # Crear la imagen en blanco con tamaño suficiente para la tabla
+        img_width = 400
+        img_height = 100 + len(tabla_simbolos) * 40  # Altura basada en el número de filas
+        img = Image.new('RGB', (img_width, img_height), color=(255, 255, 255))
+        draw = ImageDraw.Draw(img)
+
+        # Definir una fuente y tamaños de las celdas
+        try:
+            font = ImageFont.truetype("arial.ttf", 20)
+        except IOError:
+            font = ImageFont.load_default()
+
+        # Anchos de las columnas
+        col_widths = [100, 120, 120]  # Ancho de cada columna
+        x_start = 20
+        y_start = 20
+        row_height = 40
+
+        # Dibujar los encabezados
+        encabezados = ['Variable', 'Tipo', 'Valor']
+        for i, encabezado in enumerate(encabezados):
+            x_offset = x_start + sum(col_widths[:i])  # Ajuste horizontal basado en la columna
+            draw.text((x_offset + 10, y_start + 10), encabezado, font=font, fill=(0, 0, 0))
+
+        # Dibujar las filas de la tabla
+        for idx, (variable, atributos) in enumerate(tabla_simbolos.items()):
+            y_offset = y_start + (idx + 1) * row_height
+            # Dibujar las celdas de la fila
+            draw.text((x_start + 10, y_offset + 10), variable, font=font, fill=(0, 0, 0))
+            draw.text((x_start + col_widths[0] + 10, y_offset + 10), atributos['tipo'], font=font, fill=(0, 0, 0))
+            draw.text((x_start + col_widths[0] + col_widths[1] + 10, y_offset + 10), str(atributos['valor']), font=font, fill=(0, 0, 0))
+
+        # Dibujar las líneas de la tabla
+        num_rows = len(tabla_simbolos) + 1  # Número de filas (incluye encabezados)
+        total_height = y_start + num_rows * row_height
+
+        # Dibujar líneas horizontales
+        for i in range(num_rows + 1):  # +1 para la línea de la última fila
+            y_pos = y_start + i * row_height
+            draw.line([(x_start, y_pos), (x_start + sum(col_widths), y_pos)], fill=(0, 0, 0), width=2)
+
+        # Dibujar líneas verticales (incluso la última de la derecha)
+        for i in range(len(col_widths) + 1):  # +1 para la última línea vertical
+            x_pos = x_start + sum(col_widths[:i])
+            draw.line([(x_pos, y_start), (x_pos, total_height)], fill=(0, 0, 0), width=2)
+
+        # Guardar la imagen
+        img.save('tabla_simbolos.png')
 
 
 
 # Ejemplo de uso en integración con el árbol sintáctico de sintactico.py
+
 if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
     //comentario
     Def(var1,0);
-    Repeat
-        [ContinueUp Substr(100, 45);
-        ContinueRight 90;
-        ContinueDown 90;]
-    Until
-        [var1 > 0];
+    Def(var2,9);
+    Def(var3,TRUE);
+    Add(var1);
     '''
     
 
@@ -841,3 +895,4 @@ if __name__ == "__main__":
    
     #print("Análisis semántico completado correctamente")
     print("Tabla de Símbolos:", analizador.tabla_simbolos)
+   
