@@ -260,21 +260,27 @@ def p_expr(p):
             | valor MULT valor
             | valor DIV valor
             | valor SUM valor
-            | valor SUBSTR valor'''
+            | valor SUBSTR valor
+            | substr
+            | random
+            | mult
+            | div
+            | sum'''
     
     # Caso para "ADD VARIABLE"
-    if p[1] == 'Add' and len(p) == 5:  # Para ADD con un solo parámetro
+    if len(p) == 5:  # Para ADD con un solo parámetro
         p[0] = ('add_variable_uno', p[3])
     
     # Caso para "ADD VARIABLE, valor"
-    elif p[1] == 'Add' and len(p) == 7:  # Para ADD con dos parámetros
+    elif len(p) == 7:  # Para ADD con dos parámetros
         p[0] = ('add_variable_dos', p[3], p[5])
+
+    elif len(p) == 4:  # Caso para operaciones unarias
+        p[0] = (p[2], p[1], p[3])  # p[1] es el operador, p[2] y p[3] son los operandos
     
     # Caso para operaciones binarias
     else:
-        p[0] = (p[2], p[1], p[3])  # p[2] es el operador, p[1] y p[3] son los operandos
-
-
+        p[0] = p[1]
 
 # Condiciones para bucles y otras sentencias
 def p_condicion(p):
@@ -351,20 +357,7 @@ def analizar_sintactico(data):
 if __name__ == "__main__":
 
     data = '''
-    Proc main()
-    [
-        // Define variable global
-        Def(varGlobal1, 1);
-        //Llama al procedimiento linea1
-        linea1();
-        //Llama al procedimiento posiciona
-        posiciona(1,1);
-        //El color es 1
-        UseColor varGlobal1;
-        //Llama al procedimiento para dibujar una Cruz
-        impCruz(5,5);
-    ];
-    End;
+    Put(mivar, Substr(100, 45));
     '''
     
     analizar_sintactico(data)

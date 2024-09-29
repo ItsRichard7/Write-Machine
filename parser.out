@@ -93,11 +93,16 @@ Rule 82    expr -> valor MULT valor
 Rule 83    expr -> valor DIV valor
 Rule 84    expr -> valor SUM valor
 Rule 85    expr -> valor SUBSTR valor
-Rule 86    condicion -> equal
-Rule 87    condicion -> greater
-Rule 88    condicion -> smaller
-Rule 89    condicion -> and
-Rule 90    condicion -> or
+Rule 86    expr -> substr
+Rule 87    expr -> random
+Rule 88    expr -> mult
+Rule 89    expr -> div
+Rule 90    expr -> sum
+Rule 91    condicion -> equal
+Rule 92    condicion -> greater
+Rule 93    condicion -> smaller
+Rule 94    condicion -> and
+Rule 95    condicion -> or
 
 Terminals, with rules where they appear
 
@@ -155,7 +160,7 @@ error                :
 Nonterminals, with rules where they appear
 
 add_variable         : 5
-and                  : 22 89
+and                  : 22 94
 beginning            : 16
 case                 : 18
 condicion            : 55 56
@@ -164,30 +169,30 @@ continue_left        : 9
 continue_right       : 8
 continue_up          : 6
 def_variable         : 3
-div                  : 29
+div                  : 29 89
 down                 : 14
 end_case             : 49
-equal                : 21 86
+equal                : 21 91
 expr                 : 77
 for_loop             : 17
-greater              : 24 87
+greater              : 24 92
 invocacion_proc      : 32
 lista_argumentos     : 71 74
 lista_parametros     : 67 70
-mult                 : 28
-or                   : 23 90
+mult                 : 28 88
+or                   : 23 95
 pos                  : 10
 posx                 : 11
 posy                 : 12
 proc                 : 31
 put_variable         : 4
-random               : 27
+random               : 27 87
 repeat_until         : 19
 sentencia            : 1 2
 sentencias           : 2 48 52 53 55 56 67 68 0
-smaller              : 25 88
-substr               : 26
-sum                  : 30
+smaller              : 25 93
+substr               : 26 86
+sum                  : 30 90
 up                   : 15
 use_color            : 13
 valor                : 33 34 36 37 38 39 40 41 41 42 43 44 48 48 52 57 57 58 58 59 59 60 60 61 61 62 62 63 64 64 65 65 66 66 73 74 81 82 82 83 83 84 84 85 85
@@ -1656,15 +1661,35 @@ state 37
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
     valor                          shift and go to state 68
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
 state 38
 
@@ -1680,15 +1705,35 @@ state 38
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 75
+    valor                          shift and go to state 80
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
 state 39
 
@@ -1704,15 +1749,35 @@ state 39
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 76
+    valor                          shift and go to state 81
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
 state 40
 
@@ -1728,21 +1793,41 @@ state 40
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 77
+    valor                          shift and go to state 82
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
 state 41
 
     (41) pos -> POS . PARIZQ valor COMA valor PARDER PUNTOCOMA
 
-    PARIZQ          shift and go to state 78
+    PARIZQ          shift and go to state 83
 
 
 state 42
@@ -1759,15 +1844,35 @@ state 42
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 79
+    valor                          shift and go to state 84
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
 state 43
 
@@ -1783,15 +1888,35 @@ state 43
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 80
+    valor                          shift and go to state 85
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
 state 44
 
@@ -1807,133 +1932,153 @@ state 44
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 81
+    valor                          shift and go to state 86
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
 state 45
 
     (45) down -> DOWN . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 82
+    PUNTOCOMA       shift and go to state 87
 
 
 state 46
 
     (46) up -> UP . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 83
+    PUNTOCOMA       shift and go to state 88
 
 
 state 47
 
     (47) beginning -> BEGIN . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 84
+    PUNTOCOMA       shift and go to state 89
 
 
 state 48
 
     (48) for_loop -> FOR . VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
 
-    VARIABLE        shift and go to state 85
+    VARIABLE        shift and go to state 90
 
 
 state 49
 
     (49) case -> CASE . VARIABLE when_cases end_case
 
-    VARIABLE        shift and go to state 86
+    VARIABLE        shift and go to state 91
 
 
 state 50
 
     (55) repeat_until -> REPEAT . BRAIZQ sentencias BRADER UNTIL PARIZQ condicion PARDER PUNTOCOMA
 
-    BRAIZQ          shift and go to state 87
+    BRAIZQ          shift and go to state 92
 
 
 state 51
 
     (56) while -> WHILE . PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
 
-    PARIZQ          shift and go to state 88
+    PARIZQ          shift and go to state 93
 
 
 state 52
 
     (57) equal -> EQUAL . PARIZQ valor COMA valor PARDER
 
-    PARIZQ          shift and go to state 89
+    PARIZQ          shift and go to state 94
 
 
 state 53
 
     (58) and -> AND . PARIZQ valor COMA valor PARDER
 
-    PARIZQ          shift and go to state 90
+    PARIZQ          shift and go to state 95
 
 
 state 54
 
     (59) or -> OR . PARIZQ valor COMA valor PARDER
 
-    PARIZQ          shift and go to state 91
+    PARIZQ          shift and go to state 96
 
 
 state 55
 
     (60) greater -> GREATER . PARIZQ valor COMA valor PARDER
 
-    PARIZQ          shift and go to state 92
+    PARIZQ          shift and go to state 97
 
 
 state 56
 
     (61) smaller -> SMALLER . PARIZQ valor COMA valor PARDER
 
-    PARIZQ          shift and go to state 93
+    PARIZQ          shift and go to state 98
 
 
 state 57
 
     (62) substr -> SUBSTR . PARIZQ valor COMA valor PARDER
 
-    PARIZQ          shift and go to state 94
+    PARIZQ          shift and go to state 99
 
 
 state 58
 
     (63) random -> RANDOM . PARIZQ valor PARDER
 
-    PARIZQ          shift and go to state 95
+    PARIZQ          shift and go to state 100
 
 
 state 59
 
     (64) mult -> MULT . PARIZQ valor COMA valor PARDER
 
-    PARIZQ          shift and go to state 96
+    PARIZQ          shift and go to state 101
 
 
 state 60
 
     (65) div -> DIV . PARIZQ valor COMA valor PARDER
 
-    PARIZQ          shift and go to state 97
+    PARIZQ          shift and go to state 102
 
 
 state 61
 
     (66) sum -> SUM . PARIZQ valor COMA valor PARDER
 
-    PARIZQ          shift and go to state 98
+    PARIZQ          shift and go to state 103
 
 
 state 62
@@ -1941,7 +2086,7 @@ state 62
     (67) proc -> PROC . VARIABLE PARIZQ lista_parametros PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA
     (68) proc -> PROC . VARIABLE PARIZQ PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA
 
-    VARIABLE        shift and go to state 99
+    VARIABLE        shift and go to state 104
 
 
 state 63
@@ -1956,7 +2101,7 @@ state 64
 
     (33) def_variable -> DEF PARIZQ . VARIABLE COMA valor PARDER PUNTOCOMA
 
-    VARIABLE        shift and go to state 100
+    VARIABLE        shift and go to state 105
 
 
 state 65
@@ -1976,23 +2121,43 @@ state 65
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
-    PARDER          shift and go to state 102
+    PARDER          shift and go to state 107
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    lista_argumentos               shift and go to state 101
-    valor                          shift and go to state 103
+    lista_argumentos               shift and go to state 106
+    valor                          shift and go to state 108
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
 state 66
 
     (34) put_variable -> PUT PARIZQ . VARIABLE COMA valor PARDER PUNTOCOMA
 
-    VARIABLE        shift and go to state 104
+    VARIABLE        shift and go to state 109
 
 
 state 67
@@ -2000,7 +2165,7 @@ state 67
     (35) add_variable -> ADD PARIZQ . VARIABLE PARDER PUNTOCOMA
     (36) add_variable -> ADD PARIZQ . VARIABLE COMA valor PARDER PUNTOCOMA
 
-    VARIABLE        shift and go to state 105
+    VARIABLE        shift and go to state 110
 
 
 state 68
@@ -2011,11 +2176,11 @@ state 68
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PUNTOCOMA       shift and go to state 106
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PUNTOCOMA       shift and go to state 111
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
 state 69
@@ -2098,10 +2263,85 @@ state 74
     (80) expr -> ADD . PARIZQ VARIABLE PARDER
     (81) expr -> ADD . PARIZQ VARIABLE COMA valor PARDER
 
-    PARIZQ          shift and go to state 111
+    PARIZQ          shift and go to state 116
 
 
 state 75
+
+    (86) expr -> substr .
+
+    PUNTOCOMA       reduce using rule 86 (expr -> substr .)
+    MULT            reduce using rule 86 (expr -> substr .)
+    DIV             reduce using rule 86 (expr -> substr .)
+    SUM             reduce using rule 86 (expr -> substr .)
+    SUBSTR          reduce using rule 86 (expr -> substr .)
+    COMA            reduce using rule 86 (expr -> substr .)
+    PARDER          reduce using rule 86 (expr -> substr .)
+    TO              reduce using rule 86 (expr -> substr .)
+    THEN            reduce using rule 86 (expr -> substr .)
+
+
+state 76
+
+    (87) expr -> random .
+
+    PUNTOCOMA       reduce using rule 87 (expr -> random .)
+    MULT            reduce using rule 87 (expr -> random .)
+    DIV             reduce using rule 87 (expr -> random .)
+    SUM             reduce using rule 87 (expr -> random .)
+    SUBSTR          reduce using rule 87 (expr -> random .)
+    COMA            reduce using rule 87 (expr -> random .)
+    PARDER          reduce using rule 87 (expr -> random .)
+    TO              reduce using rule 87 (expr -> random .)
+    THEN            reduce using rule 87 (expr -> random .)
+
+
+state 77
+
+    (88) expr -> mult .
+
+    PUNTOCOMA       reduce using rule 88 (expr -> mult .)
+    MULT            reduce using rule 88 (expr -> mult .)
+    DIV             reduce using rule 88 (expr -> mult .)
+    SUM             reduce using rule 88 (expr -> mult .)
+    SUBSTR          reduce using rule 88 (expr -> mult .)
+    COMA            reduce using rule 88 (expr -> mult .)
+    PARDER          reduce using rule 88 (expr -> mult .)
+    TO              reduce using rule 88 (expr -> mult .)
+    THEN            reduce using rule 88 (expr -> mult .)
+
+
+state 78
+
+    (89) expr -> div .
+
+    PUNTOCOMA       reduce using rule 89 (expr -> div .)
+    MULT            reduce using rule 89 (expr -> div .)
+    DIV             reduce using rule 89 (expr -> div .)
+    SUM             reduce using rule 89 (expr -> div .)
+    SUBSTR          reduce using rule 89 (expr -> div .)
+    COMA            reduce using rule 89 (expr -> div .)
+    PARDER          reduce using rule 89 (expr -> div .)
+    TO              reduce using rule 89 (expr -> div .)
+    THEN            reduce using rule 89 (expr -> div .)
+
+
+state 79
+
+    (90) expr -> sum .
+
+    PUNTOCOMA       reduce using rule 90 (expr -> sum .)
+    MULT            reduce using rule 90 (expr -> sum .)
+    DIV             reduce using rule 90 (expr -> sum .)
+    SUM             reduce using rule 90 (expr -> sum .)
+    SUBSTR          reduce using rule 90 (expr -> sum .)
+    COMA            reduce using rule 90 (expr -> sum .)
+    PARDER          reduce using rule 90 (expr -> sum .)
+    TO              reduce using rule 90 (expr -> sum .)
+    THEN            reduce using rule 90 (expr -> sum .)
+
+
+state 80
 
     (38) continue_down -> CONDOWN valor . PUNTOCOMA
     (82) expr -> valor . MULT valor
@@ -2109,14 +2349,14 @@ state 75
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PUNTOCOMA       shift and go to state 112
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PUNTOCOMA       shift and go to state 117
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 76
+state 81
 
     (39) continue_right -> CONRIGHT valor . PUNTOCOMA
     (82) expr -> valor . MULT valor
@@ -2124,14 +2364,14 @@ state 76
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PUNTOCOMA       shift and go to state 113
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PUNTOCOMA       shift and go to state 118
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 77
+state 82
 
     (40) continue_left -> CONLEFT valor . PUNTOCOMA
     (82) expr -> valor . MULT valor
@@ -2139,14 +2379,14 @@ state 77
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PUNTOCOMA       shift and go to state 114
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PUNTOCOMA       shift and go to state 119
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 78
+state 83
 
     (41) pos -> POS PARIZQ . valor COMA valor PARDER PUNTOCOMA
     (75) valor -> . NUMBER
@@ -2160,17 +2400,37 @@ state 78
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 115
+    valor                          shift and go to state 120
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 79
+state 84
 
     (42) posx -> POSX valor . PUNTOCOMA
     (82) expr -> valor . MULT valor
@@ -2178,14 +2438,14 @@ state 79
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PUNTOCOMA       shift and go to state 116
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PUNTOCOMA       shift and go to state 121
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 80
+state 85
 
     (43) posy -> POSY valor . PUNTOCOMA
     (82) expr -> valor . MULT valor
@@ -2193,14 +2453,14 @@ state 80
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PUNTOCOMA       shift and go to state 117
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PUNTOCOMA       shift and go to state 122
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 81
+state 86
 
     (44) use_color -> USECOLOR valor . PUNTOCOMA
     (82) expr -> valor . MULT valor
@@ -2208,14 +2468,14 @@ state 81
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PUNTOCOMA       shift and go to state 118
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PUNTOCOMA       shift and go to state 123
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 82
+state 87
 
     (45) down -> DOWN PUNTOCOMA .
 
@@ -2253,7 +2513,7 @@ state 82
     BRADER          reduce using rule 45 (down -> DOWN PUNTOCOMA .)
 
 
-state 83
+state 88
 
     (46) up -> UP PUNTOCOMA .
 
@@ -2291,7 +2551,7 @@ state 83
     BRADER          reduce using rule 46 (up -> UP PUNTOCOMA .)
 
 
-state 84
+state 89
 
     (47) beginning -> BEGIN PUNTOCOMA .
 
@@ -2329,26 +2589,26 @@ state 84
     BRADER          reduce using rule 47 (beginning -> BEGIN PUNTOCOMA .)
 
 
-state 85
+state 90
 
     (48) for_loop -> FOR VARIABLE . PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
 
-    PARIZQ          shift and go to state 119
+    PARIZQ          shift and go to state 124
 
 
-state 86
+state 91
 
     (49) case -> CASE VARIABLE . when_cases end_case
     (50) when_cases -> . when_cases when_case
     (51) when_cases -> . when_case
     (52) when_case -> . WHEN valor THEN BRAIZQ sentencias BRADER
 
-    WHEN            shift and go to state 122
+    WHEN            shift and go to state 127
 
-    when_cases                     shift and go to state 120
-    when_case                      shift and go to state 121
+    when_cases                     shift and go to state 125
+    when_case                      shift and go to state 126
 
-state 87
+state 92
 
     (55) repeat_until -> REPEAT BRAIZQ . sentencias BRADER UNTIL PARIZQ condicion PARDER PUNTOCOMA
     (1) sentencias -> . sentencia
@@ -2448,7 +2708,7 @@ state 87
     PROC            shift and go to state 62
     VARIABLE        shift and go to state 34
 
-    sentencias                     shift and go to state 123
+    sentencias                     shift and go to state 128
     sentencia                      shift and go to state 2
     def_variable                   shift and go to state 3
     put_variable                   shift and go to state 4
@@ -2481,14 +2741,14 @@ state 87
     proc                           shift and go to state 31
     invocacion_proc                shift and go to state 32
 
-state 88
+state 93
 
     (56) while -> WHILE PARIZQ . condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
-    (86) condicion -> . equal
-    (87) condicion -> . greater
-    (88) condicion -> . smaller
-    (89) condicion -> . and
-    (90) condicion -> . or
+    (91) condicion -> . equal
+    (92) condicion -> . greater
+    (93) condicion -> . smaller
+    (94) condicion -> . and
+    (95) condicion -> . or
     (57) equal -> . EQUAL PARIZQ valor COMA valor PARDER
     (60) greater -> . GREATER PARIZQ valor COMA valor PARDER
     (61) smaller -> . SMALLER PARIZQ valor COMA valor PARDER
@@ -2501,14 +2761,14 @@ state 88
     AND             shift and go to state 53
     OR              shift and go to state 54
 
-    condicion                      shift and go to state 124
-    equal                          shift and go to state 125
-    greater                        shift and go to state 126
-    smaller                        shift and go to state 127
-    and                            shift and go to state 128
-    or                             shift and go to state 129
+    condicion                      shift and go to state 129
+    equal                          shift and go to state 130
+    greater                        shift and go to state 131
+    smaller                        shift and go to state 132
+    and                            shift and go to state 133
+    or                             shift and go to state 134
 
-state 89
+state 94
 
     (57) equal -> EQUAL PARIZQ . valor COMA valor PARDER
     (75) valor -> . NUMBER
@@ -2522,17 +2782,37 @@ state 89
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 130
+    valor                          shift and go to state 135
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 90
+state 95
 
     (58) and -> AND PARIZQ . valor COMA valor PARDER
     (75) valor -> . NUMBER
@@ -2546,17 +2826,37 @@ state 90
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 131
+    valor                          shift and go to state 136
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 91
+state 96
 
     (59) or -> OR PARIZQ . valor COMA valor PARDER
     (75) valor -> . NUMBER
@@ -2570,17 +2870,37 @@ state 91
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 132
+    valor                          shift and go to state 137
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 92
+state 97
 
     (60) greater -> GREATER PARIZQ . valor COMA valor PARDER
     (75) valor -> . NUMBER
@@ -2594,17 +2914,37 @@ state 92
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 133
+    valor                          shift and go to state 138
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 93
+state 98
 
     (61) smaller -> SMALLER PARIZQ . valor COMA valor PARDER
     (75) valor -> . NUMBER
@@ -2618,17 +2958,37 @@ state 93
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 134
+    valor                          shift and go to state 139
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 94
+state 99
 
     (62) substr -> SUBSTR PARIZQ . valor COMA valor PARDER
     (75) valor -> . NUMBER
@@ -2642,17 +3002,37 @@ state 94
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 135
+    valor                          shift and go to state 140
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 95
+state 100
 
     (63) random -> RANDOM PARIZQ . valor PARDER
     (75) valor -> . NUMBER
@@ -2666,17 +3046,37 @@ state 95
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 136
+    valor                          shift and go to state 141
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 96
+state 101
 
     (64) mult -> MULT PARIZQ . valor COMA valor PARDER
     (75) valor -> . NUMBER
@@ -2690,17 +3090,37 @@ state 96
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 137
+    valor                          shift and go to state 142
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 97
+state 102
 
     (65) div -> DIV PARIZQ . valor COMA valor PARDER
     (75) valor -> . NUMBER
@@ -2714,17 +3134,37 @@ state 97
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 138
+    valor                          shift and go to state 143
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 98
+state 103
 
     (66) sum -> SUM PARIZQ . valor COMA valor PARDER
     (75) valor -> . NUMBER
@@ -2738,46 +3178,66 @@ state 98
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 139
+    valor                          shift and go to state 144
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 99
+state 104
 
     (67) proc -> PROC VARIABLE . PARIZQ lista_parametros PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA
     (68) proc -> PROC VARIABLE . PARIZQ PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA
 
-    PARIZQ          shift and go to state 140
+    PARIZQ          shift and go to state 145
 
 
-state 100
+state 105
 
     (33) def_variable -> DEF PARIZQ VARIABLE . COMA valor PARDER PUNTOCOMA
 
-    COMA            shift and go to state 141
+    COMA            shift and go to state 146
 
 
-state 101
+state 106
 
     (71) invocacion_proc -> VARIABLE PARIZQ lista_argumentos . PARDER PUNTOCOMA
 
-    PARDER          shift and go to state 142
+    PARDER          shift and go to state 147
 
 
-state 102
+state 107
 
     (72) invocacion_proc -> VARIABLE PARIZQ PARDER . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 143
+    PUNTOCOMA       shift and go to state 148
 
 
-state 103
+state 108
 
     (73) lista_argumentos -> valor .
     (74) lista_argumentos -> valor . COMA lista_argumentos
@@ -2787,30 +3247,30 @@ state 103
     (85) expr -> valor . SUBSTR valor
 
     PARDER          reduce using rule 73 (lista_argumentos -> valor .)
-    COMA            shift and go to state 144
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    COMA            shift and go to state 149
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 104
+state 109
 
     (34) put_variable -> PUT PARIZQ VARIABLE . COMA valor PARDER PUNTOCOMA
 
-    COMA            shift and go to state 145
+    COMA            shift and go to state 150
 
 
-state 105
+state 110
 
     (35) add_variable -> ADD PARIZQ VARIABLE . PARDER PUNTOCOMA
     (36) add_variable -> ADD PARIZQ VARIABLE . COMA valor PARDER PUNTOCOMA
 
-    PARDER          shift and go to state 146
-    COMA            shift and go to state 147
+    PARDER          shift and go to state 151
+    COMA            shift and go to state 152
 
 
-state 106
+state 111
 
     (37) continue_up -> CONUP valor PUNTOCOMA .
 
@@ -2848,7 +3308,7 @@ state 106
     BRADER          reduce using rule 37 (continue_up -> CONUP valor PUNTOCOMA .)
 
 
-state 107
+state 112
 
     (82) expr -> valor MULT . valor
     (75) valor -> . NUMBER
@@ -2862,17 +3322,37 @@ state 107
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 148
+    valor                          shift and go to state 153
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 108
+state 113
 
     (83) expr -> valor DIV . valor
     (75) valor -> . NUMBER
@@ -2886,17 +3366,37 @@ state 108
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 149
+    valor                          shift and go to state 154
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 109
+state 114
 
     (84) expr -> valor SUM . valor
     (75) valor -> . NUMBER
@@ -2910,17 +3410,37 @@ state 109
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 150
+    valor                          shift and go to state 155
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 110
+state 115
 
     (85) expr -> valor SUBSTR . valor
     (75) valor -> . NUMBER
@@ -2934,25 +3454,45 @@ state 110
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 151
+    valor                          shift and go to state 156
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 111
+state 116
 
     (80) expr -> ADD PARIZQ . VARIABLE PARDER
     (81) expr -> ADD PARIZQ . VARIABLE COMA valor PARDER
 
-    VARIABLE        shift and go to state 152
+    VARIABLE        shift and go to state 157
 
 
-state 112
+state 117
 
     (38) continue_down -> CONDOWN valor PUNTOCOMA .
 
@@ -2990,7 +3530,7 @@ state 112
     BRADER          reduce using rule 38 (continue_down -> CONDOWN valor PUNTOCOMA .)
 
 
-state 113
+state 118
 
     (39) continue_right -> CONRIGHT valor PUNTOCOMA .
 
@@ -3028,7 +3568,7 @@ state 113
     BRADER          reduce using rule 39 (continue_right -> CONRIGHT valor PUNTOCOMA .)
 
 
-state 114
+state 119
 
     (40) continue_left -> CONLEFT valor PUNTOCOMA .
 
@@ -3066,7 +3606,7 @@ state 114
     BRADER          reduce using rule 40 (continue_left -> CONLEFT valor PUNTOCOMA .)
 
 
-state 115
+state 120
 
     (41) pos -> POS PARIZQ valor . COMA valor PARDER PUNTOCOMA
     (82) expr -> valor . MULT valor
@@ -3074,14 +3614,14 @@ state 115
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    COMA            shift and go to state 153
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    COMA            shift and go to state 158
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 116
+state 121
 
     (42) posx -> POSX valor PUNTOCOMA .
 
@@ -3119,7 +3659,7 @@ state 116
     BRADER          reduce using rule 42 (posx -> POSX valor PUNTOCOMA .)
 
 
-state 117
+state 122
 
     (43) posy -> POSY valor PUNTOCOMA .
 
@@ -3157,7 +3697,7 @@ state 117
     BRADER          reduce using rule 43 (posy -> POSY valor PUNTOCOMA .)
 
 
-state 118
+state 123
 
     (44) use_color -> USECOLOR valor PUNTOCOMA .
 
@@ -3195,7 +3735,7 @@ state 118
     BRADER          reduce using rule 44 (use_color -> USECOLOR valor PUNTOCOMA .)
 
 
-state 119
+state 124
 
     (48) for_loop -> FOR VARIABLE PARIZQ . valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
     (75) valor -> . NUMBER
@@ -3209,17 +3749,37 @@ state 119
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 154
+    valor                          shift and go to state 159
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 120
+state 125
 
     (49) case -> CASE VARIABLE when_cases . end_case
     (50) when_cases -> when_cases . when_case
@@ -3227,14 +3787,14 @@ state 120
     (54) end_case -> . END CASE PUNTOCOMA
     (52) when_case -> . WHEN valor THEN BRAIZQ sentencias BRADER
 
-    ELSE            shift and go to state 157
-    END             shift and go to state 158
-    WHEN            shift and go to state 122
+    ELSE            shift and go to state 162
+    END             shift and go to state 163
+    WHEN            shift and go to state 127
 
-    end_case                       shift and go to state 155
-    when_case                      shift and go to state 156
+    end_case                       shift and go to state 160
+    when_case                      shift and go to state 161
 
-state 121
+state 126
 
     (51) when_cases -> when_case .
 
@@ -3243,7 +3803,7 @@ state 121
     WHEN            reduce using rule 51 (when_cases -> when_case .)
 
 
-state 122
+state 127
 
     (52) when_case -> WHEN . valor THEN BRAIZQ sentencias BRADER
     (75) valor -> . NUMBER
@@ -3257,66 +3817,86 @@ state 122
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 159
+    valor                          shift and go to state 164
     expr                           shift and go to state 71
-
-state 123
-
-    (55) repeat_until -> REPEAT BRAIZQ sentencias . BRADER UNTIL PARIZQ condicion PARDER PUNTOCOMA
-
-    BRADER          shift and go to state 160
-
-
-state 124
-
-    (56) while -> WHILE PARIZQ condicion . PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
-
-    PARDER          shift and go to state 161
-
-
-state 125
-
-    (86) condicion -> equal .
-
-    PARDER          reduce using rule 86 (condicion -> equal .)
-
-
-state 126
-
-    (87) condicion -> greater .
-
-    PARDER          reduce using rule 87 (condicion -> greater .)
-
-
-state 127
-
-    (88) condicion -> smaller .
-
-    PARDER          reduce using rule 88 (condicion -> smaller .)
-
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
 state 128
 
-    (89) condicion -> and .
+    (55) repeat_until -> REPEAT BRAIZQ sentencias . BRADER UNTIL PARIZQ condicion PARDER PUNTOCOMA
 
-    PARDER          reduce using rule 89 (condicion -> and .)
+    BRADER          shift and go to state 165
 
 
 state 129
 
-    (90) condicion -> or .
+    (56) while -> WHILE PARIZQ condicion . PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA
 
-    PARDER          reduce using rule 90 (condicion -> or .)
+    PARDER          shift and go to state 166
 
 
 state 130
+
+    (91) condicion -> equal .
+
+    PARDER          reduce using rule 91 (condicion -> equal .)
+
+
+state 131
+
+    (92) condicion -> greater .
+
+    PARDER          reduce using rule 92 (condicion -> greater .)
+
+
+state 132
+
+    (93) condicion -> smaller .
+
+    PARDER          reduce using rule 93 (condicion -> smaller .)
+
+
+state 133
+
+    (94) condicion -> and .
+
+    PARDER          reduce using rule 94 (condicion -> and .)
+
+
+state 134
+
+    (95) condicion -> or .
+
+    PARDER          reduce using rule 95 (condicion -> or .)
+
+
+state 135
 
     (57) equal -> EQUAL PARIZQ valor . COMA valor PARDER
     (82) expr -> valor . MULT valor
@@ -3324,14 +3904,14 @@ state 130
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    COMA            shift and go to state 162
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    COMA            shift and go to state 167
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 131
+state 136
 
     (58) and -> AND PARIZQ valor . COMA valor PARDER
     (82) expr -> valor . MULT valor
@@ -3339,14 +3919,14 @@ state 131
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    COMA            shift and go to state 163
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    COMA            shift and go to state 168
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 132
+state 137
 
     (59) or -> OR PARIZQ valor . COMA valor PARDER
     (82) expr -> valor . MULT valor
@@ -3354,14 +3934,14 @@ state 132
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    COMA            shift and go to state 164
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    COMA            shift and go to state 169
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 133
+state 138
 
     (60) greater -> GREATER PARIZQ valor . COMA valor PARDER
     (82) expr -> valor . MULT valor
@@ -3369,14 +3949,14 @@ state 133
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    COMA            shift and go to state 165
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    COMA            shift and go to state 170
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 134
+state 139
 
     (61) smaller -> SMALLER PARIZQ valor . COMA valor PARDER
     (82) expr -> valor . MULT valor
@@ -3384,14 +3964,14 @@ state 134
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    COMA            shift and go to state 166
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    COMA            shift and go to state 171
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 135
+state 140
 
     (62) substr -> SUBSTR PARIZQ valor . COMA valor PARDER
     (82) expr -> valor . MULT valor
@@ -3399,14 +3979,14 @@ state 135
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    COMA            shift and go to state 167
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    COMA            shift and go to state 172
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 136
+state 141
 
     (63) random -> RANDOM PARIZQ valor . PARDER
     (82) expr -> valor . MULT valor
@@ -3414,14 +3994,14 @@ state 136
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 168
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 173
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 137
+state 142
 
     (64) mult -> MULT PARIZQ valor . COMA valor PARDER
     (82) expr -> valor . MULT valor
@@ -3429,14 +4009,14 @@ state 137
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    COMA            shift and go to state 169
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    COMA            shift and go to state 174
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 138
+state 143
 
     (65) div -> DIV PARIZQ valor . COMA valor PARDER
     (82) expr -> valor . MULT valor
@@ -3444,14 +4024,14 @@ state 138
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    COMA            shift and go to state 170
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    COMA            shift and go to state 175
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 139
+state 144
 
     (66) sum -> SUM PARIZQ valor . COMA valor PARDER
     (82) expr -> valor . MULT valor
@@ -3459,26 +4039,26 @@ state 139
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    COMA            shift and go to state 171
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    COMA            shift and go to state 176
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 140
+state 145
 
     (67) proc -> PROC VARIABLE PARIZQ . lista_parametros PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA
     (68) proc -> PROC VARIABLE PARIZQ . PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA
     (69) lista_parametros -> . VARIABLE
     (70) lista_parametros -> . VARIABLE COMA lista_parametros
 
-    PARDER          shift and go to state 174
-    VARIABLE        shift and go to state 172
+    PARDER          shift and go to state 179
+    VARIABLE        shift and go to state 177
 
-    lista_parametros               shift and go to state 173
+    lista_parametros               shift and go to state 178
 
-state 141
+state 146
 
     (33) def_variable -> DEF PARIZQ VARIABLE COMA . valor PARDER PUNTOCOMA
     (75) valor -> . NUMBER
@@ -3492,24 +4072,44 @@ state 141
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 175
+    valor                          shift and go to state 180
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 142
+state 147
 
     (71) invocacion_proc -> VARIABLE PARIZQ lista_argumentos PARDER . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 176
+    PUNTOCOMA       shift and go to state 181
 
 
-state 143
+state 148
 
     (72) invocacion_proc -> VARIABLE PARIZQ PARDER PUNTOCOMA .
 
@@ -3547,7 +4147,7 @@ state 143
     BRADER          reduce using rule 72 (invocacion_proc -> VARIABLE PARIZQ PARDER PUNTOCOMA .)
 
 
-state 144
+state 149
 
     (74) lista_argumentos -> valor COMA . lista_argumentos
     (73) lista_argumentos -> . valor
@@ -3563,18 +4163,38 @@ state 144
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 103
-    lista_argumentos               shift and go to state 177
+    valor                          shift and go to state 108
+    lista_argumentos               shift and go to state 182
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 145
+state 150
 
     (34) put_variable -> PUT PARIZQ VARIABLE COMA . valor PARDER PUNTOCOMA
     (75) valor -> . NUMBER
@@ -3588,24 +4208,44 @@ state 145
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 178
+    valor                          shift and go to state 183
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 146
+state 151
 
     (35) add_variable -> ADD PARIZQ VARIABLE PARDER . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 179
+    PUNTOCOMA       shift and go to state 184
 
 
-state 147
+state 152
 
     (36) add_variable -> ADD PARIZQ VARIABLE COMA . valor PARDER PUNTOCOMA
     (75) valor -> . NUMBER
@@ -3619,17 +4259,37 @@ state 147
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 180
+    valor                          shift and go to state 185
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 148
+state 153
 
     (82) expr -> valor MULT valor .
     (82) expr -> valor . MULT valor
@@ -3646,10 +4306,10 @@ state 148
     PARDER          reduce using rule 82 (expr -> valor MULT valor .)
     TO              reduce using rule 82 (expr -> valor MULT valor .)
     THEN            reduce using rule 82 (expr -> valor MULT valor .)
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
   ! MULT            [ reduce using rule 82 (expr -> valor MULT valor .) ]
   ! DIV             [ reduce using rule 82 (expr -> valor MULT valor .) ]
@@ -3657,7 +4317,7 @@ state 148
   ! SUBSTR          [ reduce using rule 82 (expr -> valor MULT valor .) ]
 
 
-state 149
+state 154
 
     (83) expr -> valor DIV valor .
     (82) expr -> valor . MULT valor
@@ -3674,10 +4334,10 @@ state 149
     PARDER          reduce using rule 83 (expr -> valor DIV valor .)
     TO              reduce using rule 83 (expr -> valor DIV valor .)
     THEN            reduce using rule 83 (expr -> valor DIV valor .)
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
   ! MULT            [ reduce using rule 83 (expr -> valor DIV valor .) ]
   ! DIV             [ reduce using rule 83 (expr -> valor DIV valor .) ]
@@ -3685,7 +4345,7 @@ state 149
   ! SUBSTR          [ reduce using rule 83 (expr -> valor DIV valor .) ]
 
 
-state 150
+state 155
 
     (84) expr -> valor SUM valor .
     (82) expr -> valor . MULT valor
@@ -3702,10 +4362,10 @@ state 150
     PARDER          reduce using rule 84 (expr -> valor SUM valor .)
     TO              reduce using rule 84 (expr -> valor SUM valor .)
     THEN            reduce using rule 84 (expr -> valor SUM valor .)
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
   ! MULT            [ reduce using rule 84 (expr -> valor SUM valor .) ]
   ! DIV             [ reduce using rule 84 (expr -> valor SUM valor .) ]
@@ -3713,7 +4373,7 @@ state 150
   ! SUBSTR          [ reduce using rule 84 (expr -> valor SUM valor .) ]
 
 
-state 151
+state 156
 
     (85) expr -> valor SUBSTR valor .
     (82) expr -> valor . MULT valor
@@ -3730,10 +4390,10 @@ state 151
     PARDER          reduce using rule 85 (expr -> valor SUBSTR valor .)
     TO              reduce using rule 85 (expr -> valor SUBSTR valor .)
     THEN            reduce using rule 85 (expr -> valor SUBSTR valor .)
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
   ! MULT            [ reduce using rule 85 (expr -> valor SUBSTR valor .) ]
   ! DIV             [ reduce using rule 85 (expr -> valor SUBSTR valor .) ]
@@ -3741,16 +4401,16 @@ state 151
   ! SUBSTR          [ reduce using rule 85 (expr -> valor SUBSTR valor .) ]
 
 
-state 152
+state 157
 
     (80) expr -> ADD PARIZQ VARIABLE . PARDER
     (81) expr -> ADD PARIZQ VARIABLE . COMA valor PARDER
 
-    PARDER          shift and go to state 181
-    COMA            shift and go to state 182
+    PARDER          shift and go to state 186
+    COMA            shift and go to state 187
 
 
-state 153
+state 158
 
     (41) pos -> POS PARIZQ valor COMA . valor PARDER PUNTOCOMA
     (75) valor -> . NUMBER
@@ -3764,17 +4424,37 @@ state 153
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 183
+    valor                          shift and go to state 188
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 154
+state 159
 
     (48) for_loop -> FOR VARIABLE PARIZQ valor . TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
     (82) expr -> valor . MULT valor
@@ -3782,14 +4462,14 @@ state 154
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    TO              shift and go to state 184
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    TO              shift and go to state 189
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 155
+state 160
 
     (49) case -> CASE VARIABLE when_cases end_case .
 
@@ -3827,7 +4507,7 @@ state 155
     BRADER          reduce using rule 49 (case -> CASE VARIABLE when_cases end_case .)
 
 
-state 156
+state 161
 
     (50) when_cases -> when_cases when_case .
 
@@ -3836,21 +4516,21 @@ state 156
     WHEN            reduce using rule 50 (when_cases -> when_cases when_case .)
 
 
-state 157
+state 162
 
     (53) end_case -> ELSE . BRAIZQ sentencias BRADER END CASE PUNTOCOMA
 
-    BRAIZQ          shift and go to state 185
+    BRAIZQ          shift and go to state 190
 
 
-state 158
+state 163
 
     (54) end_case -> END . CASE PUNTOCOMA
 
-    CASE            shift and go to state 186
+    CASE            shift and go to state 191
 
 
-state 159
+state 164
 
     (52) when_case -> WHEN valor . THEN BRAIZQ sentencias BRADER
     (82) expr -> valor . MULT valor
@@ -3858,28 +4538,28 @@ state 159
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    THEN            shift and go to state 187
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    THEN            shift and go to state 192
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 160
+state 165
 
     (55) repeat_until -> REPEAT BRAIZQ sentencias BRADER . UNTIL PARIZQ condicion PARDER PUNTOCOMA
 
-    UNTIL           shift and go to state 188
+    UNTIL           shift and go to state 193
 
 
-state 161
+state 166
 
     (56) while -> WHILE PARIZQ condicion PARDER . BRAIZQ sentencias BRADER WHEND PUNTOCOMA
 
-    BRAIZQ          shift and go to state 189
+    BRAIZQ          shift and go to state 194
 
 
-state 162
+state 167
 
     (57) equal -> EQUAL PARIZQ valor COMA . valor PARDER
     (75) valor -> . NUMBER
@@ -3893,17 +4573,37 @@ state 162
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 190
+    valor                          shift and go to state 195
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 163
+state 168
 
     (58) and -> AND PARIZQ valor COMA . valor PARDER
     (75) valor -> . NUMBER
@@ -3917,17 +4617,37 @@ state 163
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 191
+    valor                          shift and go to state 196
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 164
+state 169
 
     (59) or -> OR PARIZQ valor COMA . valor PARDER
     (75) valor -> . NUMBER
@@ -3941,17 +4661,37 @@ state 164
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 192
+    valor                          shift and go to state 197
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 165
+state 170
 
     (60) greater -> GREATER PARIZQ valor COMA . valor PARDER
     (75) valor -> . NUMBER
@@ -3965,17 +4705,37 @@ state 165
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 193
+    valor                          shift and go to state 198
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 166
+state 171
 
     (61) smaller -> SMALLER PARIZQ valor COMA . valor PARDER
     (75) valor -> . NUMBER
@@ -3989,17 +4749,37 @@ state 166
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 194
+    valor                          shift and go to state 199
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 167
+state 172
 
     (62) substr -> SUBSTR PARIZQ valor COMA . valor PARDER
     (75) valor -> . NUMBER
@@ -4013,17 +4793,37 @@ state 167
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 195
+    valor                          shift and go to state 200
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 168
+state 173
 
     (63) random -> RANDOM PARIZQ valor PARDER .
 
@@ -4059,9 +4859,14 @@ state 168
     VARIABLE        reduce using rule 63 (random -> RANDOM PARIZQ valor PARDER .)
     $end            reduce using rule 63 (random -> RANDOM PARIZQ valor PARDER .)
     BRADER          reduce using rule 63 (random -> RANDOM PARIZQ valor PARDER .)
+    PUNTOCOMA       reduce using rule 63 (random -> RANDOM PARIZQ valor PARDER .)
+    COMA            reduce using rule 63 (random -> RANDOM PARIZQ valor PARDER .)
+    PARDER          reduce using rule 63 (random -> RANDOM PARIZQ valor PARDER .)
+    TO              reduce using rule 63 (random -> RANDOM PARIZQ valor PARDER .)
+    THEN            reduce using rule 63 (random -> RANDOM PARIZQ valor PARDER .)
 
 
-state 169
+state 174
 
     (64) mult -> MULT PARIZQ valor COMA . valor PARDER
     (75) valor -> . NUMBER
@@ -4075,17 +4880,37 @@ state 169
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 196
+    valor                          shift and go to state 201
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 170
+state 175
 
     (65) div -> DIV PARIZQ valor COMA . valor PARDER
     (75) valor -> . NUMBER
@@ -4099,17 +4924,37 @@ state 170
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 197
+    valor                          shift and go to state 202
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 171
+state 176
 
     (66) sum -> SUM PARIZQ valor COMA . valor PARDER
     (75) valor -> . NUMBER
@@ -4123,40 +4968,60 @@ state 171
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 198
+    valor                          shift and go to state 203
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 172
+state 177
 
     (69) lista_parametros -> VARIABLE .
     (70) lista_parametros -> VARIABLE . COMA lista_parametros
 
     PARDER          reduce using rule 69 (lista_parametros -> VARIABLE .)
-    COMA            shift and go to state 199
+    COMA            shift and go to state 204
 
 
-state 173
+state 178
 
     (67) proc -> PROC VARIABLE PARIZQ lista_parametros . PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA
 
-    PARDER          shift and go to state 200
+    PARDER          shift and go to state 205
 
 
-state 174
+state 179
 
     (68) proc -> PROC VARIABLE PARIZQ PARDER . BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA
 
-    BRAIZQ          shift and go to state 201
+    BRAIZQ          shift and go to state 206
 
 
-state 175
+state 180
 
     (33) def_variable -> DEF PARIZQ VARIABLE COMA valor . PARDER PUNTOCOMA
     (82) expr -> valor . MULT valor
@@ -4164,14 +5029,14 @@ state 175
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 202
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 207
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 176
+state 181
 
     (71) invocacion_proc -> VARIABLE PARIZQ lista_argumentos PARDER PUNTOCOMA .
 
@@ -4209,14 +5074,14 @@ state 176
     BRADER          reduce using rule 71 (invocacion_proc -> VARIABLE PARIZQ lista_argumentos PARDER PUNTOCOMA .)
 
 
-state 177
+state 182
 
     (74) lista_argumentos -> valor COMA lista_argumentos .
 
     PARDER          reduce using rule 74 (lista_argumentos -> valor COMA lista_argumentos .)
 
 
-state 178
+state 183
 
     (34) put_variable -> PUT PARIZQ VARIABLE COMA valor . PARDER PUNTOCOMA
     (82) expr -> valor . MULT valor
@@ -4224,14 +5089,14 @@ state 178
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 203
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 208
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 179
+state 184
 
     (35) add_variable -> ADD PARIZQ VARIABLE PARDER PUNTOCOMA .
 
@@ -4269,7 +5134,7 @@ state 179
     BRADER          reduce using rule 35 (add_variable -> ADD PARIZQ VARIABLE PARDER PUNTOCOMA .)
 
 
-state 180
+state 185
 
     (36) add_variable -> ADD PARIZQ VARIABLE COMA valor . PARDER PUNTOCOMA
     (82) expr -> valor . MULT valor
@@ -4277,14 +5142,14 @@ state 180
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 204
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 209
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 181
+state 186
 
     (80) expr -> ADD PARIZQ VARIABLE PARDER .
 
@@ -4299,7 +5164,7 @@ state 181
     THEN            reduce using rule 80 (expr -> ADD PARIZQ VARIABLE PARDER .)
 
 
-state 182
+state 187
 
     (81) expr -> ADD PARIZQ VARIABLE COMA . valor PARDER
     (75) valor -> . NUMBER
@@ -4313,17 +5178,37 @@ state 182
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 205
+    valor                          shift and go to state 210
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 183
+state 188
 
     (41) pos -> POS PARIZQ valor COMA valor . PARDER PUNTOCOMA
     (82) expr -> valor . MULT valor
@@ -4331,14 +5216,14 @@ state 183
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 206
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 211
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 184
+state 189
 
     (48) for_loop -> FOR VARIABLE PARIZQ valor TO . valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
     (75) valor -> . NUMBER
@@ -4352,17 +5237,37 @@ state 184
     (83) expr -> . valor DIV valor
     (84) expr -> . valor SUM valor
     (85) expr -> . valor SUBSTR valor
+    (86) expr -> . substr
+    (87) expr -> . random
+    (88) expr -> . mult
+    (89) expr -> . div
+    (90) expr -> . sum
+    (62) substr -> . SUBSTR PARIZQ valor COMA valor PARDER
+    (63) random -> . RANDOM PARIZQ valor PARDER
+    (64) mult -> . MULT PARIZQ valor COMA valor PARDER
+    (65) div -> . DIV PARIZQ valor COMA valor PARDER
+    (66) sum -> . SUM PARIZQ valor COMA valor PARDER
 
     NUMBER          shift and go to state 69
     VARIABLE        shift and go to state 70
     TRUE            shift and go to state 72
     FALSE           shift and go to state 73
     ADD             shift and go to state 74
+    SUBSTR          shift and go to state 57
+    RANDOM          shift and go to state 58
+    MULT            shift and go to state 59
+    DIV             shift and go to state 60
+    SUM             shift and go to state 61
 
-    valor                          shift and go to state 207
+    valor                          shift and go to state 212
     expr                           shift and go to state 71
+    substr                         shift and go to state 75
+    random                         shift and go to state 76
+    mult                           shift and go to state 77
+    div                            shift and go to state 78
+    sum                            shift and go to state 79
 
-state 185
+state 190
 
     (53) end_case -> ELSE BRAIZQ . sentencias BRADER END CASE PUNTOCOMA
     (1) sentencias -> . sentencia
@@ -4462,7 +5367,7 @@ state 185
     PROC            shift and go to state 62
     VARIABLE        shift and go to state 34
 
-    sentencias                     shift and go to state 208
+    sentencias                     shift and go to state 213
     sentencia                      shift and go to state 2
     def_variable                   shift and go to state 3
     put_variable                   shift and go to state 4
@@ -4495,28 +5400,28 @@ state 185
     proc                           shift and go to state 31
     invocacion_proc                shift and go to state 32
 
-state 186
+state 191
 
     (54) end_case -> END CASE . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 209
+    PUNTOCOMA       shift and go to state 214
 
 
-state 187
+state 192
 
     (52) when_case -> WHEN valor THEN . BRAIZQ sentencias BRADER
 
-    BRAIZQ          shift and go to state 210
+    BRAIZQ          shift and go to state 215
 
 
-state 188
+state 193
 
     (55) repeat_until -> REPEAT BRAIZQ sentencias BRADER UNTIL . PARIZQ condicion PARDER PUNTOCOMA
 
-    PARIZQ          shift and go to state 211
+    PARIZQ          shift and go to state 216
 
 
-state 189
+state 194
 
     (56) while -> WHILE PARIZQ condicion PARDER BRAIZQ . sentencias BRADER WHEND PUNTOCOMA
     (1) sentencias -> . sentencia
@@ -4616,7 +5521,7 @@ state 189
     PROC            shift and go to state 62
     VARIABLE        shift and go to state 34
 
-    sentencias                     shift and go to state 212
+    sentencias                     shift and go to state 217
     sentencia                      shift and go to state 2
     def_variable                   shift and go to state 3
     put_variable                   shift and go to state 4
@@ -4649,7 +5554,7 @@ state 189
     proc                           shift and go to state 31
     invocacion_proc                shift and go to state 32
 
-state 190
+state 195
 
     (57) equal -> EQUAL PARIZQ valor COMA valor . PARDER
     (82) expr -> valor . MULT valor
@@ -4657,14 +5562,14 @@ state 190
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 213
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 218
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 191
+state 196
 
     (58) and -> AND PARIZQ valor COMA valor . PARDER
     (82) expr -> valor . MULT valor
@@ -4672,14 +5577,14 @@ state 191
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 214
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 219
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 192
+state 197
 
     (59) or -> OR PARIZQ valor COMA valor . PARDER
     (82) expr -> valor . MULT valor
@@ -4687,14 +5592,14 @@ state 192
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 215
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 220
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 193
+state 198
 
     (60) greater -> GREATER PARIZQ valor COMA valor . PARDER
     (82) expr -> valor . MULT valor
@@ -4702,14 +5607,14 @@ state 193
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 216
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 221
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 194
+state 199
 
     (61) smaller -> SMALLER PARIZQ valor COMA valor . PARDER
     (82) expr -> valor . MULT valor
@@ -4717,14 +5622,14 @@ state 194
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 217
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 222
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 195
+state 200
 
     (62) substr -> SUBSTR PARIZQ valor COMA valor . PARDER
     (82) expr -> valor . MULT valor
@@ -4732,14 +5637,14 @@ state 195
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 218
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 223
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 196
+state 201
 
     (64) mult -> MULT PARIZQ valor COMA valor . PARDER
     (82) expr -> valor . MULT valor
@@ -4747,14 +5652,14 @@ state 196
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 219
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 224
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 197
+state 202
 
     (65) div -> DIV PARIZQ valor COMA valor . PARDER
     (82) expr -> valor . MULT valor
@@ -4762,14 +5667,14 @@ state 197
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 220
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 225
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 198
+state 203
 
     (66) sum -> SUM PARIZQ valor COMA valor . PARDER
     (82) expr -> valor . MULT valor
@@ -4777,31 +5682,31 @@ state 198
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 221
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 226
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 199
+state 204
 
     (70) lista_parametros -> VARIABLE COMA . lista_parametros
     (69) lista_parametros -> . VARIABLE
     (70) lista_parametros -> . VARIABLE COMA lista_parametros
 
-    VARIABLE        shift and go to state 172
+    VARIABLE        shift and go to state 177
 
-    lista_parametros               shift and go to state 222
+    lista_parametros               shift and go to state 227
 
-state 200
+state 205
 
     (67) proc -> PROC VARIABLE PARIZQ lista_parametros PARDER . BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA
 
-    BRAIZQ          shift and go to state 223
+    BRAIZQ          shift and go to state 228
 
 
-state 201
+state 206
 
     (68) proc -> PROC VARIABLE PARIZQ PARDER BRAIZQ . sentencias BRADER PUNTOCOMA END PUNTOCOMA
     (1) sentencias -> . sentencia
@@ -4901,7 +5806,7 @@ state 201
     PROC            shift and go to state 62
     VARIABLE        shift and go to state 34
 
-    sentencias                     shift and go to state 224
+    sentencias                     shift and go to state 229
     sentencia                      shift and go to state 2
     def_variable                   shift and go to state 3
     put_variable                   shift and go to state 4
@@ -4934,28 +5839,28 @@ state 201
     proc                           shift and go to state 31
     invocacion_proc                shift and go to state 32
 
-state 202
+state 207
 
     (33) def_variable -> DEF PARIZQ VARIABLE COMA valor PARDER . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 225
+    PUNTOCOMA       shift and go to state 230
 
 
-state 203
+state 208
 
     (34) put_variable -> PUT PARIZQ VARIABLE COMA valor PARDER . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 226
+    PUNTOCOMA       shift and go to state 231
 
 
-state 204
+state 209
 
     (36) add_variable -> ADD PARIZQ VARIABLE COMA valor PARDER . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 227
+    PUNTOCOMA       shift and go to state 232
 
 
-state 205
+state 210
 
     (81) expr -> ADD PARIZQ VARIABLE COMA valor . PARDER
     (82) expr -> valor . MULT valor
@@ -4963,21 +5868,21 @@ state 205
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 228
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 233
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 206
+state 211
 
     (41) pos -> POS PARIZQ valor COMA valor PARDER . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 229
+    PUNTOCOMA       shift and go to state 234
 
 
-state 207
+state 212
 
     (48) for_loop -> FOR VARIABLE PARIZQ valor TO valor . PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
     (82) expr -> valor . MULT valor
@@ -4985,21 +5890,21 @@ state 207
     (84) expr -> valor . SUM valor
     (85) expr -> valor . SUBSTR valor
 
-    PARDER          shift and go to state 230
-    MULT            shift and go to state 107
-    DIV             shift and go to state 108
-    SUM             shift and go to state 109
-    SUBSTR          shift and go to state 110
+    PARDER          shift and go to state 235
+    MULT            shift and go to state 112
+    DIV             shift and go to state 113
+    SUM             shift and go to state 114
+    SUBSTR          shift and go to state 115
 
 
-state 208
+state 213
 
     (53) end_case -> ELSE BRAIZQ sentencias . BRADER END CASE PUNTOCOMA
 
-    BRADER          shift and go to state 231
+    BRADER          shift and go to state 236
 
 
-state 209
+state 214
 
     (54) end_case -> END CASE PUNTOCOMA .
 
@@ -5037,7 +5942,7 @@ state 209
     BRADER          reduce using rule 54 (end_case -> END CASE PUNTOCOMA .)
 
 
-state 210
+state 215
 
     (52) when_case -> WHEN valor THEN BRAIZQ . sentencias BRADER
     (1) sentencias -> . sentencia
@@ -5137,7 +6042,7 @@ state 210
     PROC            shift and go to state 62
     VARIABLE        shift and go to state 34
 
-    sentencias                     shift and go to state 232
+    sentencias                     shift and go to state 237
     sentencia                      shift and go to state 2
     def_variable                   shift and go to state 3
     put_variable                   shift and go to state 4
@@ -5170,14 +6075,14 @@ state 210
     proc                           shift and go to state 31
     invocacion_proc                shift and go to state 32
 
-state 211
+state 216
 
     (55) repeat_until -> REPEAT BRAIZQ sentencias BRADER UNTIL PARIZQ . condicion PARDER PUNTOCOMA
-    (86) condicion -> . equal
-    (87) condicion -> . greater
-    (88) condicion -> . smaller
-    (89) condicion -> . and
-    (90) condicion -> . or
+    (91) condicion -> . equal
+    (92) condicion -> . greater
+    (93) condicion -> . smaller
+    (94) condicion -> . and
+    (95) condicion -> . or
     (57) equal -> . EQUAL PARIZQ valor COMA valor PARDER
     (60) greater -> . GREATER PARIZQ valor COMA valor PARDER
     (61) smaller -> . SMALLER PARIZQ valor COMA valor PARDER
@@ -5190,21 +6095,21 @@ state 211
     AND             shift and go to state 53
     OR              shift and go to state 54
 
-    condicion                      shift and go to state 233
-    equal                          shift and go to state 125
-    greater                        shift and go to state 126
-    smaller                        shift and go to state 127
-    and                            shift and go to state 128
-    or                             shift and go to state 129
+    condicion                      shift and go to state 238
+    equal                          shift and go to state 130
+    greater                        shift and go to state 131
+    smaller                        shift and go to state 132
+    and                            shift and go to state 133
+    or                             shift and go to state 134
 
-state 212
+state 217
 
     (56) while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias . BRADER WHEND PUNTOCOMA
 
-    BRADER          shift and go to state 234
+    BRADER          shift and go to state 239
 
 
-state 213
+state 218
 
     (57) equal -> EQUAL PARIZQ valor COMA valor PARDER .
 
@@ -5243,7 +6148,7 @@ state 213
     PARDER          reduce using rule 57 (equal -> EQUAL PARIZQ valor COMA valor PARDER .)
 
 
-state 214
+state 219
 
     (58) and -> AND PARIZQ valor COMA valor PARDER .
 
@@ -5282,7 +6187,7 @@ state 214
     PARDER          reduce using rule 58 (and -> AND PARIZQ valor COMA valor PARDER .)
 
 
-state 215
+state 220
 
     (59) or -> OR PARIZQ valor COMA valor PARDER .
 
@@ -5321,7 +6226,7 @@ state 215
     PARDER          reduce using rule 59 (or -> OR PARIZQ valor COMA valor PARDER .)
 
 
-state 216
+state 221
 
     (60) greater -> GREATER PARIZQ valor COMA valor PARDER .
 
@@ -5360,7 +6265,7 @@ state 216
     PARDER          reduce using rule 60 (greater -> GREATER PARIZQ valor COMA valor PARDER .)
 
 
-state 217
+state 222
 
     (61) smaller -> SMALLER PARIZQ valor COMA valor PARDER .
 
@@ -5399,7 +6304,7 @@ state 217
     PARDER          reduce using rule 61 (smaller -> SMALLER PARIZQ valor COMA valor PARDER .)
 
 
-state 218
+state 223
 
     (62) substr -> SUBSTR PARIZQ valor COMA valor PARDER .
 
@@ -5435,9 +6340,14 @@ state 218
     VARIABLE        reduce using rule 62 (substr -> SUBSTR PARIZQ valor COMA valor PARDER .)
     $end            reduce using rule 62 (substr -> SUBSTR PARIZQ valor COMA valor PARDER .)
     BRADER          reduce using rule 62 (substr -> SUBSTR PARIZQ valor COMA valor PARDER .)
+    PUNTOCOMA       reduce using rule 62 (substr -> SUBSTR PARIZQ valor COMA valor PARDER .)
+    COMA            reduce using rule 62 (substr -> SUBSTR PARIZQ valor COMA valor PARDER .)
+    PARDER          reduce using rule 62 (substr -> SUBSTR PARIZQ valor COMA valor PARDER .)
+    TO              reduce using rule 62 (substr -> SUBSTR PARIZQ valor COMA valor PARDER .)
+    THEN            reduce using rule 62 (substr -> SUBSTR PARIZQ valor COMA valor PARDER .)
 
 
-state 219
+state 224
 
     (64) mult -> MULT PARIZQ valor COMA valor PARDER .
 
@@ -5473,9 +6383,14 @@ state 219
     VARIABLE        reduce using rule 64 (mult -> MULT PARIZQ valor COMA valor PARDER .)
     $end            reduce using rule 64 (mult -> MULT PARIZQ valor COMA valor PARDER .)
     BRADER          reduce using rule 64 (mult -> MULT PARIZQ valor COMA valor PARDER .)
+    PUNTOCOMA       reduce using rule 64 (mult -> MULT PARIZQ valor COMA valor PARDER .)
+    COMA            reduce using rule 64 (mult -> MULT PARIZQ valor COMA valor PARDER .)
+    PARDER          reduce using rule 64 (mult -> MULT PARIZQ valor COMA valor PARDER .)
+    TO              reduce using rule 64 (mult -> MULT PARIZQ valor COMA valor PARDER .)
+    THEN            reduce using rule 64 (mult -> MULT PARIZQ valor COMA valor PARDER .)
 
 
-state 220
+state 225
 
     (65) div -> DIV PARIZQ valor COMA valor PARDER .
 
@@ -5511,9 +6426,14 @@ state 220
     VARIABLE        reduce using rule 65 (div -> DIV PARIZQ valor COMA valor PARDER .)
     $end            reduce using rule 65 (div -> DIV PARIZQ valor COMA valor PARDER .)
     BRADER          reduce using rule 65 (div -> DIV PARIZQ valor COMA valor PARDER .)
+    PUNTOCOMA       reduce using rule 65 (div -> DIV PARIZQ valor COMA valor PARDER .)
+    COMA            reduce using rule 65 (div -> DIV PARIZQ valor COMA valor PARDER .)
+    PARDER          reduce using rule 65 (div -> DIV PARIZQ valor COMA valor PARDER .)
+    TO              reduce using rule 65 (div -> DIV PARIZQ valor COMA valor PARDER .)
+    THEN            reduce using rule 65 (div -> DIV PARIZQ valor COMA valor PARDER .)
 
 
-state 221
+state 226
 
     (66) sum -> SUM PARIZQ valor COMA valor PARDER .
 
@@ -5549,16 +6469,21 @@ state 221
     VARIABLE        reduce using rule 66 (sum -> SUM PARIZQ valor COMA valor PARDER .)
     $end            reduce using rule 66 (sum -> SUM PARIZQ valor COMA valor PARDER .)
     BRADER          reduce using rule 66 (sum -> SUM PARIZQ valor COMA valor PARDER .)
+    PUNTOCOMA       reduce using rule 66 (sum -> SUM PARIZQ valor COMA valor PARDER .)
+    COMA            reduce using rule 66 (sum -> SUM PARIZQ valor COMA valor PARDER .)
+    PARDER          reduce using rule 66 (sum -> SUM PARIZQ valor COMA valor PARDER .)
+    TO              reduce using rule 66 (sum -> SUM PARIZQ valor COMA valor PARDER .)
+    THEN            reduce using rule 66 (sum -> SUM PARIZQ valor COMA valor PARDER .)
 
 
-state 222
+state 227
 
     (70) lista_parametros -> VARIABLE COMA lista_parametros .
 
     PARDER          reduce using rule 70 (lista_parametros -> VARIABLE COMA lista_parametros .)
 
 
-state 223
+state 228
 
     (67) proc -> PROC VARIABLE PARIZQ lista_parametros PARDER BRAIZQ . sentencias BRADER PUNTOCOMA END PUNTOCOMA
     (1) sentencias -> . sentencia
@@ -5658,7 +6583,7 @@ state 223
     PROC            shift and go to state 62
     VARIABLE        shift and go to state 34
 
-    sentencias                     shift and go to state 235
+    sentencias                     shift and go to state 240
     sentencia                      shift and go to state 2
     def_variable                   shift and go to state 3
     put_variable                   shift and go to state 4
@@ -5691,14 +6616,14 @@ state 223
     proc                           shift and go to state 31
     invocacion_proc                shift and go to state 32
 
-state 224
+state 229
 
     (68) proc -> PROC VARIABLE PARIZQ PARDER BRAIZQ sentencias . BRADER PUNTOCOMA END PUNTOCOMA
 
-    BRADER          shift and go to state 236
+    BRADER          shift and go to state 241
 
 
-state 225
+state 230
 
     (33) def_variable -> DEF PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA .
 
@@ -5736,7 +6661,7 @@ state 225
     BRADER          reduce using rule 33 (def_variable -> DEF PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA .)
 
 
-state 226
+state 231
 
     (34) put_variable -> PUT PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA .
 
@@ -5774,7 +6699,7 @@ state 226
     BRADER          reduce using rule 34 (put_variable -> PUT PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA .)
 
 
-state 227
+state 232
 
     (36) add_variable -> ADD PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA .
 
@@ -5812,7 +6737,7 @@ state 227
     BRADER          reduce using rule 36 (add_variable -> ADD PARIZQ VARIABLE COMA valor PARDER PUNTOCOMA .)
 
 
-state 228
+state 233
 
     (81) expr -> ADD PARIZQ VARIABLE COMA valor PARDER .
 
@@ -5827,7 +6752,7 @@ state 228
     THEN            reduce using rule 81 (expr -> ADD PARIZQ VARIABLE COMA valor PARDER .)
 
 
-state 229
+state 234
 
     (41) pos -> POS PARIZQ valor COMA valor PARDER PUNTOCOMA .
 
@@ -5865,70 +6790,70 @@ state 229
     BRADER          reduce using rule 41 (pos -> POS PARIZQ valor COMA valor PARDER PUNTOCOMA .)
 
 
-state 230
+state 235
 
     (48) for_loop -> FOR VARIABLE PARIZQ valor TO valor PARDER . LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
 
-    LOOP            shift and go to state 237
-
-
-state 231
-
-    (53) end_case -> ELSE BRAIZQ sentencias BRADER . END CASE PUNTOCOMA
-
-    END             shift and go to state 238
-
-
-state 232
-
-    (52) when_case -> WHEN valor THEN BRAIZQ sentencias . BRADER
-
-    BRADER          shift and go to state 239
-
-
-state 233
-
-    (55) repeat_until -> REPEAT BRAIZQ sentencias BRADER UNTIL PARIZQ condicion . PARDER PUNTOCOMA
-
-    PARDER          shift and go to state 240
-
-
-state 234
-
-    (56) while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER . WHEND PUNTOCOMA
-
-    WHEND           shift and go to state 241
-
-
-state 235
-
-    (67) proc -> PROC VARIABLE PARIZQ lista_parametros PARDER BRAIZQ sentencias . BRADER PUNTOCOMA END PUNTOCOMA
-
-    BRADER          shift and go to state 242
+    LOOP            shift and go to state 242
 
 
 state 236
 
-    (68) proc -> PROC VARIABLE PARIZQ PARDER BRAIZQ sentencias BRADER . PUNTOCOMA END PUNTOCOMA
+    (53) end_case -> ELSE BRAIZQ sentencias BRADER . END CASE PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 243
+    END             shift and go to state 243
 
 
 state 237
 
-    (48) for_loop -> FOR VARIABLE PARIZQ valor TO valor PARDER LOOP . BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
+    (52) when_case -> WHEN valor THEN BRAIZQ sentencias . BRADER
 
-    BRAIZQ          shift and go to state 244
+    BRADER          shift and go to state 244
 
 
 state 238
 
-    (53) end_case -> ELSE BRAIZQ sentencias BRADER END . CASE PUNTOCOMA
+    (55) repeat_until -> REPEAT BRAIZQ sentencias BRADER UNTIL PARIZQ condicion . PARDER PUNTOCOMA
 
-    CASE            shift and go to state 245
+    PARDER          shift and go to state 245
 
 
 state 239
+
+    (56) while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER . WHEND PUNTOCOMA
+
+    WHEND           shift and go to state 246
+
+
+state 240
+
+    (67) proc -> PROC VARIABLE PARIZQ lista_parametros PARDER BRAIZQ sentencias . BRADER PUNTOCOMA END PUNTOCOMA
+
+    BRADER          shift and go to state 247
+
+
+state 241
+
+    (68) proc -> PROC VARIABLE PARIZQ PARDER BRAIZQ sentencias BRADER . PUNTOCOMA END PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 248
+
+
+state 242
+
+    (48) for_loop -> FOR VARIABLE PARIZQ valor TO valor PARDER LOOP . BRAIZQ sentencias BRADER END LOOP PUNTOCOMA
+
+    BRAIZQ          shift and go to state 249
+
+
+state 243
+
+    (53) end_case -> ELSE BRAIZQ sentencias BRADER END . CASE PUNTOCOMA
+
+    CASE            shift and go to state 250
+
+
+state 244
 
     (52) when_case -> WHEN valor THEN BRAIZQ sentencias BRADER .
 
@@ -5937,35 +6862,35 @@ state 239
     WHEN            reduce using rule 52 (when_case -> WHEN valor THEN BRAIZQ sentencias BRADER .)
 
 
-state 240
+state 245
 
     (55) repeat_until -> REPEAT BRAIZQ sentencias BRADER UNTIL PARIZQ condicion PARDER . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 246
+    PUNTOCOMA       shift and go to state 251
 
 
-state 241
+state 246
 
     (56) while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 247
+    PUNTOCOMA       shift and go to state 252
 
 
-state 242
+state 247
 
     (67) proc -> PROC VARIABLE PARIZQ lista_parametros PARDER BRAIZQ sentencias BRADER . PUNTOCOMA END PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 248
+    PUNTOCOMA       shift and go to state 253
 
 
-state 243
+state 248
 
     (68) proc -> PROC VARIABLE PARIZQ PARDER BRAIZQ sentencias BRADER PUNTOCOMA . END PUNTOCOMA
 
-    END             shift and go to state 249
+    END             shift and go to state 254
 
 
-state 244
+state 249
 
     (48) for_loop -> FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ . sentencias BRADER END LOOP PUNTOCOMA
     (1) sentencias -> . sentencia
@@ -6065,7 +6990,7 @@ state 244
     PROC            shift and go to state 62
     VARIABLE        shift and go to state 34
 
-    sentencias                     shift and go to state 250
+    sentencias                     shift and go to state 255
     sentencia                      shift and go to state 2
     def_variable                   shift and go to state 3
     put_variable                   shift and go to state 4
@@ -6098,14 +7023,14 @@ state 244
     proc                           shift and go to state 31
     invocacion_proc                shift and go to state 32
 
-state 245
+state 250
 
     (53) end_case -> ELSE BRAIZQ sentencias BRADER END CASE . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 251
+    PUNTOCOMA       shift and go to state 256
 
 
-state 246
+state 251
 
     (55) repeat_until -> REPEAT BRAIZQ sentencias BRADER UNTIL PARIZQ condicion PARDER PUNTOCOMA .
 
@@ -6143,7 +7068,7 @@ state 246
     BRADER          reduce using rule 55 (repeat_until -> REPEAT BRAIZQ sentencias BRADER UNTIL PARIZQ condicion PARDER PUNTOCOMA .)
 
 
-state 247
+state 252
 
     (56) while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .
 
@@ -6181,28 +7106,28 @@ state 247
     BRADER          reduce using rule 56 (while -> WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA .)
 
 
-state 248
+state 253
 
     (67) proc -> PROC VARIABLE PARIZQ lista_parametros PARDER BRAIZQ sentencias BRADER PUNTOCOMA . END PUNTOCOMA
 
-    END             shift and go to state 252
+    END             shift and go to state 257
 
 
-state 249
+state 254
 
     (68) proc -> PROC VARIABLE PARIZQ PARDER BRAIZQ sentencias BRADER PUNTOCOMA END . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 253
+    PUNTOCOMA       shift and go to state 258
 
 
-state 250
+state 255
 
     (48) for_loop -> FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias . BRADER END LOOP PUNTOCOMA
 
-    BRADER          shift and go to state 254
+    BRADER          shift and go to state 259
 
 
-state 251
+state 256
 
     (53) end_case -> ELSE BRAIZQ sentencias BRADER END CASE PUNTOCOMA .
 
@@ -6240,14 +7165,14 @@ state 251
     BRADER          reduce using rule 53 (end_case -> ELSE BRAIZQ sentencias BRADER END CASE PUNTOCOMA .)
 
 
-state 252
+state 257
 
     (67) proc -> PROC VARIABLE PARIZQ lista_parametros PARDER BRAIZQ sentencias BRADER PUNTOCOMA END . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 255
+    PUNTOCOMA       shift and go to state 260
 
 
-state 253
+state 258
 
     (68) proc -> PROC VARIABLE PARIZQ PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA .
 
@@ -6285,14 +7210,14 @@ state 253
     BRADER          reduce using rule 68 (proc -> PROC VARIABLE PARIZQ PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA .)
 
 
-state 254
+state 259
 
     (48) for_loop -> FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER . END LOOP PUNTOCOMA
 
-    END             shift and go to state 256
+    END             shift and go to state 261
 
 
-state 255
+state 260
 
     (67) proc -> PROC VARIABLE PARIZQ lista_parametros PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA .
 
@@ -6330,21 +7255,21 @@ state 255
     BRADER          reduce using rule 67 (proc -> PROC VARIABLE PARIZQ lista_parametros PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA .)
 
 
-state 256
+state 261
 
     (48) for_loop -> FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END . LOOP PUNTOCOMA
 
-    LOOP            shift and go to state 257
+    LOOP            shift and go to state 262
 
 
-state 257
+state 262
 
     (48) for_loop -> FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 258
+    PUNTOCOMA       shift and go to state 263
 
 
-state 258
+state 263
 
     (48) for_loop -> FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA .
 
@@ -6384,19 +7309,19 @@ state 258
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for MULT in state 148 resolved as shift
-WARNING: shift/reduce conflict for DIV in state 148 resolved as shift
-WARNING: shift/reduce conflict for SUM in state 148 resolved as shift
-WARNING: shift/reduce conflict for SUBSTR in state 148 resolved as shift
-WARNING: shift/reduce conflict for MULT in state 149 resolved as shift
-WARNING: shift/reduce conflict for DIV in state 149 resolved as shift
-WARNING: shift/reduce conflict for SUM in state 149 resolved as shift
-WARNING: shift/reduce conflict for SUBSTR in state 149 resolved as shift
-WARNING: shift/reduce conflict for MULT in state 150 resolved as shift
-WARNING: shift/reduce conflict for DIV in state 150 resolved as shift
-WARNING: shift/reduce conflict for SUM in state 150 resolved as shift
-WARNING: shift/reduce conflict for SUBSTR in state 150 resolved as shift
-WARNING: shift/reduce conflict for MULT in state 151 resolved as shift
-WARNING: shift/reduce conflict for DIV in state 151 resolved as shift
-WARNING: shift/reduce conflict for SUM in state 151 resolved as shift
-WARNING: shift/reduce conflict for SUBSTR in state 151 resolved as shift
+WARNING: shift/reduce conflict for MULT in state 153 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 153 resolved as shift
+WARNING: shift/reduce conflict for SUM in state 153 resolved as shift
+WARNING: shift/reduce conflict for SUBSTR in state 153 resolved as shift
+WARNING: shift/reduce conflict for MULT in state 154 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 154 resolved as shift
+WARNING: shift/reduce conflict for SUM in state 154 resolved as shift
+WARNING: shift/reduce conflict for SUBSTR in state 154 resolved as shift
+WARNING: shift/reduce conflict for MULT in state 155 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 155 resolved as shift
+WARNING: shift/reduce conflict for SUM in state 155 resolved as shift
+WARNING: shift/reduce conflict for SUBSTR in state 155 resolved as shift
+WARNING: shift/reduce conflict for MULT in state 156 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 156 resolved as shift
+WARNING: shift/reduce conflict for SUM in state 156 resolved as shift
+WARNING: shift/reduce conflict for SUBSTR in state 156 resolved as shift
