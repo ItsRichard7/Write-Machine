@@ -282,7 +282,9 @@ class AnalizadorSemantico:
 
         # Verificar que ambos operandos sean enteros
         if not isinstance(left, int) or not isinstance(right, int):
-            raise Exception(f"Error: Los operandos deben ser enteros. Recibido: {left} y {right}")
+            error = f"Error: Los operandos deben ser enteros. Recibido: {left} y {right}"
+            errores.append(error)
+            raise Exception(error)
         
         result = 0
         
@@ -292,7 +294,9 @@ class AnalizadorSemantico:
         elif operator == '/':
             # Aseguramos que no se divida por cero
             if right == 0:
-                raise ZeroDivisionError("Error: División por cero")
+                error = f"Error: División por cero."
+                errores.append(error)
+                raise ZeroDivisionError(error)
             result = round(left / right)
         elif operator == '+':
             result = left + right
@@ -313,7 +317,9 @@ class AnalizadorSemantico:
 
         # Verificar que ambos operandos sean enteros
         if not isinstance(left, int) or not isinstance(right, int):
-            raise Exception(f"Error: Los operandos deben ser booleanos. Recibido: {left} y {right}")
+            error = f"Error: Los operandos deben ser enteros. Recibido: {left} y {right}"
+            errores.append(error)
+            raise Exception(error)
         
         result = 0
         
@@ -806,12 +812,7 @@ class AnalizadorSemantico:
         print(f"Resultado de la suma {valor1} + {valor2} = {resultado}")
         return resultado
 
-    def analizar_condicional(self, nodo_condicional):
-        """
-        Realiza las comprobaciones para condicionales como IF, WHILE, REPEAT-UNTIL, etc.
-        """
-        # Realizar las comprobaciones adecuadas para el nodo de condicional
-        pass
+
 
 # Ejemplo de uso en integración con el árbol sintáctico de sintactico.py
 if __name__ == "__main__":
