@@ -111,6 +111,13 @@ class AnalizadorSemantico:
             elif tipo_nodo == 'sum':
                 self.analizar_sum(nodo)
             
+            elif tipo_nodo == 'proc':
+                self.analizar_proc(nodo)
+                return
+
+            elif tipo_nodo == 'invocacion_proc':
+                self.analizar_invocacion_proc(nodo)
+
             # Si el nodo contiene más subnodos (sentencias), procesarlos también
             for subnodo in nodo[1:]:
                 self.analizar(subnodo)
@@ -379,7 +386,6 @@ class AnalizadorSemantico:
         """
 
         valor_a = 0 
-        print(nodo)
 
         if len(nodo[1]) > 2:
             valor_a = self.verificar_operacion(nodo[1])
@@ -528,11 +534,12 @@ class AnalizadorSemantico:
             elif operacion == 'or':
                 resultado = self.analizar_or(nodo[-1])
             elif operacion == '<' or operacion == '>' or operacion == '==' or operacion == '<=' or operacion == '>=':
-                resultado = self.verificar_operacion_booleana(nodo[-1])
+                resultado = self.verificar_operacion_booleana(nodo[-1])   
             else:
                 error = (f"Error semántico: operación no válida.")
                 errores.append(error)
                 raise Exception(error)
+            print("resultado: ", resultado)
 
 
         
@@ -818,6 +825,61 @@ class AnalizadorSemantico:
         print(f"Resultado de la suma {valor1} + {valor2} = {resultado}")
         return resultado
     
+    def analizar_proc(self, nodo):
+        nombre = nodo[1]
+        entradas = nodo[2]
+        print(nombre)
+        if nombre not in self.tabla_simbolos:
+            self.tabla_simbolos[nombre] = {'tipo': 'procedimiento', 'valor': self.extraer_sentencias(nodo), 'entradas': entradas}
+            print(f"Procedimiento '{nombre}' declarado.")
+        else:
+            error = (f"Error semántico: el procedimiento '{nombre}' ya ha sido declarado.")
+            errores.append(error)
+            raise Exception(error)
+        
+    def analizar_invocacion_proc(self, nodo):
+        nombre = nodo[1]
+        entradas = nodo[2]
+        if nombre not in self.tabla_simbolos:
+            error = (f"Error semántico: el procedimiento '{nombre}' no ha sido declarado.")
+            errores.append(error)
+            raise Exception(error)
+        elif self.tabla_simbolos[nombre]['tipo'] != 'procedimiento':
+                error = (f"Error semántico: el nombre '{nombre}' no es un procedimiento.")
+                errores.append(error)
+                raise Exception(error)
+        else:
+            if entradas is None:
+                sentencias = self.tabla_simbolos[nombre]['valor']
+                for i in range(len(sentencias)):
+                    sentencia = sentencias[i]
+                    self.analizar(sentencia)
+                print(f"Invocado el procedimiento '{nombre}'.")
+            elif len(entradas) == len(self.tabla_simbolos[nombre]['entradas']):
+
+                for j in range(len(entradas)):
+                    entrada = entradas[j]
+                    nodo_variable = ('def_variable', self.tabla_simbolos[nombre]['entradas'][j], entrada)
+                    self.analizar(nodo_variable)
+
+                sentencias = self.tabla_simbolos[nombre]['valor']
+
+                for i in range(len(sentencias)):
+                    sentencia = sentencias[i]
+                    print(sentencia)
+                    self.analizar(sentencia)
+                print(f"Invocado el procedimiento '{nombre}'.")
+
+                for j in range(len(entradas)):
+                    variable = self.tabla_simbolos[nombre]['entradas'][j]
+                    del self.tabla_simbolos[variable]
+
+            else:
+                error = (f"Error semántico: el número de argumentos no coincide con el procedimiento '{nombre}'.")
+                errores.append(error)
+                raise Exception(error)
+
+
     def generar_tabla_simbolos(self, tabla_simbolos):
         # Crear la imagen en blanco con tamaño suficiente para la tabla
         img_width = 400
@@ -876,11 +938,15 @@ if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-    //comentario
-    Def(var1,0);
-    Def(var2,9);
-    Def(var3,TRUE);
-    Add(var1);
+    // Programa de Prueba
+    Def(var4,7);
+    Proc posiciona(valorX, valorY)
+    [
+        PosY valorX;
+        PosY valorY;
+    ];
+    End;
+    posiciona(3,4);
     '''
     
 
