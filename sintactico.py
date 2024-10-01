@@ -370,15 +370,18 @@ def analizar_sintactico(data):
 if __name__ == "__main__":
 
     data = '''
-    // Programa de Prueba
-    Def(var4,7);
-    Proc posiciona(valorX, valorY)
-    [
-        PosY valorX;
-        PosY valorY;
+     //comentario
+    // Prueba para la funcionalidad Repeat-Until
+Proc main()[
+    Def(bucle,1);
+    Repeat
+        [ContinueRight 90;
+        Add(bucle);]
+    Until
+        [bucle == 2];
     ];
-    End;
-    posiciona(3,4);
+End;
+
     '''
     
     analizar_sintactico(data)

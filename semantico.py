@@ -460,7 +460,6 @@ class AnalizadorSemantico:
             while indice_menor < indice_mayor:
                 for i in range(len(self.extraer_sentencias(nodo))):
                     sentencia = self.extraer_sentencias(nodo)[i]
-                    print("sentencia: ", sentencia)
                     self.analizar(sentencia)
                 indice_menor += 1
                 self.tabla_simbolos[var]['valor'] = indice_menor
@@ -828,7 +827,9 @@ class AnalizadorSemantico:
     def analizar_proc(self, nodo):
         nombre = nodo[1]
         entradas = nodo[2]
-        print(nombre)
+        if nombre == "main":
+            self.analizar(nodo[2])
+            return
         if nombre not in self.tabla_simbolos:
             self.tabla_simbolos[nombre] = {'tipo': 'procedimiento', 'valor': self.extraer_sentencias(nodo), 'entradas': entradas}
             print(f"Procedimiento '{nombre}' declarado.")
@@ -839,7 +840,10 @@ class AnalizadorSemantico:
         
     def analizar_invocacion_proc(self, nodo):
         nombre = nodo[1]
-        entradas = nodo[2]
+        if len(nodo) <= 2:
+            entradas = None
+        else:
+            entradas = nodo[2]
         if nombre not in self.tabla_simbolos:
             error = (f"Error semántico: el procedimiento '{nombre}' no ha sido declarado.")
             errores.append(error)
@@ -858,15 +862,18 @@ class AnalizadorSemantico:
             elif len(entradas) == len(self.tabla_simbolos[nombre]['entradas']):
 
                 for j in range(len(entradas)):
-                    entrada = entradas[j]
-                    nodo_variable = ('def_variable', self.tabla_simbolos[nombre]['entradas'][j], entrada)
-                    self.analizar(nodo_variable)
+                    entrada = self.obtener_valor(entradas[j])
+                    if isinstance(entrada,int):
+                        nodo_variable = ('def_variable', self.tabla_simbolos[nombre]['entradas'][j], ('number',entrada))
+                        self.analizar(nodo_variable)
+                    else:
+                        nodo_variable = ('def_variable', self.tabla_simbolos[nombre]['entradas'][j], ('booleano',entrada))
+                        self.analizar(nodo_variable)
 
                 sentencias = self.tabla_simbolos[nombre]['valor']
 
                 for i in range(len(sentencias)):
                     sentencia = sentencias[i]
-                    print(sentencia)
                     self.analizar(sentencia)
                 print(f"Invocado el procedimiento '{nombre}'.")
 
@@ -880,27 +887,35 @@ class AnalizadorSemantico:
                 raise Exception(error)
 
 
-    def generar_tabla_simbolos(self, tabla_simbolos):
-        # Crear la imagen en blanco con tamaño suficiente para la tabla
-        img_width = 400
-        img_height = 100 + len(tabla_simbolos) * 40  # Altura basada en el número de filas
-        img = Image.new('RGB', (img_width, img_height), color=(255, 255, 255))
-        draw = ImageDraw.Draw(img)
 
-        # Definir una fuente y tamaños de las celdas
+    def generar_tabla_simbolos(self, tabla_simbolos):
+        # Crear una imagen temporal para obtener las dimensiones del texto
+        img_temp = Image.new('RGB', (1, 1))
+        draw_temp = ImageDraw.Draw(img_temp)
+
+        # Definir una fuente
         try:
             font = ImageFont.truetype("arial.ttf", 20)
         except IOError:
             font = ImageFont.load_default()
 
-        # Anchos de las columnas
-        col_widths = [100, 120, 120]  # Ancho de cada columna
+        # Calcular el ancho máximo de las columnas "Valor" y "Entradas"
+        max_valor_width = max(draw_temp.textbbox((0, 0), str(atributos['valor']), font=font)[2] for atributos in tabla_simbolos.values())
+        max_entradas_width = max(draw_temp.textbbox((0, 0), str(atributos.get('entradas', '')), font=font)[2] for atributos in tabla_simbolos.values())
+
+        # Anchos de las columnas (ajustar dinámicamente los de las columnas Valor y Entradas)
+        col_widths = [100, 120, max(120, max_valor_width + 20), max(120, max_entradas_width + 20)]  # Ancho de cada columna
+        img_width = sum(col_widths) + 40  # Sumar los anchos de todas las columnas más un margen
+        img_height = 100 + len(tabla_simbolos) * 40  # Altura basada en el número de filas
+        img = Image.new('RGB', (img_width, img_height), color=(255, 255, 255))
+        draw = ImageDraw.Draw(img)
+
         x_start = 20
         y_start = 20
         row_height = 40
 
         # Dibujar los encabezados
-        encabezados = ['Variable', 'Tipo', 'Valor']
+        encabezados = ['Variable', 'Tipo', 'Valor', 'Entradas']
         for i, encabezado in enumerate(encabezados):
             x_offset = x_start + sum(col_widths[:i])  # Ajuste horizontal basado en la columna
             draw.text((x_offset + 10, y_start + 10), encabezado, font=font, fill=(0, 0, 0))
@@ -912,6 +927,7 @@ class AnalizadorSemantico:
             draw.text((x_start + 10, y_offset + 10), variable, font=font, fill=(0, 0, 0))
             draw.text((x_start + col_widths[0] + 10, y_offset + 10), atributos['tipo'], font=font, fill=(0, 0, 0))
             draw.text((x_start + col_widths[0] + col_widths[1] + 10, y_offset + 10), str(atributos['valor']), font=font, fill=(0, 0, 0))
+            draw.text((x_start + col_widths[0] + col_widths[1] + col_widths[2] + 10, y_offset + 10), str(atributos.get('entradas', '')), font=font, fill=(0, 0, 0))
 
         # Dibujar las líneas de la tabla
         num_rows = len(tabla_simbolos) + 1  # Número de filas (incluye encabezados)
@@ -939,14 +955,57 @@ if __name__ == "__main__":
 
     data = '''
     // Programa de Prueba
-    Def(var4,7);
-    Proc posiciona(valorX, valorY)
-    [
-        PosY valorX;
-        PosY valorY;
-    ];
+    Proc linea1()
+        [
+            //Define variable local
+            Def(varLocal1, 1);
+            PosY varLocal1;
+        ];
     End;
-    posiciona(3,4);
+
+    Proc posiciona(valorX, valorY)
+        [
+            PosX valorX;
+            PosY valorY;
+        ];
+    End;
+
+    Proc impCruz(varx, vary)
+        [
+            Down;
+            Pos(varx,vary);
+            For var1(1 to 11) Loop
+                [PosY 6;
+                ContinueRight 9;]
+            End Loop;
+            Up; 
+            PosX Substr(varx, 6);
+            PosY Substr(vary, 5);
+            Down;
+            For var2(1 to 5) Loop
+                [PosY 5;
+                ContinueRight 9;]
+            End Loop;
+            Up;
+            Beginning;
+        ];
+    End;
+     //comentario
+    Proc main()
+        [
+            // Define variable global
+            Def(varGlobal1, 1);
+            //Llama al procedimiento linea1
+            linea1();
+            //Llama al procedimiento posiciona
+            posiciona(1,1);
+            //El color es 1
+            UseColor varGlobal1;
+            //Llama al procedimiento para dibujar una Cruz
+            impCruz(5,5);
+        ];
+    End;
+
     '''
     
 
