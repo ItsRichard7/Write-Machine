@@ -20,19 +20,23 @@ class AnalizadorSemantico:
             # Analizar declaraciones de variables
             if self.analisis_fallido:
                 return
+            # Analizar declaraciones de variables
             elif tipo_nodo == 'def_variable':
                 self.analizar_declaracion_variable(nodo)
 
-            # Analizar expresiones como PUT, ADD, operaciones, etc.
+            # Analizar cambios de variable
             elif tipo_nodo == 'put_variable':
                 self.analizar_uso_variable(nodo[1], nodo[2][1])
 
+            # Analizar operaciones suma de una variable
             elif tipo_nodo == 'add_variable_uno':
                 self.analizar_operacion_add(nodo[1])
 
+            # Analizar operaciones suma con dos argumentos
             elif tipo_nodo == 'add_variable_dos':
                 self.analizar_operacion_add(nodo[1], nodo[2][1])
 
+            # Analizar operaciones continue del lapiz
             elif tipo_nodo == 'continue_up' or tipo_nodo == 'continue_down' or tipo_nodo == 'continue_left' or tipo_nodo == 'continue_right':
                 if len(nodo[1]) > 2:
                     mov = self.verificar_operacion(nodo[1])
@@ -41,12 +45,15 @@ class AnalizadorSemantico:
                     self.verificar_entero(nodo[1][1])
                     print(f"Mover lapicero con {tipo_nodo} por {nodo[1][1]} unidades.")
 
+            # Analizar operaciones de Pos(x,y)
             elif tipo_nodo == 'pos':
                 self.analizar_pos(nodo)
 
+            # Analizar operaciones PosX y PosY para posicionar el lapicero
             elif tipo_nodo == 'posx' or tipo_nodo == 'posy':
                 self.analizar_pos_xy(nodo)
 
+            # Analizar operaciones de cambio de color del lapicero
             elif tipo_nodo == 'use_color':
                 self.verificar_entero(nodo[1][1])
                 valor = self.obtener_valor(nodo[1])
@@ -57,12 +64,15 @@ class AnalizadorSemantico:
                 else: 
                     print(f"Usar color {valor}.")
             
+            # Analizar operaciones para bajar el lapicero
             elif tipo_nodo == 'down':
                 print("Mover lapicero hacia abajo.")
-
+            
+            # Analizar operaciones para subir el lapicero
             elif tipo_nodo == 'up':
                 print("Mover lapicero hacia arriba.")
 
+            # Analizar operaciones para mover el lapicero a la posicion incial
             elif tipo_nodo == 'beginning':
                 print("Mover lapicero a [1,1].")
 
@@ -70,56 +80,67 @@ class AnalizadorSemantico:
             elif tipo_nodo == 'for_loop':
                 self.analizar_for(nodo)
             
+            # Analizar case
             elif tipo_nodo == 'case':
                 self.analizar_case(nodo)
                 return
             
-            elif tipo_nodo == 'for':
-                self.analizar_for(nodo)
-                return
-
+            # Analizar while loop
             elif tipo_nodo == 'while':
                 self.analizar_while(nodo)
                 return
             
+            # Analizar repeat until
             elif tipo_nodo == 'repeat_until':
                 self.analizar_repeat(nodo)
                 return
 
+            # Analizar Equal(x,y)
             elif tipo_nodo == 'equal':
                 self.analizar_equal(nodo)
 
+            # Analizar And(x,y)
             elif tipo_nodo == 'and':
                 self.analizar_and(nodo)
 
+            # Analizar Or(x,y)
             elif tipo_nodo == 'or':
                 self.analizar_or(nodo)
 
+            # Analizar Greater(x,y)
             elif tipo_nodo == 'greater':
                 self.analizar_greater(nodo)
 
+            # Analizar Smaller(x,y)
             elif tipo_nodo == 'smaller':
                 self.analizar_smaller(nodo)
 
+            # Analizar Substr(x,y)
             elif tipo_nodo == 'substract':
                 self.analizar_substract(nodo)
 
+            # Analizar Random(x,y)
             elif tipo_nodo == 'random':
                 self.analizar_random(nodo)
 
+            # Analizar Mult(x,y)
             elif tipo_nodo == 'mult':
                 self.analizar_mult(nodo)
 
+            # Analizar Div(x,y)
             elif tipo_nodo == 'div':
                 self.analizar_div(nodo)
 
+            # Analizar Sum(x,y)
             elif tipo_nodo == 'sum':
                 self.analizar_sum(nodo)
             
+            # Analizar creacion de procedimientos
             elif tipo_nodo == 'proc':
                 self.analizar_proc(nodo)
                 return
 
+            # Analizar invocacion de procedimientos
             elif tipo_nodo == 'invocacion_proc':
                 self.analizar_invocacion_proc(nodo)
 
@@ -127,19 +148,20 @@ class AnalizadorSemantico:
             for subnodo in nodo[1:]:
                 self.analizar(subnodo)
 
+            # Verificar si el procedimiento main fue declarado
             if nodo == self.arbol_sintactico and not self.main:
                 error = (f"Error semántico: no se encontró el procedimiento main.")
                 errores.append(error)
                 self.analisis_fallido = True
 
-            
+    # Funcion que pone la bandera del analisis fallido y borra la tabla de simbolos
     def analisis_fallido(self):
         self.analisis_fallido = True
         self.tabla_simbolos = {}
 
 
     # Analizar declaraciones de variables
-    def analizar_declaracion_variable(self, nodo):
+    def analizar_declaracion_variable(self, nodo, alcance = 'global'):
         """
         Verifica si la variable ya fue declarada, la agrega a la tabla de símbolos y asigna su valor.
         """
@@ -165,7 +187,7 @@ class AnalizadorSemantico:
             return
         
         # Agregar la variable a la tabla de símbolos
-        self.tabla_simbolos[nombre_variable] = {'tipo': tipo_variable, 'valor': valor_variable}
+        self.tabla_simbolos[nombre_variable] = {'tipo': tipo_variable, 'valor': valor_variable, 'alcance': alcance}
         print(f"Declarada la variable '{nombre_variable}' como '{tipo_variable}' con valor {valor_variable}.")
 
     def analizar_uso_variable(self, nombre_variable, nuevo_valor=None):
@@ -897,7 +919,11 @@ class AnalizadorSemantico:
                 sentencias = self.tabla_simbolos[nombre]['valor']
                 for i in range(len(sentencias)):
                     sentencia = sentencias[i]
-                    self.analizar(sentencia)
+                    print(sentencia)
+                    if sentencia[1][0] == 'def_variable':
+                        self.analizar_declaracion_variable(sentencia[1], nombre)
+                    else:
+                        self.analizar(sentencia)
                 print(f"Invocado el procedimiento '{nombre}'.")
             elif len(entradas) == len(self.tabla_simbolos[nombre]['entradas']):
 
@@ -914,6 +940,7 @@ class AnalizadorSemantico:
 
                 for i in range(len(sentencias)):
                     sentencia = sentencias[i]
+                    print(sentencia)
                     self.analizar(sentencia)
                 print(f"Invocado el procedimiento '{nombre}'.")
 
@@ -1003,34 +1030,6 @@ if __name__ == "__main__":
             PosY varLocal1;
         ];
     End;
-
-    Proc posiciona(valorX, valorY)
-        [
-            PosX valorX;
-            PosY valorY;
-        ];
-    End;
-
-    Proc impCruz(varx, vary)
-        [
-            Down;
-            Pos(varx,vary);
-            For var1(1 to 11) Loop
-                [PosY 6;
-                ContinueRight 9;]
-            End Loop;
-            Up; 
-            PosX Substr(varx, 6);
-            PosY Substr(vary, 5);
-            Down;
-            For var2(1 to 5) Loop
-                [PosY 5;
-                ContinueRight 9;]
-            End Loop;
-            Up;
-            Beginning;
-        ];
-    End;
      //comentario
     Proc main()
         [
@@ -1038,12 +1037,6 @@ if __name__ == "__main__":
             Def(varGlobal1, 1);
             //Llama al procedimiento linea1
             linea1();
-            //Llama al procedimiento posiciona
-            posiciona(1,1);
-            //El color es 1
-            UseColor varGlobal1;
-            //Llama al procedimiento para dibujar una Cruz
-            impCruz(5,5);
         ];
     End;
 
@@ -1056,7 +1049,7 @@ if __name__ == "__main__":
     print("Árbol Sintáctico Generado:", arbol_sintactico)
 
     # Crear y ejecutar el analizador semántico
-    analizador = AnalizadorSemantico()
+    analizador = AnalizadorSemantico(arbol_sintactico)
     analizador.analizar(arbol_sintactico)
    
     #print("Análisis semántico completado correctamente")
