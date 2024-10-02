@@ -3,9 +3,12 @@ import random
 from PIL import Image, ImageDraw, ImageFont
 
 class AnalizadorSemantico:
-    def __init__(self):
+    def __init__(self, arbol_sintactico):
         # Esta tabla de símbolos almacenará las variables declaradas, sus tipos y valores
         self.tabla_simbolos = {}
+        self.main = False
+        self.arbol_sintactico = arbol_sintactico
+        self.analisis_fallido = False
 
     def analizar(self, nodo):
         """
@@ -15,7 +18,9 @@ class AnalizadorSemantico:
             tipo_nodo = nodo[0]
 
             # Analizar declaraciones de variables
-            if tipo_nodo == 'def_variable':
+            if self.analisis_fallido:
+                return
+            elif tipo_nodo == 'def_variable':
                 self.analizar_declaracion_variable(nodo)
 
             # Analizar expresiones como PUT, ADD, operaciones, etc.
@@ -48,7 +53,7 @@ class AnalizadorSemantico:
                 if valor != 1 and valor != 2:
                     error = (f"Error semántico: el valor de UseColor debe ser 1 o 2, se obtuvo {valor}.")
                     errores.append(error)
-                    raise Exception(error)
+                    self.analisis_fallido()
                 else: 
                     print(f"Usar color {valor}.")
             
@@ -122,7 +127,16 @@ class AnalizadorSemantico:
             for subnodo in nodo[1:]:
                 self.analizar(subnodo)
 
-            # Manejar otros tipos de sentencias aquí...
+            if nodo == self.arbol_sintactico and not self.main:
+                error = (f"Error semántico: no se encontró el procedimiento main.")
+                errores.append(error)
+                self.analisis_fallido = True
+
+            
+    def analisis_fallido(self):
+        self.analisis_fallido = True
+        self.tabla_simbolos = {}
+
 
     # Analizar declaraciones de variables
     def analizar_declaracion_variable(self, nodo):
@@ -140,13 +154,15 @@ class AnalizadorSemantico:
         else:
             error = (f"Error semántico: el valor '{valor_variable}' no es un tipo válido (se esperaba entero o booleano).")
             errores.append(error)
-            raise Exception(error)
+            self.analisis_fallido()
+            return
             
         # Verificar si la variable ya fue declarada
         if nombre_variable in self.tabla_simbolos:
             error = (f"Error semántico: la variable '{nombre_variable}' ya fue declarada.")
             errores.append(error)
-            raise Exception(error)
+            self.analisis_fallido()
+            return
         
         # Agregar la variable a la tabla de símbolos
         self.tabla_simbolos[nombre_variable] = {'tipo': tipo_variable, 'valor': valor_variable}
@@ -159,7 +175,8 @@ class AnalizadorSemantico:
         if nombre_variable not in self.tabla_simbolos:
             error = (f"Error semántico: la variable '{nombre_variable}' se usa antes de ser declarada.")
             errores.append(error)
-            raise Exception(error)
+            self.analisis_fallido()
+            return
         
         # Obtener el tipo y el valor actual de la variable
         tipo_actual = self.tabla_simbolos[nombre_variable]['tipo']
@@ -175,13 +192,15 @@ class AnalizadorSemantico:
             if nuevo_tipo is None:
                 error = (f"Error semántico: el nuevo valor '{nuevo_valor}' no es un tipo válido (se esperaba entero o booleano).")
                 errores.append(error)
-                raise Exception(error)
+                self.analisis_fallido()
+                return
             
             # Verificar la consistencia de tipos
             if nuevo_tipo != tipo_actual:
                 error = (f"Error semántico: no se puede asignar el valor '{nuevo_valor}' de tipo '{nuevo_tipo}' a la variable '{nombre_variable}' que es de tipo '{tipo_actual}'.")
                 errores.append(error)
-                raise Exception(error)
+                self.analisis_fallido()
+                return
 
             # Si el tipo es correcto, actualiza el valor
             self.tabla_simbolos[nombre_variable]['valor'] = nuevo_valor
@@ -189,7 +208,8 @@ class AnalizadorSemantico:
         else:
             error = f"Error semántico: la variable '{nombre_variable}' no se le esta asignando un valor."
             errores.append(error)
-            raise Exception(error)
+            self.analisis_fallido()
+            return
     
     def analizar_operacion_add(self, nombre_variable, valor_b=1):
         """
@@ -200,7 +220,8 @@ class AnalizadorSemantico:
         if nombre_variable not in self.tabla_simbolos:
             error = (f"Error semántico: la variable '{nombre_variable}' no ha sido declarada.")
             errores.append(error)
-            raise Exception(error)
+            self.analisis_fallido()
+            return
         
         valor_a_sumar = self.tabla_simbolos[nombre_variable]['valor']
         tipo_a = self.tabla_simbolos[nombre_variable]['tipo']
@@ -210,12 +231,14 @@ class AnalizadorSemantico:
             if valor_b == 'TRUE' or valor_b == 'FALSE':
                 error = (f"Error semántico: no se puede sumar un valor booleano.")
                 errores.append(error)
-                raise Exception(error)
+                self.analisis_fallido()
+                return
             
             elif valor_b not in self.tabla_simbolos:
                 error = (f"Error semántico: la variable '{valor_b}' no ha sido declarada.")
                 errores.append(error)
-                raise Exception(error)
+                self.analisis_fallido()
+                return
             
             valor_b_sumar = self.tabla_simbolos[valor_b]['valor']
             tipo_b = self.tabla_simbolos[valor_b]['tipo']
@@ -224,19 +247,22 @@ class AnalizadorSemantico:
             if tipo_a != 'entero' or tipo_b != 'entero':
                 error = (f"Error semántico: las variables deben ser de tipo entero. '{nombre_variable}' es de tipo '{tipo_a}' y '{valor_b}' es de tipo '{tipo_b}'.")
                 errores.append(error)
-                raise Exception(error)
+                self.analisis_fallido()
+                return
         else:  # Si es un número
             valor_b_sumar = valor_b  # Asumimos que ya es un entero
             if not isinstance(valor_b_sumar, int):
                 error = (f"Error semántico: el valor a sumar debe ser un entero. Se recibió: '{valor_b_sumar}'.")
                 errores.append(error)
-                raise Exception(error)
+                self.analisis_fallido()
+                return
         
         # Verificar que el tipo de valor_a_sumar sea entero
         if tipo_a != 'entero':
             error = (f"Error semántico: no se puede sumar a la variable '{nombre_variable}' de tipo '{tipo_a}'.")
             errores.append(error)
-            raise Exception(error)
+            self.analisis_fallido()
+            return
 
         # Realizar la suma
         nuevo_valor = valor_a_sumar + valor_b_sumar
@@ -250,19 +276,20 @@ class AnalizadorSemantico:
             if valor not in self.tabla_simbolos:
                 error = (f"Error semántico: la variable '{valor}' no ha sido declarada.")
                 errores.append(error)
-                raise Exception(error)
+                self.analisis_fallido()
+                return
             tipo_variable = self.tabla_simbolos[valor]['tipo']
             if tipo_variable != 'entero':
                 error = (f"Error semántico: la variable '{valor}' debe ser de tipo entero. Es de tipo '{tipo_variable}'.")
                 errores.append(error)
-                raise Exception(error)
-            
+                self.analisis_fallido()
+                return
         else:  # Se asume que el valor es un número
             if not isinstance(valor, int):
                 error = (f"Error semántico: se esperaba un entero, se recibió: '{valor}'.")
                 errores.append(error)
-                raise Exception(error)
-
+                self.analisis_fallido()
+                return
      # Función para verificar si el valor es una variable o un número
     def verificar_booleano(self, valor):
         if isinstance(valor, str):  # Si es una variable
@@ -273,7 +300,8 @@ class AnalizadorSemantico:
             elif valor not in self.tabla_simbolos:
                 error = (f"Error semántico: la variable '{valor}' no ha sido declarada.")
                 errores.append(error)
-                raise Exception(error)
+                self.analisis_fallido()
+                return
             else:
                 booleano = self.tabla_simbolos[valor]['valor']
                 if isinstance(booleano, bool):
@@ -281,7 +309,8 @@ class AnalizadorSemantico:
                 else:
                     error = (f"Error semántico: la variable '{valor}' debe ser de tipo booleano.")
                     errores.append(error)
-                    raise Exception(error)
+                    self.analisis_fallido()
+                    return
                 
     def verificar_operacion(self, node):
         # Si el nodo es un número, lo devolvemos
@@ -297,7 +326,8 @@ class AnalizadorSemantico:
         if not isinstance(left, int) or not isinstance(right, int):
             error = f"Error: Los operandos deben ser enteros. Recibido: {left} y {right}"
             errores.append(error)
-            raise Exception(error)
+            self.analisis_fallido()
+            return
         
         result = 0
         
@@ -332,8 +362,8 @@ class AnalizadorSemantico:
         if not isinstance(left, int) or not isinstance(right, int):
             error = f"Error: Los operandos deben ser enteros. Recibido: {left} y {right}"
             errores.append(error)
-            raise Exception(error)
-        
+            self.analisis_fallido()
+            return
         result = 0
         
         # Realiza la operación en función del operador
@@ -409,7 +439,8 @@ class AnalizadorSemantico:
             if not isinstance(caso, int):
                 error = (f"Error semántico: el caso debe de ser entero, se obtuvo {caso}.")
                 errores.append(error)
-                raise Exception(error)
+                self.analisis_fallido()
+                return
             else:
                 if caso == valor_actual:
                     print(f"El caso {caso} se cumple.")
@@ -466,7 +497,8 @@ class AnalizadorSemantico:
         else:
             error = (f"Error semántico: la variable '{var}' ya ha sido declarada.")
             errores.append(error)
-            raise Exception(error)
+            self.analisis_fallido()
+            return
         
         
     def extraer_sentencias(self,node):
@@ -537,7 +569,8 @@ class AnalizadorSemantico:
             else:
                 error = (f"Error semántico: operación no válida.")
                 errores.append(error)
-                raise Exception(error)
+                self.analisis_fallido()
+                return
             print("resultado: ", resultado)
 
 
@@ -553,13 +586,15 @@ class AnalizadorSemantico:
             else:
                 error = (f"Error: la variable '{operando}' no está definida.")
                 errores.append(error)
-                raise Exception(error)
+                self.analisis_fallido()
+                return
         elif isinstance(operando, tuple) and operando[0] == 'number' or operando[0] == 'logico':  
             return operando[1]  # Retorna el valor numérico
         else:
             error = ("Error: operando no válido.")
             errores.append(error)
-            raise Exception(error)
+            self.analisis_fallido()
+            return
 
     def analizar_equal(self, nodo):
         # nodo: ('equal', operand1, operand2)
@@ -800,7 +835,8 @@ class AnalizadorSemantico:
         if valor2 == 0:
             error = ("Error: operando 2 no válido.")
             errores.append(error)
-            raise Exception(error)
+            self.analisis_fallido()
+            return
         else:
             resultado = valor1 / valor2
             print(f"Resultado de la division {valor1} / {valor2} = {resultado}")
@@ -829,6 +865,7 @@ class AnalizadorSemantico:
         entradas = nodo[2]
         if nombre == "main":
             self.analizar(nodo[2])
+            self.main = True
             return
         if nombre not in self.tabla_simbolos:
             self.tabla_simbolos[nombre] = {'tipo': 'procedimiento', 'valor': self.extraer_sentencias(nodo), 'entradas': entradas}
@@ -836,7 +873,8 @@ class AnalizadorSemantico:
         else:
             error = (f"Error semántico: el procedimiento '{nombre}' ya ha sido declarado.")
             errores.append(error)
-            raise Exception(error)
+            self.analisis_fallido()
+            return
         
     def analizar_invocacion_proc(self, nodo):
         nombre = nodo[1]
@@ -847,11 +885,13 @@ class AnalizadorSemantico:
         if nombre not in self.tabla_simbolos:
             error = (f"Error semántico: el procedimiento '{nombre}' no ha sido declarado.")
             errores.append(error)
-            raise Exception(error)
+            self.analisis_fallido()
+            return
         elif self.tabla_simbolos[nombre]['tipo'] != 'procedimiento':
                 error = (f"Error semántico: el nombre '{nombre}' no es un procedimiento.")
                 errores.append(error)
-                raise Exception(error)
+                self.analisis_fallido()
+                return
         else:
             if entradas is None:
                 sentencias = self.tabla_simbolos[nombre]['valor']
@@ -884,7 +924,8 @@ class AnalizadorSemantico:
             else:
                 error = (f"Error semántico: el número de argumentos no coincide con el procedimiento '{nombre}'.")
                 errores.append(error)
-                raise Exception(error)
+                self.analisis_fallido()
+                return
 
 
 

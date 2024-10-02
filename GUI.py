@@ -39,8 +39,9 @@ def run_code(arbol, tabla):
                     mostrar_imagen_con_scroll("arbol_parseo.png")
                     consolePanel.insert(tk.END, "Árbol de parseo generado con éxito <3 \n", 'exito')
                 lexer.lineno = 1
-                analizador = AnalizadorSemantico()
+                analizador = AnalizadorSemantico(arb_sint)
                 analizador.analizar(arb_sint)
+                print(errores)
                 if errores:
                    show_errors(errores)
                 else:
