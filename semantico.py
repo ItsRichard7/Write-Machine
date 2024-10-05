@@ -8,7 +8,8 @@ class AnalizadorSemantico:
         self.tabla_simbolos = {}
         self.main = False
         self.arbol_sintactico = arbol_sintactico
-        self.fallido = False
+        self.fallido = False 
+        self.fallido_proc = False
 
     def analizar(self, nodo, alcance ='global'):
         """
@@ -147,12 +148,13 @@ class AnalizadorSemantico:
             # Si el nodo contiene más subnodos (sentencias), procesarlos también
             for subnodo in nodo[1:]:
                 self.analizar(subnodo, alcance)
+                self.contador_linea += 1
 
             # Verificar si el procedimiento main fue declarado
             if nodo == self.arbol_sintactico and not self.main:
                 error = (f"Error semántico: no se encontró el procedimiento main.")
                 errores.append(error)
-                self.analisis_fallido = True
+                self.fallido = True
 
     # Funcion que pone la bandera del analisis fallido y borra la tabla de simbolos
     def analisis_fallido(self):
@@ -315,28 +317,33 @@ class AnalizadorSemantico:
 
     def verificar_entero(self, valor, alcance):
         if isinstance(valor, str):  # Si es una variable
+            if valor == 'TRUE' or valor == 'FALSE':
+                error = (f"Error semántico: El valor de la variable '{valor}' no es un entero.")
+                errores.append(error)
+                self.analisis_fallido()
+                return 
             if valor not in self.tabla_simbolos:
                 error = (f"Error semántico: la variable '{valor}' no ha sido declarada.")
                 errores.append(error)
                 self.analisis_fallido()
-                return
+                return 
             tipo_variable = self.tabla_simbolos[valor]['tipo']
             if tipo_variable != 'entero':
                 error = (f"Error semántico: la variable '{valor}' debe ser de tipo entero. Es de tipo '{tipo_variable}'.")
                 errores.append(error)
                 self.analisis_fallido()
-                return
+                return 
             if self.tabla_simbolos[valor]['alcance'] != alcance and self.tabla_simbolos[valor]['alcance'] != 'global':
                 error = (f"Error semántico: la variable '{valor}' no se puede modificar en este alcance.")
                 errores.append(error)
                 self.analisis_fallido()
-                return
+                return 
         else:  # Se asume que el valor es un número
             if not isinstance(valor, int):
                 error = (f"Error semántico: se esperaba un entero, se recibió: '{valor}'.")
                 errores.append(error)
                 self.analisis_fallido()
-                return
+                return 
      # Función para verificar si el valor es una variable o un número
     def verificar_booleano(self, valor, alcance):
         if isinstance(valor, str):  # Si es una variable
@@ -476,6 +483,7 @@ class AnalizadorSemantico:
 
             # Verificar ambos valores
             self.verificar_entero(valor_a, alcance)
+    
 
         print(f"Posicionar usando {nodo[0]} en {valor_a}.")
 
@@ -972,6 +980,9 @@ class AnalizadorSemantico:
                     self.analizar(sentencia, nombre)
                 print(f"Invocado el procedimiento '{nombre}'.")
 
+                if self.fallido:
+                    return
+
                 for j in range(len(entradas)):
                     variable = self.tabla_simbolos[nombre]['entradas'][j]
                     del self.tabla_simbolos[variable]
@@ -1053,55 +1064,34 @@ if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-    // Programa de Prueba
+   // Programa de Prueba
     Proc linea1()
         [
             //Define variable local
-            Def(varLocal1, 1);
+            Def(varLocal1, FALSE);
             PosY varLocal1;
         ];
     End;
 
-    Proc posiciona(valorX, valorY)
+Proc posiciona(valorX, valorY)
         [
             PosX valorX;
             PosY valorY;
         ];
     End;
 
-    Proc impCruz(varx, vary)
-        [
-            Down;
-            Pos(varx,vary);
-            For var1(1 to 11) Loop
-                [PosY 6;
-                ContinueRight 9;]
-            End Loop;
-            Up; 
-            PosX Substr(varx, 6);
-            PosY Substr(vary, 5);
-            Down;
-            For var2(1 to 5) Loop
-                [PosY 5;
-                ContinueRight 9;]
-            End Loop;
-            Up;
-            Beginning;
-        ];
-    End;
-     //comentario
-    Proc main()
+Proc main()
         [
             // Define variable global
             Def(varGlobal1, 1);
+            Def(varGlobal1, 2);
             //Llama al procedimiento linea1
-            linea1();
-            //Llama al procedimiento posiciona
-            posiciona(1,1);
+            linea1(); 
+            Put(varGlobal1, TRUE);
+            Add(varGlobal1, TRUE);
+	        posiciona(3,TRUE);
             //El color es 1
             UseColor varGlobal1;
-            //Llama al procedimiento para dibujar una Cruz
-            impCruz(5,5);
         ];
     End;
 
