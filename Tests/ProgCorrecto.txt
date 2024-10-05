@@ -26,14 +26,14 @@ End;
 Proc linea4(varLocal2, varLocal3)
 [
 Def(varLocal1, 1);
-call linea3(varLocal1);
-call linea2();
+linea3(varLocal1);
+linea2();
 ];
 End;
 
 
 
-Proc linea4(varLocal2, varLocal3)
+Proc linea5(varLocal2, varLocal3)
 [
 Def(varLocal00, 1);
 Def(var, 1);
@@ -54,7 +54,7 @@ Def(variable3,TRUE);
 
 Def(miVar, 2);
 Put(miVar, 100);
-Put(mivar, Substr(100, 45));
+Put(miVar, Substr(100, 45));
 
 
 Def(var, 2);Def(var3, 1);
@@ -123,23 +123,23 @@ Case var1
 When 1 Then
 [ Add(var1, 1); ]
 When 2 Then
-[ Add(var2, 1) ]
+[ Add(var2, 1); ]
 When 3 Then
-[ Add(variale3, 1) ]
-End case;
+[ Add(variale3, 1); ]
+End Case;
 
 
 Case var5
 When TRUE Then
 [ Add(var2, 1); ]
 Else
-[ Add(var, 1) ]
-End case;
+[ Add(var, 1); ]
+End Case;
 
 
 
 Repeat
-[ContinueRight 90]
+[ContinueRight 90;]
 Until
 [bucle == 2];
 
@@ -147,69 +147,69 @@ Until
 
 Def(bucle, 2);
 While [bucle==1]
-[ContinueRight 90]
+[ContinueRight 90;]
 Whend;
 
 While [Equal(var1,2*5)]
-[ContinueRight 90]
+[ContinueRight 90;]
 Whend;
 
 
 
 While [Equal(10,2*5)]
-[ContinueRight 90]
+[ContinueRight 90;]
 Whend;
 
 While [Equal(10,5)]
-[ContinueRight 90]
+[ContinueRight 90;]
 Whend;
 
 While [Equal(var1,2*5)]
-[ContinueRight 90]
+[ContinueRight 90;]
 Whend;
 
 
-While [And(true,true)]
-[ContinueRight 90]
+While [And(TRUE,TRUE)]
+[ContinueRight 90;]
 Whend;
 
 While [And(10>2,2>5)]
-[ContinueRight 90]
+[ContinueRight 90;]
 Whend;
 
 While [And(var1>2,2<5)]
-[ContinueRight 90]
+[ContinueRight 90;]
 Whend;
 
 
 
-While [or(true,true)]
-[ContinueRight 90]
+While [Or(TRUE,TRUE)]
+[ContinueRight 90;]
 Whend;
 
-While [or(10>2,2>5)]
-[ContinueRight 90]
+While [Or(10>2,2>5)]
+[ContinueRight 90;]
 Whend;
 
-While [or(var1>2,2<5)]
-[ContinueRight 90]
+While [Or(var1>2,2<5)]
+[ContinueRight 90;]
 Whend;
 
 While [Greater(10, 2*5)]
-[ContinueRight 90]
+[ContinueRight 90;]
 Whend;
 
 While [Greater(var1,2*5)]
-[ContinueRight 90]
+[ContinueRight 90;]
 Whend;
 
 
 While [Smaller(10, 2*5)]
-[ContinueRight 90]
+[ContinueRight 90;]
 Whend;
 
 While [Smaller(var1,2*5)]
-[ContinueRight 90]
+[ContinueRight 90;]
 Whend;
 
 
@@ -242,11 +242,9 @@ ContinueLeft Sum(var1, var2);
 ];
 End;
 
-
-
 Proc main()
 [
-Principal();
+principal();
 
 ];
 End;

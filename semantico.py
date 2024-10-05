@@ -148,7 +148,6 @@ class AnalizadorSemantico:
             # Si el nodo contiene más subnodos (sentencias), procesarlos también
             for subnodo in nodo[1:]:
                 self.analizar(subnodo, alcance)
-                self.contador_linea += 1
 
             # Verificar si el procedimiento main fue declarado
             if nodo == self.arbol_sintactico and not self.main:
