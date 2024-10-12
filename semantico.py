@@ -595,13 +595,13 @@ class AnalizadorSemantico:
             elif operacion == 'or':
                 result = self.analizar_or(nodo[1], alcance)
             elif operacion == '<' or operacion == '>' or operacion == '==' or operacion == '<=' or operacion == '>=':
-                result = self.verificar_operacion_booleana(nodo[-1], alcance)
-
-            for i in range(len(self.extraer_sentencias(nodo))):
-                sentencia = self.extraer_sentencias(nodo)[i]
-                print("sentencia: ", sentencia)
-                self.analizar(sentencia, alcance)
-            self.analizar_while(nodo, alcance)
+                result = self.verificar_operacion_booleana(nodo[1], alcance)
+            
+            if result:
+                for i in range(len(self.extraer_sentencias(nodo))):
+                    sentencia = self.extraer_sentencias(nodo)[i]
+                    self.analizar(sentencia, alcance)
+                self.analizar_while(nodo, alcance)
 
     def analizar_repeat(self, nodo, alcance):
         operacion = nodo[-1][0]
@@ -1132,17 +1132,18 @@ if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-     //comentario
+      //comentario
     Proc main()
         [
             // Define variable global
             Def(varGlobal1, 1);
             Def(varGlobal2, 2);
-            Repeat
-                [Add(varGlobal1);
-                 Add(varGlobal2);]
-            Until
-                [varGlobal1 == 5];
+            While [varGlobal1 < 10]
+                [
+                Add(varGlobal1, 5);
+                Add(varGlobal2, 10);
+                ]
+            Whend;
         ];
     End;
     '''

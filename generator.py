@@ -44,6 +44,8 @@ class CodeGenerator:
             self.generar_case(nodo)
         elif tipo == 'repeat_until':
             self.generar_repeat_until(nodo)
+        elif tipo == 'while':
+            self.generar_while(nodo)
         elif tipo == 'add_variable_dos' and isinstance(nodo[2], int):
             self.add_variable_dos(nodo)
         elif tipo == 'add_variable_dos' and isinstance(nodo[2], str):
@@ -284,6 +286,59 @@ class CodeGenerator:
 
         # Posicionar en el bloque de salida
         self.builder.position_at_end(bloque_salida)
+    
+    def generar_while(self, nodo):
+        # Nodo tiene la forma ('while', 'condición', 'instrucciones')
+        condicion = nodo[1]
+        instrucciones = nodo[2]
+
+        # Crear el bloque de la condición y el bloque del cuerpo del while
+        bloque_condicion = self.builder.append_basic_block("while_condicion")
+        bloque_cuerpo = self.builder.append_basic_block("while_body")
+        bloque_salida = self.builder.append_basic_block("end_while")
+
+        # Saltar al bloque de la condición
+        self.builder.branch(bloque_condicion)
+
+        # Posicionar en el bloque de la condición
+        self.builder.position_at_end(bloque_condicion)
+
+        # Generar la condición
+        var_nombre = condicion[1]
+        operador = condicion[0]
+        valor_condicion = ir.Constant(ir.IntType(32), 10)  # Suponemos que la comparación es con el valor 10
+        variable = self.variables.get(var_nombre)
+
+        if not variable:
+            print(f"Variable {var_nombre} no encontrada.")
+            return
+
+        valor_variable = self.builder.load(variable, name=f"{var_nombre}_valor")
+
+        # Dependiendo del operador, generar la comparación
+        if operador == '==':
+            comparacion = self.builder.icmp_signed('==', valor_variable, valor_condicion)
+        elif operador == '>':
+            comparacion = self.builder.icmp_signed('>', valor_variable, valor_condicion)
+        elif operador == '<':
+            comparacion = self.builder.icmp_signed('<', valor_variable, valor_condicion)
+        else:
+            raise ValueError(f"Operador {operador} no soportado.")
+
+        # Bifurcar condicionalmente: si la condición es verdadera, vamos al cuerpo, si no, al final
+        self.builder.cbranch(comparacion, bloque_cuerpo, bloque_salida)
+
+        # Posicionar en el bloque del cuerpo
+        self.builder.position_at_end(bloque_cuerpo)
+
+        # Generar las instrucciones dentro del cuerpo del while
+        self.visitar(instrucciones)
+
+        # Al final del cuerpo, saltar de vuelta a la condición
+        self.builder.branch(bloque_condicion)
+
+        # Posicionar en el bloque de salida
+        self.builder.position_at_end(bloque_salida)    
 
 
     def add_variable_dos(self, nodo):
@@ -365,11 +420,12 @@ ast = ('sentencias',
             ('sentencias', 
                 ('def_variable', 'varGlobal1', 1), 
                 ('def_variable', 'varGlobal2', 2), 
-                ('repeat_until', 
+                ('while', 
+                    ('<', 'varGlobal1', 10), 
                     ('sentencias', 
-                        ('add_variable_uno', 'varGlobal1'), 
-                        ('add_variable_uno', 'varGlobal2')), 
-                    ('==', 'varGlobal1', 5)))))
+                        ('add_variable_dos', 'varGlobal1', 5), 
+                        ('add_variable_dos', 'varGlobal2', 10))))))
+
 
 
 # Crear el generador y generar código

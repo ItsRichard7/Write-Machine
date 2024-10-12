@@ -376,12 +376,14 @@ if __name__ == "__main__":
             // Define variable global
             Def(varGlobal1, 1);
             Def(varGlobal2, 2);
-            Sum(varGlobal1, 2)
-            Sum(varGlobal1)
-            Sum(varGlobal1, varGlobal2)
+            While [varGlobal1 < 10]
+                [
+                Add(varGlobal1, 5);
+                Add(varGlobal2, 10);
+                ]
+            Whend;
         ];
     End;
-
     '''
     
     analizar_sintactico(data)
