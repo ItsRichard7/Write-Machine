@@ -147,11 +147,16 @@ Until
 
 Def(bucle, 2);
 While [bucle==1]
-[ContinueRight 90;]
-Whend;
-
-While [Equal(var1,2*5)]
-[ContinueRight 90;]
+[ContinueRight 90;] // Define variable global
+            Def(varGlobal1, 1);
+            Def(varGlobal1, 2);
+            //Llama al procedimiento linea1
+            linea1(); 
+            Put(varGlobal1, TRUE);
+            Add(varGlobal1, TRUE);
+	        posiciona(3,TRUE);
+            //El color es 1
+            UseColor varGlobal1;
 Whend;
 
 
@@ -162,7 +167,16 @@ Whend;
 
 While [Equal(10,5)]
 [ContinueRight 90;]
-Whend;
+Whend;// Define variable global
+            Def(varGlobal1, 1);
+            Def(varGlobal1, 2);
+            //Llama al procedimiento linea1
+            linea1(); 
+            Put(varGlobal1, TRUE);
+            Add(varGlobal1, TRUE);
+	        posiciona(3,TRUE);
+            //El color es 1
+            UseColor varGlobal1;
 
 While [Equal(var1,2*5)]
 [ContinueRight 90;]

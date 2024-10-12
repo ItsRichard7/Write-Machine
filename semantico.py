@@ -1,6 +1,7 @@
 from lexico import errores
 import random
 from PIL import Image, ImageDraw, ImageFont
+from graphviz import Digraph
 
 class AnalizadorSemantico:
     def __init__(self, arbol_sintactico):
@@ -1054,6 +1055,74 @@ class AnalizadorSemantico:
         # Guardar la imagen
         img.save('tabla_simbolos.png')
 
+    def generar_ast(self, nodo, dot=None, padre=None, cont=0):
+        if dot is None:
+            dot = Digraph()
+            dot.attr('node', shape='box')
+
+        # Definir el nodo actual
+        nombre_nodo = f"nodo{cont}"
+        cont += 1
+
+        # Asigna una etiqueta al nodo actual
+        if isinstance(nodo, tuple) and len(nodo) > 0:
+            etiqueta = str(nodo[0])
+        else:
+            etiqueta = str(nodo)
+
+        dot.node(nombre_nodo, etiqueta)
+
+        # Si hay un nodo padre, conecta los nodos
+        if padre is not None:
+            dot.edge(padre, nombre_nodo)
+
+        # Si el nodo tiene hijos (es una tupla), recorre sus subnodos
+        if isinstance(nodo, tuple) and len(nodo) > 1:
+            for hijo in nodo[1:]:
+                dot, cont = self.generar_ast(hijo, dot, nombre_nodo, cont)
+
+        return dot, cont
+    
+    def simplificar_arbol(self,nodo):
+        # Lista de nodos a eliminar
+        nodos_a_eliminar = {"sentencia", "number", "variable"}
+
+        # Si el nodo es una tupla y su primer elemento no está en la lista a eliminar
+        if isinstance(nodo, tuple) and len(nodo) > 0:
+            etiqueta = nodo[0]
+
+            # Si el nodo actual no está en la lista de nodos a eliminar, lo conservamos
+            if etiqueta not in nodos_a_eliminar:
+                # Creamos una nueva tupla con el nodo actual y sus hijos simplificados
+                return (etiqueta,) + tuple(self.simplificar_arbol(hijo) for hijo in nodo[1:])
+            else:
+                # Si el nodo actual debe eliminarse, retornamos directamente los hijos simplificados
+                hijos_simplificados = [self.simplificar_arbol(hijo) for hijo in nodo[1:]]
+                # Aplanar la lista eliminando nodos vacíos y combinando tuplas
+                return self.aplanar(hijos_simplificados)
+        
+        # Si no es una tupla (es una hoja del árbol), lo conservamos
+        return nodo
+
+    def aplanar(self,lista):
+        """
+        Aplana una lista anidada, quitando las tuplas que sean de longitud 1.
+        Esto evita que queden elementos vacíos o tuplas innecesarias.
+        """
+        resultado = []
+        for elem in lista:
+            if isinstance(elem, list):
+                resultado.extend(self.aplanar(elem))
+            elif isinstance(elem, tuple) and len(elem) == 1:
+                resultado.extend(self.aplanar([elem[0]]))
+            else:
+                resultado.append(elem)
+        # Si el resultado tiene un solo elemento, retornamos solo ese elemento, no una lista
+        if len(resultado) == 1:
+            return resultado[0]
+        return tuple(resultado)
+
+
 
 
 
@@ -1063,37 +1132,23 @@ if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-   // Programa de Prueba
-    Proc linea1()
-        [
-            //Define variable local
-            Def(varLocal1, FALSE);
-            PosY varLocal1;
-        ];
-    End;
-
-Proc posiciona(valorX, valorY)
+// Programa de Prueba
+    Proc posiciona(valorX, valorY)
         [
             PosX valorX;
             PosY valorY;
         ];
     End;
 
-Proc main()
+     //comentario
+    Proc main()
         [
             // Define variable global
             Def(varGlobal1, 1);
-            Def(varGlobal1, 2);
-            //Llama al procedimiento linea1
-            linea1(); 
-            Put(varGlobal1, TRUE);
-            Add(varGlobal1, TRUE);
-	        posiciona(3,TRUE);
-            //El color es 1
-            UseColor varGlobal1;
+            //Llama al procedimiento posiciona
+            posiciona(1,1);
         ];
     End;
-
     '''
     
 
@@ -1105,6 +1160,11 @@ Proc main()
     # Crear y ejecutar el analizador semántico
     analizador = AnalizadorSemantico(arbol_sintactico)
     analizador.analizar(arbol_sintactico)
+
+    arbol_simplificado = analizador.simplificar_arbol(arbol_sintactico)
+    print(arbol_simplificado)
+    dot, _ = analizador.generar_ast(arbol_simplificado)
+    dot.render('ast_simplificado', format='png')
    
     #print("Análisis semántico completado correctamente")
     print("Tabla de Símbolos:", analizador.tabla_simbolos)
