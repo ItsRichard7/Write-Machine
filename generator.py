@@ -40,6 +40,8 @@ class CodeGenerator:
             self.invocar_procedimiento(nodo)
         elif tipo == 'for_loop':
             self.generar_for_loop(nodo)
+        elif tipo == 'case':
+            self.generar_case(nodo)
         elif tipo == 'add_variable_dos' and isinstance(nodo[2], int):
             self.add_variable_dos(nodo)
         elif tipo == 'add_variable_dos' and isinstance(nodo[2], str):
@@ -158,6 +160,80 @@ class CodeGenerator:
         # Posicionar el builder en el bloque de salida
         self.builder.position_at_end(fin_bloque)
 
+    def generar_case(self, nodo):
+        # Nodo tiene la forma ('case', 'variable', 'when_cases', 'end_case')
+        var_nombre = nodo[1]
+        when_cases = nodo[2]
+
+        # Cargar la variable que se va a evaluar
+        variable = self.variables.get(var_nombre)
+        if not variable:
+            print(f"Variable {var_nombre} no encontrada.")
+            return
+
+        valor_variable = self.builder.load(variable, name=f"{var_nombre}_valor")
+
+        # Crear el bloque final para después del case
+        bloque_final = self.builder.append_basic_block("end_case")
+
+        # Aplanar los 'when_cases' y procesar los 'when_case'
+        casos = self.recorrer_when_cases(when_cases)
+
+        # Recorrer los when_case procesados
+        for idx, when_case in enumerate(casos):
+            valor_case = when_case[1]
+            cuerpo = when_case[2]
+
+            # Crear el bloque para este caso
+            bloque_caso = self.builder.append_basic_block(f"when_{valor_case}")
+            
+            # Crear el bloque para continuar si no se cumple la condición
+            bloque_siguiente = self.builder.append_basic_block(f"next_{valor_case}")
+            
+            # Comparar la variable con el valor del case
+            condicion = self.builder.icmp_signed('==', valor_variable, ir.Constant(ir.IntType(32), valor_case))
+            self.builder.cbranch(condicion, bloque_caso, bloque_siguiente)
+
+            # Posicionar el builder en el bloque del caso actual
+            self.builder.position_at_end(bloque_caso)
+            self.visitar(cuerpo)  # Visitar las sentencias dentro del when_case
+
+            # Solo agregar branch si el bloque no está ya terminado
+            if not self.builder.block.is_terminated:
+                self.builder.branch(bloque_final)  # Saltar al bloque final al terminar
+
+            # Posicionar el builder en el bloque siguiente (para el próximo when_case)
+            self.builder.position_at_end(bloque_siguiente)
+
+        # Enlazar el último bloque con el bloque final si no está terminado
+        if not self.builder.block.is_terminated:
+            self.builder.branch(bloque_final)
+
+        # Posicionar el builder en el bloque final
+        self.builder.position_at_end(bloque_final)
+
+
+
+
+    def recorrer_when_cases(self, when_cases):
+        # Si es un solo 'when_case', procesarlo directamente
+        if when_cases[0] == 'when_case':
+            return [when_cases]
+        
+        # Si es un 'when_cases', recorrerlo y procesar todos sus elementos
+        casos = []
+        for caso in when_cases[1:]:
+            if caso[0] == 'when_cases':
+                # Recursivamente aplanar los 'when_cases' anidados
+                casos.extend(self.recorrer_when_cases(caso))
+            else:
+                # Añadir el 'when_case' actual
+                casos.append(caso)
+        
+        return casos
+
+
+
     def add_variable_dos(self, nodo):
         # Nodo tiene la forma ('add_variable_dos', 'nombre_variable', valor)
         nombre_var = nodo[1]
@@ -232,7 +308,7 @@ class CodeGenerator:
                 print(f"Variable {valor} no encontrada.")
 
 # Ejemplo de AST de entrada con un for loop
-ast = ('sentencias', ('proc', 'main', ('sentencias', ('def_variable', 'varGlobal1', 1), ('sentencias', ('def_variable', 'varGlobal2', 2), ('sentencias', ('put_variable', 'varGlobal1', 2), ('sentencias', ('put_variable', 'varGlobal2', 4)))))))
+ast = ('sentencias', ('proc', 'main', ('sentencias', ('def_variable', 'varGlobal1', 1), ('sentencias', ('def_variable', 'varGlobal2', 2), ('sentencias', ('def_variable', 'caso', 1), ('sentencias', ('case', 'caso', ('when_cases', ('when_cases', ('when_cases', ('when_case', 1, ('sentencias', ('add_variable_uno', 'varGlobal1')))), ('when_case', 2, ('sentencias', ('add_variable_uno', 'varGlobal2')))), ('when_case', 3, ('sentencias', ('add_variable_uno', 'varGlobal1'), ('sentencias', ('add_variable_uno', 'varGlobal2'))))), ('end_case',))))))))
 
 # Crear el generador y generar código
 generador = CodeGenerator()
