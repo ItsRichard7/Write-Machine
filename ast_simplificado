@@ -3,42 +3,38 @@ digraph {
 	nodo0 [label=sentencias]
 	nodo1 [label=proc]
 	nodo0 -> nodo1
-	nodo2 [label=posiciona]
+	nodo2 [label=main]
 	nodo1 -> nodo2
-	nodo3 [label="['valorX', 'valorY']"]
+	nodo3 [label=sentencias]
 	nodo1 -> nodo3
-	nodo4 [label=sentencias]
-	nodo1 -> nodo4
-	nodo5 [label=posx]
+	nodo4 [label=def_variable]
+	nodo3 -> nodo4
+	nodo5 [label=varGlobal1]
 	nodo4 -> nodo5
-	nodo6 [label=valorX]
-	nodo5 -> nodo6
+	nodo6 [label=1]
+	nodo4 -> nodo6
 	nodo7 [label=sentencias]
-	nodo4 -> nodo7
-	nodo8 [label=posy]
+	nodo3 -> nodo7
+	nodo8 [label=def_variable]
 	nodo7 -> nodo8
-	nodo9 [label=valorY]
+	nodo9 [label=varGlobal2]
 	nodo8 -> nodo9
-	nodo10 [label=sentencias]
-	nodo0 -> nodo10
-	nodo11 [label=proc]
-	nodo10 -> nodo11
-	nodo12 [label=main]
+	nodo10 [label=2]
+	nodo8 -> nodo10
+	nodo11 [label=sentencias]
+	nodo7 -> nodo11
+	nodo12 [label=put_variable]
 	nodo11 -> nodo12
-	nodo13 [label=sentencias]
-	nodo11 -> nodo13
-	nodo14 [label=def_variable]
-	nodo13 -> nodo14
-	nodo15 [label=varGlobal1]
-	nodo14 -> nodo15
-	nodo16 [label=1]
-	nodo14 -> nodo16
-	nodo17 [label=sentencias]
-	nodo13 -> nodo17
-	nodo18 [label=invocacion_proc]
-	nodo17 -> nodo18
-	nodo19 [label=posiciona]
-	nodo18 -> nodo19
-	nodo20 [label="[('number', 1), ('number', 1)]"]
-	nodo18 -> nodo20
+	nodo13 [label=varGlobal1]
+	nodo12 -> nodo13
+	nodo14 [label=2]
+	nodo12 -> nodo14
+	nodo15 [label=sentencias]
+	nodo11 -> nodo15
+	nodo16 [label=put_variable]
+	nodo15 -> nodo16
+	nodo17 [label=varGlobal2]
+	nodo16 -> nodo17
+	nodo18 [label=4]
+	nodo16 -> nodo18
 }

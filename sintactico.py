@@ -371,16 +371,16 @@ if __name__ == "__main__":
 
     data = '''
      //comentario
-    // Prueba para la funcionalidad Repeat-Until
-Proc main()[
-    Def(bucle,1);
-    Repeat
-        [ContinueRight 90;
-        Add(bucle);]
-    Until
-        [bucle == 2];
-    ];
-End;
+    Proc main()
+        [
+            // Define variable global
+            Def(varGlobal1, 1);
+            Def(varGlobal2, 2);
+            Sum(varGlobal1, 2)
+            Sum(varGlobal1)
+            Sum(varGlobal1, varGlobal2)
+        ];
+    End;
 
     '''
     

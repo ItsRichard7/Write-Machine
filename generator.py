@@ -34,8 +34,18 @@ class CodeGenerator:
             self.generar_procedimiento(nodo)
         elif tipo == 'def_variable':
             self.definir_variable(nodo)
+        elif tipo == 'put_variable':
+            self.put_variable(nodo)
         elif tipo == 'invocacion_proc':
             self.invocar_procedimiento(nodo)
+        elif tipo == 'for_loop':
+            self.generar_for_loop(nodo)
+        elif tipo == 'add_variable_dos' and isinstance(nodo[2], int):
+            self.add_variable_dos(nodo)
+        elif tipo == 'add_variable_dos' and isinstance(nodo[2], str):
+            self.add_variable_dos_var(nodo)
+        elif tipo == 'add_variable_uno':
+            self.add_variable_uno(nodo)
         elif tipo == 'posx':
             self.generar_posx(nodo)
         elif tipo == 'posy':
@@ -43,28 +53,19 @@ class CodeGenerator:
         else:
             print(f"Tipo de nodo no manejado: {tipo}")
 
+
     def generar_procedimiento(self, nodo):
         nombre = nodo[1]
-        argumentos = nodo[2] if isinstance(nodo[2], list) else []
-        cuerpo = nodo[3] if len(nodo) > 3 else nodo[2]
+        cuerpo = nodo[2] if len(nodo) > 3 else nodo[2]
 
-        # Crear la función LLVM con argumentos
-        tipo_args = [ir.IntType(32)] * len(argumentos)
-        tipo_funcion = ir.FunctionType(ir.VoidType(), tipo_args)
+        # Crear la función LLVM sin argumentos
+        tipo_funcion = ir.FunctionType(ir.VoidType(), [])
         funcion = ir.Function(self.module, tipo_funcion, name=nombre)
         self.funciones[nombre] = funcion
 
         # Crear un bloque básico para el cuerpo de la función
         bloque = funcion.append_basic_block(name="entrada")
         self.builder = ir.IRBuilder(bloque)
-
-        # Definir los argumentos como variables locales
-        for i, arg in enumerate(funcion.args):
-            arg_name = argumentos[i]
-            arg.name = arg_name
-            var_local = self.builder.alloca(ir.IntType(32), name=arg_name)
-            self.builder.store(arg, var_local)
-            self.variables[arg_name] = var_local
 
         # Visitar el cuerpo de la función
         self.visitar(cuerpo)
@@ -82,6 +83,20 @@ class CodeGenerator:
         self.variables[nombre] = variable
 
         print(f"Definiendo variable {nombre} con valor {valor}")
+
+    def put_variable(self, nodo):
+        # Nodo tiene la forma ('put_variable', 'nombre_variable', nuevo_valor)
+        nombre_var = nodo[1]
+        nuevo_valor = nodo[2]
+        
+        # Buscar la variable en la tabla de variables
+        variable = self.variables.get(nombre_var)
+        if variable:
+            # Almacenar el nuevo valor en la variable
+            self.builder.store(ir.Constant(ir.IntType(32), nuevo_valor), variable)
+            print(f"Cambiando el valor de {nombre_var} a {nuevo_valor}")
+        else:
+            print(f"Variable {nombre_var} no encontrada.")
 
     def invocar_procedimiento(self, nodo):
         nombre_proc = nodo[1]
@@ -104,32 +119,120 @@ class CodeGenerator:
         else:
             print(f"Procedimiento {nombre_proc} no encontrado.")
 
+    def generar_for_loop(self, nodo):
+        var_nombre = nodo[1]
+        inicio = nodo[2]
+        fin = nodo[3]
+        cuerpo = nodo[4]
+
+        # Inicializar la variable de control (var1)
+        var = self.builder.alloca(ir.IntType(32), name=var_nombre)
+        self.builder.store(ir.Constant(ir.IntType(32), inicio), var)
+        self.variables[var_nombre] = var
+
+        # Crear bloques para el loop
+        cond_bloque = self.builder.append_basic_block("condicion")
+        cuerpo_bloque = self.builder.append_basic_block("cuerpo")
+        fin_bloque = self.builder.append_basic_block("fin_loop")
+
+        # Saltar al bloque de condición
+        self.builder.branch(cond_bloque)
+        self.builder.position_at_end(cond_bloque)
+
+        # Cargar la variable y verificar la condición (var <= fin)
+        var_valor = self.builder.load(var, name=f"{var_nombre}_temp")
+        cond = self.builder.icmp_signed('<', var_valor, ir.Constant(ir.IntType(32), fin))
+        self.builder.cbranch(cond, cuerpo_bloque, fin_bloque)
+
+        # Bloque del cuerpo del loop
+        self.builder.position_at_end(cuerpo_bloque)
+        self.visitar(cuerpo)  # Visitar el cuerpo del bucle
+
+        # Incrementar la variable de control
+        incremento = self.builder.add(var_valor, ir.Constant(ir.IntType(32), 1))
+        self.builder.store(incremento, var)
+
+        # Saltar de nuevo al bloque de condición
+        self.builder.branch(cond_bloque)
+
+        # Posicionar el builder en el bloque de salida
+        self.builder.position_at_end(fin_bloque)
+
+    def add_variable_dos(self, nodo):
+        # Nodo tiene la forma ('add_variable_dos', 'nombre_variable', valor)
+        nombre_var = nodo[1]
+        valor = nodo[2]
+        
+        # Cargar el valor actual de la variable
+        variable = self.variables.get(nombre_var)
+        if variable:
+            valor_actual = self.builder.load(variable, name=f"{nombre_var}_actual")
+            suma = self.builder.add(valor_actual, ir.Constant(ir.IntType(32), valor))
+            self.builder.store(suma, variable)
+            print(f"Suma de {valor} a {nombre_var}")
+        else:
+            print(f"Variable {nombre_var} no encontrada.")
+
+    def add_variable_dos_var(self, nodo):
+        # Nodo tiene la forma ('add_variable_dos', 'nombre_variable1', 'nombre_variable2')
+        nombre_var1 = nodo[1]
+        nombre_var2 = nodo[2]
+        
+        # Cargar el valor actual de las dos variables
+        variable1 = self.variables.get(nombre_var1)
+        variable2 = self.variables.get(nombre_var2)
+        
+        if variable1 and variable2:
+            valor_actual1 = self.builder.load(variable1, name=f"{nombre_var1}_actual")
+            valor_actual2 = self.builder.load(variable2, name=f"{nombre_var2}_actual")
+            suma = self.builder.add(valor_actual1, valor_actual2)
+            self.builder.store(suma, variable1)
+            print(f"Suma del valor de {nombre_var2} a {nombre_var1}")
+        else:
+            print(f"Una de las variables no fue encontrada.")
+    
+    def add_variable_uno(self, nodo):
+        # Nodo tiene la forma ('add_variable_uno', 'nombre_variable')
+        nombre_var = nodo[1]
+        
+        # Cargar el valor actual de la variable
+        variable = self.variables.get(nombre_var)
+        if variable:
+            valor_actual = self.builder.load(variable, name=f"{nombre_var}_actual")
+            suma = self.builder.add(valor_actual, ir.Constant(ir.IntType(32), 1))
+            self.builder.store(suma, variable)
+            print(f"Suma de 1 a {nombre_var}")
+        else:
+            print(f"Variable {nombre_var} no encontrada.")
+
+
+
     def generar_posx(self, nodo):
         valor = nodo[1]
-        variable = self.variables.get(valor)
-        if variable:
-            valor_posx = self.builder.load(variable, name="posx_temp")
-            print(f"Generando PosX con valor de la variable {valor}")
+        if isinstance(valor, int):
+            print(f"Generando PosX con valor {valor}")
         else:
-            print(f"Variable {valor} no encontrada.")
+            variable = self.variables.get(valor)
+            if variable:
+                valor_posx = self.builder.load(variable, name="posx_temp")
+                print(f"Generando PosX con valor de la variable {valor}")
+            else:
+                print(f"Variable {valor} no encontrada.")
 
     def generar_posy(self, nodo):
         valor = nodo[1]
-        variable = self.variables.get(valor)
-        if variable:
-            valor_posy = self.builder.load(variable, name="posy_temp")
-            print(f"Generando PosY con valor de la variable {valor}")
+        if isinstance(valor, int):
+            print(f"Generando PosY con valor {valor}")
         else:
-            print(f"Variable {valor} no encontrada.")
+            variable = self.variables.get(valor)
+            if variable:
+                valor_posy = self.builder.load(variable, name="posy_temp")
+                print(f"Generando PosY con valor de la variable {valor}")
+            else:
+                print(f"Variable {valor} no encontrada.")
 
-# Ejemplo de AST de entrada
-ast = ('sentencias', 
-        ('proc', 'posiciona', ['valorX', 'valorY'], 
-            ('sentencias', ('posx', 'valorX'), 
-            ('sentencias', ('posy', 'valorY')))),
-        ('sentencias', ('proc', 'main', 
-            ('sentencias', ('def_variable', 'varGlobal1', 1), 
-            ('sentencias', ('invocacion_proc', 'posiciona', [('number', 1), ('number', 1)]))))))
+# Ejemplo de AST de entrada con un for loop
+ast = ('sentencias', ('proc', 'main', ('sentencias', ('def_variable', 'varGlobal1', 1), ('sentencias', ('def_variable', 'varGlobal2', 2), ('sentencias', ('put_variable', 'varGlobal1', 2), ('sentencias', ('put_variable', 'varGlobal2', 4)))))))
 
 # Crear el generador y generar código
 generador = CodeGenerator()
