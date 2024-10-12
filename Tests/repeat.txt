@@ -1,0 +1,11 @@
+// Prueba para la funcionalidad Repeat-Until
+Proc main()
+    Def(bucle,1);
+    [
+    Repeat
+        [ContinueRight 90;
+        Add(bucle);]
+    Until
+        [bucle == 2];
+    ];
+End;

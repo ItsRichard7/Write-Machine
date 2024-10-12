@@ -1,0 +1,328 @@
+
+
+Proc linea1 		//Error 1:  siempre después del nombre debe llevar paréntesis redondos
+[ 		
+//Define variable local 		
+Def(varLocal1, 1); 		
+PosY varLocal1; 		
+]; 		
+end; 		        //Error 2:  En la primer linea tiene que haber un mensaje
+		
+Proc linea1() 		//Error 3: Un procedimiento difiere de otro procedimiento por el nombre de este y los parámetros que conte
+[ 		
+Def(varLocal1, 1); 		
+PosY varLocal1; 		
+]; 		
+end; 		
+		
+Proc linea3(varLocal2 varLocal3) 		//Error 4: Los parametros deben estar separados por coma
+[ 		
+Def(varLocal1, 1); 		
+PosY varLocal1 + varLocal2; 		
+]; 		
+end; 		
+		
+		
+Proc linea4(varLocal2, varLocal3) 		
+[ 		
+Def(varLocal2, 1); 	  	//Error 5: No se debe definir una variable con mismo nombre de un parametro
+call lineaX();		        //Error 6: La rutina lineaX no existe
+]; 		
+end; 		
+		
+Proc linea4(varLocal2, varLocal3) 		
+Def(varLocal2, 1); 		//Error 7: El cuerpo del procedimiento debe estar entre parentesis cuadrado
+call lineaX();		
+end; 		
+		
+Proc linea5(varLocal2, varLocal3) 		
+[ 		
+Def(varLocal000, 1); 		//Error 8: Tamaño máximo de identificadores es de 10
+Def(va, 1); 		//Error 9: Tamaño mínimo de identificadores es de 3
+Def(VARIABLE, 1); 		//Error 10: Debe iniciar siempre con minuscula
+Def(5var1, 1); 		//Error 11: Debe iniciar siempre con minuscula
+Def(v#Dato&1, 1); 		//Error 12: Los simbolos especiales son solamente @ y _
+]; 		
+end; 		
+		
+		
+		
+		
+		
+Proc principal() 		
+[ 		
+		
+		
+		
+Def(variable4);		//Error 13: Debe tener un valor para determinar el tipo de datos
+		
+Def(variable1, 5); 		
+Def(variable1, 4); 		//Error 14:  Variable ya esta definida
+Def(variable1, TRUE); 		//Error 15:  Variable ya esta definida
+		
+DEF(miVar2, 2);		
+PUT(miVar2, TRUE); 		//Error 16: Error Semántico
+		
+DEF(miVar3, TRUE);		
+PUT(miVar3, 1); 		//Error 17: Error Semántico
+		
+		
+DEF(var4, 2);DEF(var5, FALSE);		
+ADD(4); 		        //Error 18: Se aumenta solo a variables
+ADD(var, TRUE); 		//Error 19: No se puede aumentar con TRUE
+ADD(var4, var5); 		//Error 20: No se puede aumentar con TRUE
+ADD(var5); 		        //Error 21: No se puede aumentar con TRUE
+		
+		
+ContinueUp TRUE; 		//Error 22: Solo permite valores numericos
+ContinueUp 5*FALSE; 		//Error 23: Solo permite valores numericos
+ContinueUp var5; 		//Error 24: Solo permite valores numericos
+ContinueUp; 		        //Error 25: Necesita un valor numerico
+		
+ContinueDown TRUE; 		//Error 26: Solo permite valores numericos
+ContinueDown 5*FALSE; 		//Error 27: Solo permite valores numericos
+ContinueDown var5; 		//Error 28: Solo permite valores numericos
+ContinueDown; 		        //Error 29: Necesita un valor numerico
+		
+		
+ContinueRight TRUE; 		//Error 30: Solo permite valores numericos
+ContinueRight 5*FALSE; 		//Error 31: Solo permite valores numericos
+ContinueRight var5; 		//Error 32: Solo permite valores numericos
+ContinueRight; 		        //Error 33: Necesita un valor numerico
+		
+ContinueLeft TRUE; 		//Error 34: Solo permite valores numericos
+ContinueLeft 5*FALSE; 		//Error 35 : Solo permite valores numericos
+ContinueLeft var5; 		//Error 36: Solo permite valores numericos
+ContinueLeft; 		//Error 37: Necesita un valor numerico
+		
+Pos(100); 		//Error 38: Requiere dos parametros
+Pos(var1); 		//Error 39: Requiere dos parametros
+Pos(var5); 		//Error 40: Requiere dos parametros Numericos
+Pos(var5,100); 		//Error 41: No permite booleanos
+Pos(100, var5); 		//Error 42: No permite booleanos
+Pos(TRUE, FALSE); 		//Error 43: No permite booleanos
+		
+PosX; 		//Error 44: Necesita parametro
+PosX variableX; 	//Error 45: Variable No existe
+PosX var5; 		//Error 46: No permite booleanos
+		
+		
+PosY; 		//Error 47: Necesita parametro
+PosY variableX; 	//Error 48: Variable No existe
+PosY var5; 		//Error 49: No permite booleanos
+		
+UseColor 3; 		//Error 50:  Valor no permitido
+		
+		
+		
+Down 5; 		//Error 51:  Demasiados valores
+Down var1; 		//Error 52:  Demasiados valores
+Down var5; 		//Error 53:  Demasiados valores
+		
+Up 5; 			//Error 54:  Demasiados valores
+Up var1; 		//Error 55:  Demasiados valores
+Up var5; 		//Error 56:  Demasiados valores
+		
+		
+Beginning 5; 		//Error 57:  Demasiados valores
+Beginning var1; 	//Error 58:  Demasiados valores
+Beginning var5; 	//Error 59:  Demasiados valores
+		
+		
+DEF(var6, 2);		
+For var6(1 to 5) Loop 		//Error 60: Variable ya existe
+[PoxY Add(var2, var1); 		
+ContinueRight 9;] 		
+End Loop; 		
+		
+For var7 Loop 		//Error 61:  Error sintaxis
+[PoxY Add(var2, var1); 		
+ContinueRight 9;] 		
+End Loop; 		
+		
+For var8(5 to 1) Loop 		//Error 62: Max debe ser mayor a Min sino se debe generar un error.
+[PoxY Add(var2, var1); 		
+ContinueRight 9;] 		
+End Loop; 		
+		
+For var9(1 to 5) 		//Error 63:  Error sintaxis
+[PoxY Add(var2, var1); 		
+ContinueRight 9;] 		
+End Loop; 		
+		
+For var10(1 to 5) Loop 		//Error 64:  Error sintaxis
+[PoxY Add(var2, var1); 		
+ContinueRight 9;] ;		
+		
+		
+Case var1 		
+When 1 Then 		
+When 2 Then 		//Error 65: Error Sintaxis
+[ Add(var2, 1) ] 		
+When 3 Then 		
+[ Add(variale3, 1) ] 		
+End case; 		
+		
+		
+		
+Case var5 		//Error 66: Error Sintaxis
+Else 		
+[ Add(var, 1) ] 		
+When True Then 		
+[ Add(var2, 1); ] 		
+End case; 		
+		
+		
+Case var1 		//Error 67: Error Sintaxis
+When 1 		
+[ Add(var1, 1); ] 		
+End case; 		
+		
+Case var1 		
+When 1 Then		
+[ Add(1, 1); ] 		//Error 68: Se espera una variable
+End case; 		
+		
+Repeat 			//Error 69: Error Sintaxis
+Until 		
+[bucle = 2]; 		
+		
+Repeat 			//Error 70: Error Sintaxis
+[TurnRight 90] 		
+Until 		
+[False]; 		
+		
+Repeat 		
+[TurnRight 90] 		
+Until 		
+[bucleXYZ = 2]; 		//Error 71: Variable no definida
+		
+Repeat 		
+[TurnRight var5] 		//Error 72: Espera numeros
+Until 		
+[bucle = 2]; 		
+		
+		
+While 				//Error 73: Error Sintaxis
+[TurnRight 90] 		
+Whend; 		
+		
+		
+While [bucle=1] 		
+[TurnRight] 		  //Error 74: Falta dato numerico
+Whend; 		
+		
+		
+While [bucleXYZ=1] 		//Error 75: Variable no definida
+[TurnRight] 		
+Whend; 		
+		
+		
+Equal(10,2*5); 		
+		
+		
+		
+While [Equal() ] 		//Error 76: Error Sintaxis
+[TurnRight 90] 		
+Whend; 		
+		
+While [Equal(10) ] 		//Error 77:  Faltan parametros
+[TurnRight 90] 		
+Whend; 		
+		
+While [Equal(var5,2*5) ] 	//Error 78:  Valores booleanos no permitidos
+[TurnRight 90] 		
+Whend; 		
+		
+		
+		
+While [And(true,5) ] 		//Error 79: Datos incompatibles
+[TurnRight 90] 		
+Whend; 		
+		
+While [And(true) ] 		//Error 80: Error Sintaxis
+[TurnRight 90] 		
+Whend; 		
+		
+While [And(true,true, False) ] 		//Error 81: Error en parametros
+[TurnRight 90] 		
+Whend; 		
+		
+		
+		
+		
+While [or(true,5) ] 		//Error 82: Datos incompatibles
+[TurnRight 90] 		
+Whend; 		
+		
+While [or(true) ] 		//Error 83: Error Sintaxis
+[TurnRight 90] 		
+Whend; 		
+		
+While [or(true,true, False) ] 		//Error 84: Error en parametros
+[TurnRight 90] 		
+Whend; 		
+		
+While [Greater(True, 2*5) ] 		//Error 85:  No se aceptan booleanos
+[TurnRight 90] 		
+Whend; 		
+		
+While [Greater(var5,2*5) ] 		//Error 86:  No se aceptan booleanos
+[TurnRight 90] 		
+Whend; 		
+		
+While [Greater(10) ] 			//Error 87: Error Sintaxis
+[TurnRight 90] 		
+Whend; 		
+		
+		
+While [Smaller(True, 2*5) ] 		//Error 88:  No se aceptan booleanos
+[TurnRight 90] 		
+Whend; 		
+		
+While [Smaller(var5,2*5) ] 		//Error 89:  No se aceptan booleanos
+[TurnRight 90] 		
+Whend; 		
+		
+While [Smaller(10) ] 			//Error 90: Error Sintaxis
+[TurnRight 90] 		
+Whend; 		
+		
+		
+TurnLeft Substr(45, 100); 		//Error 91: N1 siempre debe ser mayor o igual a N2,
+		
+TurnLeft Substr(var5, 45); 		//Error 92:  No se aceptan booleanos
+		
+TurnLeft Substr(45, False); 		//Error 93:  No se aceptan booleanos
+		
+		
+TurnLeft Random(True); 		//Error 94:  No se aceptan booleanos
+		
+TurnLeft Random(); 		//Error 95:  Error Sintaxis
+		
+TurnLeft Random(var5); 		//Error 96:  No se aceptan booleanos
+		
+		
+		
+TurnLeft Mult(var5, 45); 		//Error 97:  No se aceptan booleanos
+		
+TurnLeft Mult(45, False); 		//Error 98:  No se aceptan booleanos
+		
+		
+		
+		
+TurnLeft Div(var5, 45); 		//Error 99:  No se aceptan booleanos
+		
+TurnLeft Div(45, False); 		//Error 100:  No se aceptan booleanos
+		
+		
+TurnLeft Sum(var5, 45); 		//Error 101:  No se aceptan booleanos
+		
+TurnLeft Sum(45, False); 		//Error 102:  No se aceptan booleanos
+		
+		
+]; 		
+end; 		
+		
+		
+		//Error 103:  Todo programa debe tener un procedimiento Main

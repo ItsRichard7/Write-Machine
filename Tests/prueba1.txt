@@ -1,0 +1,51 @@
+// Programa de Prueba
+    Proc linea1()
+        [
+            //Define variable local
+            Def(varLocal1, 1);
+            PosY varLocal1;
+        ];
+    End;
+
+    Proc posiciona(valorX, valorY)
+        [
+            PosX valorX;
+            PosY valorY;
+        ];
+    End;
+
+    Proc impCruz(varx, vary)
+        [
+            Down;
+            Pos(varx,vary);
+            For var1(1 to 11) Loop
+                [PosY 6;
+                ContinueRight 9;]
+            End Loop;
+            Up; 
+            PosX Substr(varx, 6);
+            PosY Substr(vary, 5);
+            Down;
+            For var2(1 to 5) Loop
+                [PosY 5;
+                ContinueRight 9;]
+            End Loop;
+            Up;
+            Beginning;
+        ];
+    End;
+     //comentario
+    Proc main()
+        [
+            // Define variable global
+            Def(varGlobal1, 1);
+            //Llama al procedimiento linea1
+            linea1();
+            //Llama al procedimiento posiciona
+            posiciona(1,1);
+            //El color es 1
+            UseColor varGlobal1;
+            //Llama al procedimiento para dibujar una Cruz
+            impCruz(5,5);
+        ];
+    End;

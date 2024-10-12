@@ -1,0 +1,264 @@
+// Este es un programa correcto
+
+Proc linea1()
+[
+//Define variable local
+Def(varLocal1, 1);
+PosY varLocal1;
+];
+End;
+
+Proc linea2()
+[
+Def(varLocal1, 1);
+PosY varLocal1;
+];
+End;
+
+Proc linea3(varLocal2)
+[
+Def(varLocal1, 1);
+PosY varLocal1 + varLocal2;
+];
+End;
+
+
+Proc linea4(varLocal2, varLocal3)
+[
+Def(varLocal1, 1);
+linea3(varLocal1);
+linea2();
+];
+End;
+
+
+
+Proc linea5(varLocal2, varLocal3)
+[
+Def(varLocal00, 1);
+Def(var, 1);
+Def(varIABLE, 1);
+Def(var1, 1);
+Def(v@Dato_1, 1);
+];
+End;
+
+
+
+Proc principal()
+[
+
+Def(var1, 5);
+Def(variable3,TRUE);
+
+
+Def(miVar, 2);
+Put(miVar, 100);
+Put(miVar, Substr(100, 45));
+
+
+Def(var, 2);Def(var3, 1);
+Add(var);
+Add(var, 5);
+Add(var, var3);
+
+
+
+ContinueUp 10; 
+ContinueUp 5*3;
+ContinueUp var1;
+
+
+ContinueDown 10; 
+ContinueDown 5*3;
+ContinueDown var1;
+
+
+
+ContinueRight 10; 
+ContinueRight 5*3;
+ContinueRight var1;
+
+
+ContinueLeft 10; 
+ContinueLeft 5*3;
+ContinueLeft var1;
+
+
+Pos(100,0);
+Pos(var1,0);
+Pos(100,var1);
+Pos(var1,var1);
+Pos(var1,var1+10);
+
+
+PosX 100;
+PosX var1;
+PosX var1+1;
+
+
+PosY 100;
+PosY var1;
+PosY var1+1;
+
+UseColor 1;
+UseColor 2;
+
+
+Down;
+
+Up;
+
+
+Beginning;
+
+
+For var6(1 to 5) Loop
+[PosY Add(var2, var1);
+ContinueRight 9;]
+End Loop;
+
+
+Case var1
+When 1 Then
+[ Add(var1, 1); ]
+When 2 Then
+[ Add(var2, 1); ]
+When 3 Then
+[ Add(variale3, 1); ]
+End Case;
+
+
+Case var5
+When TRUE Then
+[ Add(var2, 1); ]
+Else
+[ Add(var, 1); ]
+End Case;
+
+
+
+Repeat
+[ContinueRight 90;]
+Until
+[bucle == 2];
+
+
+
+Def(bucle, 2);
+While [bucle==1]
+[ContinueRight 90;] // Define variable global
+            Def(varGlobal1, 1);
+            Def(varGlobal1, 2);
+            //Llama al procedimiento linea1
+            linea1(); 
+            Put(varGlobal1, TRUE);
+            Add(varGlobal1, TRUE);
+	        posiciona(3,TRUE);
+            //El color es 1
+            UseColor varGlobal1;
+Whend;
+
+
+
+While [Equal(10,2*5)]
+[ContinueRight 90;]
+Whend;
+
+While [Equal(10,5)]
+[ContinueRight 90;]
+Whend;// Define variable global
+            Def(varGlobal1, 1);
+            Def(varGlobal1, 2);
+            //Llama al procedimiento linea1
+            linea1(); 
+            Put(varGlobal1, TRUE);
+            Add(varGlobal1, TRUE);
+	        posiciona(3,TRUE);
+            //El color es 1
+            UseColor varGlobal1;
+
+While [Equal(var1,2*5)]
+[ContinueRight 90;]
+Whend;
+
+
+While [And(TRUE,TRUE)]
+[ContinueRight 90;]
+Whend;
+
+While [And(10>2,2>5)]
+[ContinueRight 90;]
+Whend;
+
+While [And(var1>2,2<5)]
+[ContinueRight 90;]
+Whend;
+
+
+
+While [Or(TRUE,TRUE)]
+[ContinueRight 90;]
+Whend;
+
+While [Or(10>2,2>5)]
+[ContinueRight 90;]
+Whend;
+
+While [Or(var1>2,2<5)]
+[ContinueRight 90;]
+Whend;
+
+While [Greater(10, 2*5)]
+[ContinueRight 90;]
+Whend;
+
+While [Greater(var1,2*5)]
+[ContinueRight 90;]
+Whend;
+
+
+While [Smaller(10, 2*5)]
+[ContinueRight 90;]
+Whend;
+
+While [Smaller(var1,2*5)]
+[ContinueRight 90;]
+Whend;
+
+
+
+ContinueLeft Substr(100, 45);
+ContinueLeft Substr(var1, 45);
+ContinueLeft Substr(var1, var2);
+
+
+ContinueLeft Random(360);
+
+ContinueLeft Random(var1);
+
+
+ContinueLeft Mult(2,5);
+ContinueLeft Mult(2,Mult(5,3) );
+ContinueLeft Mult(var1, var2);
+
+
+ContinueLeft Div(12, 4);
+ContinueLeft Div(var1, 4);
+ContinueLeft Div(var1, var2);
+
+
+ContinueLeft Sum(12, 4);
+ContinueLeft Sum(var1, 4);
+ContinueLeft Sum(var1, var2);
+
+
+];
+End;
+
+Proc main()
+[
+principal();
+
+];
+End;

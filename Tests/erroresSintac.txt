@@ -1,0 +1,30 @@
+// Codigo para mostrar errores sintactico
+Proc linea1()
+        [
+            //Define variable local
+            Def(varLocal1, FALSE);
+            PosY varLocal1;
+        ];
+    End;
+
+Proc posiciona(valorX, valorY)
+        [
+            PosX valorX;
+            PosY valorY;
+        ];
+    End;
+
+Proc main()
+        [
+            // Define variable global
+            Def(varGlobal1, 1);
+            Def(varGlobal1, 2);
+            //Llama al procedimiento linea1
+            linea1(); 
+            Put(varGlobal1, TRUE);
+            Add(varGlobal1, TRUE);
+	        posiciona(3,TRUE);
+            //El color es 1
+            UseColor varGlobal1;
+        ];
+    End;

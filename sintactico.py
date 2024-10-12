@@ -1,6 +1,4 @@
-import sys
-sys.path.append('./Analizador_lexico')  # Ajustar según la estructura de carpetas
-from lexico import tokens  # Importamos los tokens definidos
+from lexico import tokens, errores  # Importamos los tokens definidos
 import ply.yacc as yacc
 import pydot
 
@@ -8,12 +6,12 @@ import pydot
 
 # Definir sentencias múltiples
 def p_sentencias(p):
-    '''sentencias : sentencia sentencias
-                  | sentencia'''
-    if len(p) == 3:
-        p[0] = ('sentencias', p[1], p[2])
+    '''sentencias : sentencia
+                  | sentencia sentencias'''
+    if len(p) == 2:
+        p[0] = ('sentencias', p[1])  # Crear lista de una sola sentencia
     else:
-        p[0] = ('sentencias', p[1])
+        p[0] = ('sentencias', p[1], p[2])  # Concatenar listas de sentencias
 
 # Definir una sentencia que puede ser cualquier instrucción válida
 def p_sentencia(p):
@@ -44,7 +42,9 @@ def p_sentencia(p):
                  | random
                  | mult
                  | div
-                 | sum'''
+                 | sum
+                 | proc 
+                 | invocacion_proc'''
     p[0] = ('sentencia', p[1])
 
 # 2. Reglas más específicas
@@ -120,7 +120,7 @@ def p_beginning(p):
 # 2.9. Sentencia FOR-LOOP
 def p_for_loop(p):
     '''for_loop : FOR VARIABLE PARIZQ valor TO valor PARDER LOOP BRAIZQ sentencias BRADER END LOOP PUNTOCOMA'''
-    p[0] = ('for_loop', p[2], p[4], p[6], p[9])
+    p[0] = ('for_loop', p[2], p[4], p[6], p[10])
 
 # 2.10. Sentencia CASE-WHEN
 def p_case(p):
@@ -142,32 +142,36 @@ def p_when_case(p):
 def p_end_case(p):
     '''end_case : ELSE BRAIZQ sentencias BRADER END CASE PUNTOCOMA
                 | END CASE PUNTOCOMA'''
-    if len(p) == 8:
+    if len(p) == 8:  # Caso con ELSE
         p[0] = ('end_case', p[3])
-    else:
+    else:  # Caso sin ELSE
         p[0] = ('end_case',)
+
 
 # 2.11. Sentencia REPEAT-UNTIL
 def p_repeat_until(p):
-    '''repeat_until : REPEAT BRAIZQ sentencias BRADER UNTIL PARIZQ condicion PARDER PUNTOCOMA'''
+    '''repeat_until : REPEAT BRAIZQ sentencias BRADER UNTIL BRAIZQ condicion BRADER PUNTOCOMA'''
     p[0] = ('repeat_until', p[3], p[7])
 
 # 2.12. Sentencia WHILE-WHEND
 def p_while(p):
-    '''while : WHILE PARIZQ condicion PARDER BRAIZQ sentencias BRADER WHEND PUNTOCOMA'''
+    '''while : WHILE BRAIZQ condicion BRADER BRAIZQ sentencias BRADER WHEND PUNTOCOMA'''
     p[0] = ('while', p[3], p[6])
 
 # 2.13. Funciones: Equal, And, Or, Greater, Smaller
 def p_equal(p):
-    '''equal : EQUAL PARIZQ valor COMA valor PARDER'''
+    '''equal : EQUAL PARIZQ valor COMA valor PARDER
+             | EQUAL PARIZQ condicion COMA condicion PARDER'''
     p[0] = ('equal', p[3], p[5])
 
 def p_and(p):
-    '''and : AND PARIZQ valor COMA valor PARDER'''
+    '''and : AND PARIZQ valor COMA valor PARDER
+           | AND PARIZQ condicion COMA condicion PARDER'''
     p[0] = ('and', p[3], p[5])
 
 def p_or(p):
-    '''or : OR PARIZQ valor COMA valor PARDER'''
+    '''or : OR PARIZQ valor COMA valor PARDER
+          | OR PARIZQ condicion COMA condicion PARDER'''
     p[0] = ('or', p[3], p[5])
 
 def p_greater(p):
@@ -199,6 +203,42 @@ def p_sum(p):
     '''sum : SUM PARIZQ valor COMA valor PARDER'''
     p[0] = ('sum', p[3], p[5])
 
+# 2.15. Definir un procedimiento (Proc)
+def p_proc(p):
+    '''proc : PROC VARIABLE PARIZQ lista_parametros PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA
+            | PROC VARIABLE PARIZQ PARDER BRAIZQ sentencias BRADER PUNTOCOMA END PUNTOCOMA'''
+    if len(p) == 12:  # Caso sin parámetros
+        p[0] = ('proc', p[2], p[4], p[7])  # p[2]: nombre del proc, p[6]: cuerpo del proc
+    else:  # Caso con parámetros
+        p[0] = ('proc', p[2], p[6])  # p[4]: lista de parámetros
+
+# 2.16. Definir lista de parámetros de un procedimiento
+def p_lista_parametros(p):
+    '''lista_parametros : VARIABLE
+                        | VARIABLE COMA lista_parametros'''
+    if len(p) == 2:  # Un solo parámetro
+        p[0] = [p[1]]
+    else:  # Lista de parámetros
+        p[0] = [p[1]] + p[3]
+
+# 2.17. Invocación de un procedimiento
+def p_invocacion_proc(p):
+    '''invocacion_proc : VARIABLE PARIZQ lista_argumentos PARDER PUNTOCOMA
+                       | VARIABLE PARIZQ PARDER PUNTOCOMA'''
+    if len(p) == 6:  # Sin argumentos
+        p[0] = ('invocacion_proc', p[1], p[3])  # p[1]: nombre del procedimiento
+    else:  # Con argumentos
+        p[0] = ('invocacion_proc', p[1])  # p[3]: lista de argumentos
+
+# 2.18. Lista de argumentos para invocación de procedimientos
+def p_lista_argumentos(p):
+    '''lista_argumentos : valor
+                        | valor COMA lista_argumentos'''
+    if len(p) == 2:  # Un solo argumento
+        p[0] = [p[1]]
+    else:  # Varios argumentos
+        p[0] = [p[1]] + p[3]
+
 # Manejo de valores que pueden ser números, variables o expresiones
 def p_valor_numero(p):
     '''valor : NUMBER'''
@@ -219,45 +259,91 @@ def p_valor_logico(p):
 
 # Definir expresiones básicas (operaciones matemáticas)
 def p_expr(p):
-    '''expr : valor MULT valor
-            | valor DIV valor
-            | valor SUM valor
-            | valor SUBSTR valor'''
-    p[0] = (p[2], p[1], p[3])
+    '''expr : ADD PARIZQ VARIABLE PARDER
+            | ADD PARIZQ VARIABLE COMA valor PARDER
+            | valor OP_MULT valor
+            | valor OP_DIV valor
+            | valor OP_SUM valor
+            | valor OP_SUB valor
+            | substr
+            | random
+            | mult
+            | div
+            | sum'''
+    
+    # Caso para "ADD VARIABLE"
+    if len(p) == 5:  # Para ADD con un solo parámetro
+        p[0] = ('add_variable_uno', p[3])
+    
+    # Caso para "ADD VARIABLE, valor"
+    elif len(p) == 7:  # Para ADD con dos parámetros
+        p[0] = ('add_variable_dos', p[3], p[5])
+
+    elif len(p) == 4:  # Caso para operaciones unarias
+        p[0] = (p[2], p[1], p[3])  # p[1] es el operador, p[2] y p[3] son los operandos
+    
+    # Caso para operaciones binarias
+    else:
+        p[0] = p[1]
 
 # Condiciones para bucles y otras sentencias
 def p_condicion(p):
-    '''condicion : equal
+    '''condicion : valor OP_EQUAL valor
+                 | valor OP_GREATER valor
+                 | valor OP_SMALLER valor
+                 | valor OP_AND valor
+                 | valor OP_OR valor
+                 | equal
                  | greater
                  | smaller
                  | and
                  | or'''
-    p[0] = p[1]
+    if len(p) == 4:
+        p[0] = (p[2], p[1], p[3])
+    else:
+        p[0] = p[1]
 
 # Manejo de errores sintácticos
 def p_error(p):
     if p:
-        print(f"Error sintáctico en línea {p.lineno}: token inesperado '{p.value}'")
+        error = f"Error sintáctico en línea {p.lineno-1}: token inesperado '{p.value}'"
     else:
-        print("Error sintáctico: fin de archivo inesperado")
+        error = "Error sintáctico: fin de archivo inesperado"
+    if error not in errores:
+        errores.append(error)
 
 # Construir el parser
 parser = yacc.yacc()
 
-# Función para crear el árbol de parseo
+# Definir un contador global para generar identificadores únicos para los nodos
+contador_nodos = 0
+
+def generar_id_nodo():
+    global contador_nodos
+    contador_nodos += 1
+    return contador_nodos
+
 def crear_nodo_arbol(nodo, grafo, padre=None):
+    # Generar un identificador único para cada nodo
+    nodo_id = generar_id_nodo()
+    
     if isinstance(nodo, tuple):
-        nodo_actual = pydot.Node(str(id(nodo)), label=nodo[0])
+        nodo_actual = pydot.Node(str(nodo_id), label=nodo[0])
         grafo.add_node(nodo_actual)
         if padre:
             grafo.add_edge(pydot.Edge(padre, nodo_actual))
         for subnodo in nodo[1:]:
-            crear_nodo_arbol(subnodo, grafo, nodo_actual)
+            if isinstance(subnodo, list):
+                for item in subnodo:
+                    crear_nodo_arbol(item, grafo, nodo_actual)
+            else:
+                crear_nodo_arbol(subnodo, grafo, nodo_actual)
     else:
-        nodo_hoja = pydot.Node(str(id(nodo)), label=str(nodo))
+        nodo_hoja = pydot.Node(str(nodo_id), label=str(nodo))
         grafo.add_node(nodo_hoja)
         if padre:
             grafo.add_edge(pydot.Edge(padre, nodo_hoja))
+
 
 # Función para visualizar el árbol
 def visualizar_arbol(arbol):
@@ -265,25 +351,39 @@ def visualizar_arbol(arbol):
     crear_nodo_arbol(arbol, grafo)
     grafo.write_png("arbol_parseo.png")
 
+
 # Función para analizar sintácticamente el código fuente
 def analizar_sintactico(data):
     try:
         resultado = parser.parse(data)
-        if resultado:
+        if errores:
+            for error in errores:
+                print(error)
+        else:
+            print(resultado)
             visualizar_arbol(resultado)
             print("Árbol de parseo generado y guardado como 'arbol_parseo.png'")
-        else:
-            print("No se generó un árbol.")
     except SyntaxError as se:
         print(str(se))
 
 # Ejemplo de prueba
 if __name__ == "__main__":
-    data = '''// Ejemplo de código fuente
-    Def(variable1, 5);
-    Add(variable1, 10);
-    ContinueUp 10;
+
+    data = '''
+     //comentario
+    // Prueba para la funcionalidad Repeat-Until
+Proc main()[
+    Def(bucle,1);
+    Repeat
+        [ContinueRight 90;
+        Add(bucle);]
+    Until
+        [bucle == 2];
+    ];
+End;
+
     '''
+    
     analizar_sintactico(data)
 
 

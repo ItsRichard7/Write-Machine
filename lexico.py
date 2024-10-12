@@ -1,4 +1,8 @@
 import ply.lex as lex
+import re
+
+# Lista para almacenar los errores léxicos
+errores = []
 
 # Definición de tokens
 tokens = [
@@ -51,6 +55,15 @@ tokens = [
     'WHEND',
     'PROC',
     'COMA',
+    'OP_MULT',    # Operador de multiplicación *
+    'OP_DIV',     # Operador de división /
+    'OP_SUM',     # Operador de suma +
+    'OP_SUB',      # Operador de resta -
+    'OP_EQUAL',
+    'OP_GREATER',
+    'OP_SMALLER',
+    'OP_AND',
+    'OP_OR'
 ]
 
 # Expresiones regulares para tokens simples
@@ -68,7 +81,7 @@ t_POSY = r'PosY'
 t_USECOLOR = r'UseColor'
 t_DOWN = r'Down'
 t_UP = r'Up'
-t_BEGIN = r'Beginning;'
+t_BEGIN = r'Beginning'
 t_EQUAL = r'Equal'
 t_AND = r'And'
 t_OR = r'Or'
@@ -77,9 +90,33 @@ t_GREATER = r'Greater'
 t_SMALLER = r'Smaller'
 t_SUBSTR = r'Substr'
 t_RANDOM = r'Random'
+
 t_MULT = r'Mult'
 t_DIV = r'Div'
 t_SUM = r'Sum'
+
+t_OP_MULT = r'\*'  # Operador estándar de multiplicación *
+t_OP_DIV = r'/'    # Operador estándar de división /
+t_OP_SUM = r'\+'   # Operador estándar de suma +
+t_OP_SUB = r'-'    # Operador estándar de resta -
+
+t_OP_EQUAL = r'=='     # Operador de igualdad
+t_OP_GREATER = r'>'     # Operador mayor que
+t_OP_SMALLER = r'<'     # Operador menor que
+t_OP_AND = r'&&'        # Operador lógico AND
+t_OP_OR = r'\|\|'       # Operador lógico OR
+
+t_FOR = r'For'
+t_LOOP = r'Loop'
+t_CASE = r'Case'
+t_WHEN = r'When'
+t_THEN = r'Then'
+t_ELSE = r'Else'
+t_REPEAT = r'Repeat'
+t_UNTIL = r'Until'
+t_WHILE = r'While'
+t_WHEND = r'Whend'
+
 t_PARIZQ = r'\('
 t_PARDER = r'\)'
 t_BRAIZQ = r'\['
@@ -87,7 +124,7 @@ t_BRADER = r'\]'
 t_TRUE = r'TRUE'
 t_FALSE = r'FALSE'
 t_PUNTOCOMA = r';'
-t_COMA = r','
+t_COMA = r',' 
 t_END = r'End'
 
 # Expresión regular para reconocer números enteros
@@ -123,42 +160,38 @@ def t_newline(t):
 
 # Manejo de errores de token
 def t_error(t):
-    print(f"Carácter no válido: '{t.value[0]}' en la línea {t.lexer.lineno}")
+    error = f"Error léxico: carácter no válido '{t.value[0]}' en la línea {t.lexer.lineno}"
+    if error not in errores:
+        errores.append(error)
     t.lexer.skip(1)
 
 # Crear y construir el analizador léxico
 lexer = lex.lex()
 
 # Verificación de que la primera línea sea un comentario
-def verificar_comentario_inicial(lexer, data):
-    lexer.first_comment = False  # Inicializamos la bandera
-    lexer.input(data)  # Alimentamos el lexer con el código
-
-    # Revisamos todos los tokens en la primera línea
-    while True:
-        tok = lexer.token()
-        if not tok or tok.lineno > 1:
-            break
-        # Si es un comentario en la primera línea, marcamos como válido
-        if tok.type == 'COMMENT':
-            lexer.first_comment = True
-
-    # Si no se encontró el comentario, lanzamos el error
-    if not lexer.first_comment:
-        print(f"Error en la línea {lexer.lineno}: La primera línea debe ser un comentario.")
+def verificar_comentario_inicial(data):
+    primera_linea = data.splitlines()[0].strip()  # Obtenemos la primera línea del código fuente
+    if re.match(r'//', primera_linea):  # Verificamos si la primera línea es un comentario
+        return True
+    else:
+        error_msg = "Error: La primera línea debe ser un comentario."
+        errores.append(error_msg)
         return False
-    return True
 
 # Función que recibe el código fuente y lo analiza léxicamente
 def analizar(data):
-    if verificar_comentario_inicial(lexer, data):
+    errores.clear()  # Limpiamos la lista de errores
+    if verificar_comentario_inicial(data):
         lexer.input(data)  # Reiniciamos el lexer para el análisis completo
-        for token in lexer:
-            print(token)
-
-"""
-# Ejemplo de prueba
-data = '''// Este es el nombre del programa
+        """for token in lexer:
+            print(token)"""
+    # Imprimir errores si los hay
+    if errores:
+        print("Errores encontrados:")
+        for error in errores:
+            print(error)
+            
+data = '''// Este es un comentario
 Def(xxx, 5);
 UseColor 255;
 Proc myProc(zzz, www)
@@ -167,4 +200,3 @@ End;
 '''
 
 analizar(data)
-"""
