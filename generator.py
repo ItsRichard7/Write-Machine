@@ -42,6 +42,8 @@ class CodeGenerator:
             self.generar_for_loop(nodo)
         elif tipo == 'case':
             self.generar_case(nodo)
+        elif tipo == 'repeat_until':
+            self.generar_repeat_until(nodo)
         elif tipo == 'add_variable_dos' and isinstance(nodo[2], int):
             self.add_variable_dos(nodo)
         elif tipo == 'add_variable_dos' and isinstance(nodo[2], str):
@@ -213,8 +215,6 @@ class CodeGenerator:
         self.builder.position_at_end(bloque_final)
 
 
-
-
     def recorrer_when_cases(self, when_cases):
         # Si es un solo 'when_case', procesarlo directamente
         if when_cases[0] == 'when_case':
@@ -232,6 +232,58 @@ class CodeGenerator:
         
         return casos
 
+    def generar_repeat_until(self, nodo):
+        # Nodo tiene la forma ('repeat_until', 'instrucciones', 'condición')
+        instrucciones = nodo[1]
+        condicion = nodo[2]
+
+        # Crear el bloque de inicio del bucle
+        bloque_repeat = self.builder.append_basic_block("repeat_loop")
+        bloque_condicion = self.builder.append_basic_block("check_condicion")
+        bloque_salida = self.builder.append_basic_block("end_repeat")
+
+        # Saltar al bloque del bucle
+        self.builder.branch(bloque_repeat)
+
+        # Posicionar en el bloque del bucle
+        self.builder.position_at_end(bloque_repeat)
+
+        # Visitar las instrucciones dentro del repeat
+        self.visitar(instrucciones)
+
+        # Saltar al bloque de la condición
+        self.builder.branch(bloque_condicion)
+
+        # Posicionar en el bloque de la condición
+        self.builder.position_at_end(bloque_condicion)
+
+        # Generar la condición
+        var_nombre = condicion[1]
+        operador = condicion[0]
+        valor_condicion = ir.Constant(ir.IntType(32), 5)  # Por ahora suponemos el valor es 5
+        variable = self.variables.get(var_nombre)
+
+        if not variable:
+            print(f"Variable {var_nombre} no encontrada.")
+            return
+
+        valor_variable = self.builder.load(variable, name=f"{var_nombre}_valor")
+
+        # Dependiendo del operador, generar la comparación
+        if operador == '==':
+            comparacion = self.builder.icmp_signed('==', valor_variable, valor_condicion)
+        elif operador == '>':
+            comparacion = self.builder.icmp_signed('>', valor_variable, valor_condicion)
+        elif operador == '<':
+            comparacion = self.builder.icmp_signed('<', valor_variable, valor_condicion)
+        else:
+            raise ValueError(f"Operador {operador} no soportado.")
+
+        # Bifurcar condicionalmente según la comparación
+        self.builder.cbranch(comparacion, bloque_salida, bloque_repeat)
+
+        # Posicionar en el bloque de salida
+        self.builder.position_at_end(bloque_salida)
 
 
     def add_variable_dos(self, nodo):
@@ -308,7 +360,17 @@ class CodeGenerator:
                 print(f"Variable {valor} no encontrada.")
 
 # Ejemplo de AST de entrada con un for loop
-ast = ('sentencias', ('proc', 'main', ('sentencias', ('def_variable', 'varGlobal1', 1), ('sentencias', ('def_variable', 'varGlobal2', 2), ('sentencias', ('def_variable', 'caso', 1), ('sentencias', ('case', 'caso', ('when_cases', ('when_cases', ('when_cases', ('when_case', 1, ('sentencias', ('add_variable_uno', 'varGlobal1')))), ('when_case', 2, ('sentencias', ('add_variable_uno', 'varGlobal2')))), ('when_case', 3, ('sentencias', ('add_variable_uno', 'varGlobal1'), ('sentencias', ('add_variable_uno', 'varGlobal2'))))), ('end_case',))))))))
+ast = ('sentencias', 
+        ('proc', 'main', 
+            ('sentencias', 
+                ('def_variable', 'varGlobal1', 1), 
+                ('def_variable', 'varGlobal2', 2), 
+                ('repeat_until', 
+                    ('sentencias', 
+                        ('add_variable_uno', 'varGlobal1'), 
+                        ('add_variable_uno', 'varGlobal2')), 
+                    ('==', 'varGlobal1', 5)))))
+
 
 # Crear el generador y generar código
 generador = CodeGenerator()

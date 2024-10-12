@@ -23,60 +23,24 @@ digraph {
 	nodo8 -> nodo10
 	nodo11 [label=sentencias]
 	nodo7 -> nodo11
-	nodo12 [label=def_variable]
+	nodo12 [label=repeat_until]
 	nodo11 -> nodo12
-	nodo13 [label=caso]
+	nodo13 [label=sentencias]
 	nodo12 -> nodo13
-	nodo14 [label=1]
-	nodo12 -> nodo14
-	nodo15 [label=sentencias]
-	nodo11 -> nodo15
-	nodo16 [label=case]
-	nodo15 -> nodo16
-	nodo17 [label=caso]
+	nodo14 [label=add_variable_uno]
+	nodo13 -> nodo14
+	nodo15 [label=varGlobal1]
+	nodo14 -> nodo15
+	nodo16 [label=sentencias]
+	nodo13 -> nodo16
+	nodo17 [label=add_variable_uno]
 	nodo16 -> nodo17
-	nodo18 [label=when_cases]
-	nodo16 -> nodo18
-	nodo19 [label=when_cases]
-	nodo18 -> nodo19
-	nodo20 [label=when_cases]
+	nodo18 [label=varGlobal2]
+	nodo17 -> nodo18
+	nodo19 [label="=="]
+	nodo12 -> nodo19
+	nodo20 [label=varGlobal1]
 	nodo19 -> nodo20
-	nodo21 [label=when_case]
-	nodo20 -> nodo21
-	nodo22 [label=1]
-	nodo21 -> nodo22
-	nodo23 [label=sentencias]
-	nodo21 -> nodo23
-	nodo24 [label=add_variable_uno]
-	nodo23 -> nodo24
-	nodo25 [label=varGlobal1]
-	nodo24 -> nodo25
-	nodo26 [label=when_case]
-	nodo19 -> nodo26
-	nodo27 [label=2]
-	nodo26 -> nodo27
-	nodo28 [label=sentencias]
-	nodo26 -> nodo28
-	nodo29 [label=add_variable_uno]
-	nodo28 -> nodo29
-	nodo30 [label=varGlobal2]
-	nodo29 -> nodo30
-	nodo31 [label=when_case]
-	nodo18 -> nodo31
-	nodo32 [label=3]
-	nodo31 -> nodo32
-	nodo33 [label=sentencias]
-	nodo31 -> nodo33
-	nodo34 [label=add_variable_uno]
-	nodo33 -> nodo34
-	nodo35 [label=varGlobal1]
-	nodo34 -> nodo35
-	nodo36 [label=sentencias]
-	nodo33 -> nodo36
-	nodo37 [label=add_variable_uno]
-	nodo36 -> nodo37
-	nodo38 [label=varGlobal2]
-	nodo37 -> nodo38
-	nodo39 [label=end_case]
-	nodo16 -> nodo39
+	nodo21 [label=5]
+	nodo19 -> nodo21
 }

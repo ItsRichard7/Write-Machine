@@ -1138,19 +1138,11 @@ if __name__ == "__main__":
             // Define variable global
             Def(varGlobal1, 1);
             Def(varGlobal2, 2);
-            Def(caso,1);
-            Case caso
-                When 1 Then [
-                    Add(varGlobal1);
-                ]
-                When 2 Then [
-                    Add(varGlobal2);
-                ]
-                When 3 Then [
-                    Add(varGlobal1);
-                    Add(varGlobal2);
-                ]
-            End Case;
+            Repeat
+                [Add(varGlobal1);
+                 Add(varGlobal2);]
+            Until
+                [varGlobal1 == 5];
         ];
     End;
     '''
