@@ -11,40 +11,30 @@ digraph {
 	nodo3 -> nodo4
 	nodo5 [label=varGlobal1]
 	nodo4 -> nodo5
-	nodo6 [label=1]
+	nodo6 [label=logico]
 	nodo4 -> nodo6
-	nodo7 [label=sentencias]
-	nodo3 -> nodo7
-	nodo8 [label=def_variable]
-	nodo7 -> nodo8
-	nodo9 [label=varGlobal2]
+	nodo7 [label=TRUE]
+	nodo6 -> nodo7
+	nodo8 [label=sentencias]
+	nodo3 -> nodo8
+	nodo9 [label=and]
 	nodo8 -> nodo9
-	nodo10 [label=2]
-	nodo8 -> nodo10
-	nodo11 [label=sentencias]
-	nodo7 -> nodo11
-	nodo12 [label=while]
+	nodo10 [label=varGlobal1]
+	nodo9 -> nodo10
+	nodo11 [label=logico]
+	nodo9 -> nodo11
+	nodo12 [label=TRUE]
 	nodo11 -> nodo12
-	nodo13 [label="<"]
-	nodo12 -> nodo13
-	nodo14 [label=varGlobal1]
+	nodo13 [label=sentencias]
+	nodo8 -> nodo13
+	nodo14 [label=and]
 	nodo13 -> nodo14
-	nodo15 [label=10]
-	nodo13 -> nodo15
-	nodo16 [label=sentencias]
-	nodo12 -> nodo16
-	nodo17 [label=add_variable_dos]
-	nodo16 -> nodo17
-	nodo18 [label=varGlobal1]
+	nodo15 [label=logico]
+	nodo14 -> nodo15
+	nodo16 [label=TRUE]
+	nodo15 -> nodo16
+	nodo17 [label=logico]
+	nodo14 -> nodo17
+	nodo18 [label=FALSE]
 	nodo17 -> nodo18
-	nodo19 [label=5]
-	nodo17 -> nodo19
-	nodo20 [label=sentencias]
-	nodo16 -> nodo20
-	nodo21 [label=add_variable_dos]
-	nodo20 -> nodo21
-	nodo22 [label=varGlobal2]
-	nodo21 -> nodo22
-	nodo23 [label=10]
-	nodo21 -> nodo23
 }

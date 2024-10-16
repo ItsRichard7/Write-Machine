@@ -56,6 +56,10 @@ class CodeGenerator:
             self.generar_posx(nodo)
         elif tipo == 'posy':
             self.generar_posy(nodo)
+        elif tipo == 'equal':
+            self.generar_equal(nodo)
+        elif tipo == 'and':
+            self.generar_and(nodo)
         else:
             print(f"Tipo de nodo no manejado: {tipo}")
 
@@ -80,15 +84,25 @@ class CodeGenerator:
         self.builder.ret_void()
 
     def definir_variable(self, nodo):
+        # Nodo tiene la forma ('def_variable', 'nombre', 'valor')
         nombre = nodo[1]
         valor = nodo[2]
 
-        # Definir variable como local (alloca) y almacenarla
-        variable = self.builder.alloca(ir.IntType(32), name=nombre)
-        self.builder.store(ir.Constant(ir.IntType(32), valor), variable)
+        # Crear la variable en el ámbito actual
+        variable = self.builder.alloca(ir.IntType(1) if isinstance(valor, tuple) and valor[0] == 'logico' else ir.IntType(32), name=nombre)
+
+        # Si es un valor lógico, convertirlo a i1
+        if isinstance(valor, tuple) and valor[0] == 'logico':
+            valor_inicial = ir.Constant(ir.IntType(1), 1 if valor[1] == 'TRUE' else 0)
+        else:
+            valor_inicial = ir.Constant(ir.IntType(32), valor)
+
+        # Almacenar el valor en la variable
+        self.builder.store(valor_inicial, variable)
+
+        # Registrar la variable
         self.variables[nombre] = variable
 
-        print(f"Definiendo variable {nombre} con valor {valor}")
 
     def put_variable(self, nodo):
         # Nodo tiene la forma ('put_variable', 'nombre_variable', nuevo_valor)
@@ -413,18 +427,74 @@ class CodeGenerator:
                 print(f"Generando PosY con valor de la variable {valor}")
             else:
                 print(f"Variable {valor} no encontrada.")
+    
+    def generar_equal(self, nodo):
+        # Nodo tiene la forma ('equal', 'op1', 'op2')
+        op1 = nodo[1]
+        op2 = nodo[2]
+
+        # Obtener el primer operando (variable o constante)
+        valor1 = self.builder.load(self.variables[op1], name=f"{op1}_valor") if isinstance(op1, str) else ir.Constant(ir.IntType(32), op1)
+
+        # Obtener el segundo operando (variable, constante o expresión aritmética)
+        if isinstance(op2, str):
+            valor2 = self.builder.load(self.variables[op2], name=f"{op2}_valor")
+        elif isinstance(op2, tuple) and op2[0] == '+':
+            # Evaluar la suma de dos constantes
+            valor2 = ir.Constant(ir.IntType(32), op2[1] + op2[2])
+        else:
+            valor2 = ir.Constant(ir.IntType(32), op2)
+
+        # Generar la comparación y retornar el resultado booleano
+        return self.builder.icmp_signed('==', valor1, valor2)
+    
+    def generar_and(self, nodo):
+        # Nodo tiene la forma ('and', 'op1', 'op2')
+        op1 = nodo[1]
+        op2 = nodo[2]
+
+        # Obtener el primer operando (puede ser una variable o un valor lógico)
+        if isinstance(op1, str) and op1 in self.variables:
+            valor1 = self.builder.load(self.variables[op1], name=f"{op1}_valor")
+        elif isinstance(op1, tuple) and op1[0] == 'logico':
+            # Si es un valor lógico, convertir a constante LLVM (TRUE -> 1, FALSE -> 0)
+            valor1 = ir.Constant(ir.IntType(1), 1 if op1[1] == 'TRUE' else 0)
+        else:
+            raise ValueError(f"Operando no soportado: {op1}")
+
+        # Si el primer operando es de tipo i32, convertirlo a i1
+        if valor1.type != ir.IntType(1):
+            valor1 = self.builder.icmp_signed('!=', valor1, ir.Constant(ir.IntType(32), 0))
+
+        # Obtener el segundo operando (puede ser una variable o un valor lógico)
+        if isinstance(op2, str) and op2 in self.variables:
+            valor2 = self.builder.load(self.variables[op2], name=f"{op2}_valor")
+        elif isinstance(op2, tuple) and op2[0] == 'logico':
+            # Si es un valor lógico, convertir a constante LLVM (TRUE -> 1, FALSE -> 0)
+            valor2 = ir.Constant(ir.IntType(1), 1 if op2[1] == 'TRUE' else 0)
+        else:
+            raise ValueError(f"Operando no soportado: {op2}")
+
+        # Si el segundo operando es de tipo i32, convertirlo a i1
+        if valor2.type != ir.IntType(1):
+            valor2 = self.builder.icmp_signed('!=', valor2, ir.Constant(ir.IntType(32), 0))
+
+        # Realizar la operación lógica AND
+        resultado = self.builder.and_(valor1, valor2)
+
+        # Almacenar el resultado en una variable
+        resultado_and = self.builder.alloca(ir.IntType(1), name="resultado_and")
+        self.builder.store(resultado, resultado_and)
+
+        # Retornar la dirección donde se almacenó el resultado
+        return resultado_and
+
+
+
 
 # Ejemplo de AST de entrada con un for loop
-ast = ('sentencias', 
-        ('proc', 'main', 
-            ('sentencias', 
-                ('def_variable', 'varGlobal1', 1), 
-                ('def_variable', 'varGlobal2', 2), 
-                ('while', 
-                    ('<', 'varGlobal1', 10), 
-                    ('sentencias', 
-                        ('add_variable_dos', 'varGlobal1', 5), 
-                        ('add_variable_dos', 'varGlobal2', 10))))))
+ast = ('sentencias', ('proc', 'main', ('sentencias', ('def_variable', 'varGlobal1', ('logico', 'TRUE')), ('sentencias', ('and', 'varGlobal1', ('logico', 'TRUE')), ('sentencias', ('and', ('logico', 'TRUE'), ('logico', 'FALSE')))))))
+
 
 
 

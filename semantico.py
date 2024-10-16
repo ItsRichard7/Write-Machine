@@ -683,12 +683,12 @@ class AnalizadorSemantico:
                 valor1 = self.obtener_valor(operando1, alcance)
         else:
             # Obtener valores de ambos operandos
-            valor1 = self.obtener_valor(operando1, alcance, alcance)
-            valor2 = self.obtener_valor(operando2, alcance, alcance)
+            valor1 = self.obtener_valor(operando1, alcance)
+            valor2 = self.obtener_valor(operando2, alcance)
 
             # Verificar que ambos valores sean enteros
-            self.verificar_entero(valor1)
-            self.verificar_entero(valor2)
+            self.verificar_entero(valor1, alcance)
+            self.verificar_entero(valor2, alcance)
 
         # Comparar los valores y devolver el resultado
         resultado = valor1 == valor2
@@ -1132,18 +1132,13 @@ if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-      //comentario
+    //comentario
     Proc main()
         [
             // Define variable global
-            Def(varGlobal1, 1);
-            Def(varGlobal2, 2);
-            While [varGlobal1 < 10]
-                [
-                Add(varGlobal1, 5);
-                Add(varGlobal2, 10);
-                ]
-            Whend;
+            Def(varGlobal1, TRUE);
+            And(varGlobal1,TRUE)
+            And(TRUE,FALSE)
         ];
     End;
     '''
