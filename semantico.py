@@ -1132,13 +1132,32 @@ if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-    //comentario
+    // Programa de Prueba
+    Proc linea1()
+        [
+            //Define variable local
+            Def(varLocal1, 1);
+            PosY varLocal1;
+        ];
+    End;
+
+    Proc posiciona(valorX, valorY)
+        [
+            PosX valorX;
+            PosY valorY;
+        ];
+    End;
+
+     //comentario
     Proc main()
         [
             // Define variable global
-            Def(varGlobal1, 60);
-            Random(60)
-            Random(varGlobal1)
+            Def(varGlobal1, 1);
+            //Llama al procedimiento linea1
+            linea1();
+            //Llama al procedimiento posiciona
+            posiciona(1,1);
+
         ];
     End;
     '''

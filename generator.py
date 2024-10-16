@@ -79,25 +79,57 @@ class CodeGenerator:
         else:
             print(f"Tipo de nodo no manejado: {tipo}")
 
+    def generar_archivo_asm(self, archivo_salida):
+        # Generar el código ensamblador y guardarlo en el archivo especificado
+        modulo_llvm = binding.parse_assembly(str(self.module))
+        modulo_llvm.verify()
+
+        # Crear una máquina objetivo para compilar a código ensamblador
+        target = binding.Target.from_default_triple()
+        target_machine = target.create_target_machine()
+
+        # Emitir el ensamblador y guardarlo en un archivo
+        with open(archivo_salida, "w") as archivo:
+            asm = target_machine.emit_assembly(modulo_llvm)
+            archivo.write(asm)
+
+        print(f"El archivo ensamblador se ha generado correctamente: {archivo_salida}")
+
+
 
     def generar_procedimiento(self, nodo):
         nombre = nodo[1]
-        cuerpo = nodo[2] if len(nodo) > 3 else nodo[2]
+        parametros = nodo[2] if isinstance(nodo[2], list) else []
+        cuerpo = nodo[3] if len(nodo) > 3 else nodo[2]
 
-        # Crear la función LLVM sin argumentos
-        tipo_funcion = ir.FunctionType(ir.VoidType(), [])
+        # Crear la lista de tipos de los parámetros (si existen)
+        tipos_parametros = [ir.IntType(32)] * len(parametros)
+        
+        # Crear la función LLVM con los tipos de los parámetros
+        tipo_funcion = ir.FunctionType(ir.VoidType(), tipos_parametros)
         funcion = ir.Function(self.module, tipo_funcion, name=nombre)
         self.funciones[nombre] = funcion
+
+        # Añadir los nombres de los parámetros a la función
+        for i, param in enumerate(parametros):
+            funcion.args[i].name = param
 
         # Crear un bloque básico para el cuerpo de la función
         bloque = funcion.append_basic_block(name="entrada")
         self.builder = ir.IRBuilder(bloque)
+
+        # Registrar los parámetros como variables locales
+        for param in parametros:
+            variable = self.builder.alloca(ir.IntType(32), name=param)
+            self.builder.store(funcion.args[parametros.index(param)], variable)
+            self.variables[param] = variable
 
         # Visitar el cuerpo de la función
         self.visitar(cuerpo)
 
         # Terminar la función
         self.builder.ret_void()
+
 
     def definir_variable(self, nodo):
         # Nodo tiene la forma ('def_variable', 'nombre', 'valor')
@@ -714,7 +746,7 @@ class CodeGenerator:
 
 
 # Ejemplo de AST de entrada con un for loop
-ast = ('sentencias', ('proc', 'main', ('sentencias', ('def_variable', 'varGlobal1', 60), ('sentencias', ('random', 60), ('sentencias', ('random', 'varGlobal1'))))))
+ast = ('sentencias', ('proc', 'linea1', ('sentencias', ('def_variable', 'varLocal1', 1), ('sentencias', ('posy', 'varLocal1')))), ('sentencias', ('proc', 'posiciona', ['valorX', 'valorY'], ('sentencias', ('posx', 'valorX'), ('sentencias', ('posy', 'valorY')))), ('sentencias', ('proc', 'main', ('sentencias', ('def_variable', 'varGlobal1', 1), ('sentencias', ('invocacion_proc', 'linea1'), ('sentencias', ('invocacion_proc', 'posiciona', [('number', 1), ('number', 1)]))))))))
 
 
 
@@ -725,6 +757,9 @@ generador.generar_codigo(ast)
 
 # Imprimir el módulo LLVM generado
 print(generador.module)
+
+# Generar el archivo ensamblador .asm
+generador.generar_archivo_asm("output.asm")
 
 # Opcionalmente: ejecutar el código LLVM usando el motor JIT
 modulo_llvm = binding.parse_assembly(str(generador.module))
