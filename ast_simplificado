@@ -11,30 +11,18 @@ digraph {
 	nodo3 -> nodo4
 	nodo5 [label=varGlobal1]
 	nodo4 -> nodo5
-	nodo6 [label=logico]
+	nodo6 [label=60]
 	nodo4 -> nodo6
-	nodo7 [label=TRUE]
-	nodo6 -> nodo7
-	nodo8 [label=sentencias]
-	nodo3 -> nodo8
-	nodo9 [label=and]
+	nodo7 [label=sentencias]
+	nodo3 -> nodo7
+	nodo8 [label=random]
+	nodo7 -> nodo8
+	nodo9 [label=60]
 	nodo8 -> nodo9
-	nodo10 [label=varGlobal1]
-	nodo9 -> nodo10
-	nodo11 [label=logico]
-	nodo9 -> nodo11
-	nodo12 [label=TRUE]
+	nodo10 [label=sentencias]
+	nodo7 -> nodo10
+	nodo11 [label=random]
+	nodo10 -> nodo11
+	nodo12 [label=varGlobal1]
 	nodo11 -> nodo12
-	nodo13 [label=sentencias]
-	nodo8 -> nodo13
-	nodo14 [label=and]
-	nodo13 -> nodo14
-	nodo15 [label=logico]
-	nodo14 -> nodo15
-	nodo16 [label=TRUE]
-	nodo15 -> nodo16
-	nodo17 [label=logico]
-	nodo14 -> nodo17
-	nodo18 [label=FALSE]
-	nodo17 -> nodo18
 }

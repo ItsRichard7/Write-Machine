@@ -118,7 +118,7 @@ class AnalizadorSemantico:
                 self.analizar_smaller(nodo, alcance)
 
             # Analizar Substr(x,y)
-            elif tipo_nodo == 'substract':
+            elif tipo_nodo == 'substr':
                 self.analizar_substract(nodo, alcance)
 
             # Analizar Random(x,y)
@@ -1136,9 +1136,9 @@ if __name__ == "__main__":
     Proc main()
         [
             // Define variable global
-            Def(varGlobal1, TRUE);
-            And(varGlobal1,TRUE)
-            And(TRUE,FALSE)
+            Def(varGlobal1, 60);
+            Random(60)
+            Random(varGlobal1)
         ];
     End;
     '''

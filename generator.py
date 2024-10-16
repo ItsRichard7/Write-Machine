@@ -60,6 +60,22 @@ class CodeGenerator:
             self.generar_equal(nodo)
         elif tipo == 'and':
             self.generar_and(nodo)
+        elif tipo == 'or':
+            self.generar_or(nodo)
+        elif tipo == 'greater':
+            self.generar_greater(nodo)
+        elif tipo == 'smaller':
+            self.generar_smaller(nodo)
+        elif tipo == 'sum':
+            self.generar_sum(nodo)
+        elif tipo == 'mult':
+            self.generar_mult(nodo)
+        elif tipo == 'substr':
+            self.generar_substr(nodo)
+        elif tipo == 'div':
+            self.generar_div(nodo)
+        elif tipo == 'random':
+            self.generar_random(nodo)
         else:
             print(f"Tipo de nodo no manejado: {tipo}")
 
@@ -488,12 +504,217 @@ class CodeGenerator:
 
         # Retornar la dirección donde se almacenó el resultado
         return resultado_and
+    
+    def generar_or(self, nodo):
+        # Nodo tiene la forma ('and', 'op1', 'op2')
+        op1 = nodo[1]
+        op2 = nodo[2]
 
+        # Obtener el primer operando (puede ser una variable o un valor lógico)
+        if isinstance(op1, str) and op1 in self.variables:
+            valor1 = self.builder.load(self.variables[op1], name=f"{op1}_valor")
+        elif isinstance(op1, tuple) and op1[0] == 'logico':
+            # Si es un valor lógico, convertir a constante LLVM (TRUE -> 1, FALSE -> 0)
+            valor1 = ir.Constant(ir.IntType(1), 1 if op1[1] == 'TRUE' else 0)
+        else:
+            raise ValueError(f"Operando no soportado: {op1}")
+
+        # Si el primer operando es de tipo i32, convertirlo a i1
+        if valor1.type != ir.IntType(1):
+            valor1 = self.builder.icmp_signed('!=', valor1, ir.Constant(ir.IntType(32), 0))
+
+        # Obtener el segundo operando (puede ser una variable o un valor lógico)
+        if isinstance(op2, str) and op2 in self.variables:
+            valor2 = self.builder.load(self.variables[op2], name=f"{op2}_valor")
+        elif isinstance(op2, tuple) and op2[0] == 'logico':
+            # Si es un valor lógico, convertir a constante LLVM (TRUE -> 1, FALSE -> 0)
+            valor2 = ir.Constant(ir.IntType(1), 1 if op2[1] == 'TRUE' else 0)
+        else:
+            raise ValueError(f"Operando no soportado: {op2}")
+
+        # Si el segundo operando es de tipo i32, convertirlo a i1
+        if valor2.type != ir.IntType(1):
+            valor2 = self.builder.icmp_signed('!=', valor2, ir.Constant(ir.IntType(32), 0))
+
+        # Realizar la operación lógica AND
+        resultado = self.builder.or_(valor1, valor2)
+
+        # Almacenar el resultado en una variable
+        resultado_or = self.builder.alloca(ir.IntType(1), name="resultado_or")
+        self.builder.store(resultado, resultado_or)
+
+        # Retornar la dirección donde se almacenó el resultado
+        return resultado_or
+    
+    def generar_greater(self, nodo):
+        # Nodo tiene la forma ('greater', 'op1', 'op2')
+        op1 = nodo[1]
+        op2 = nodo[2]
+
+        # Obtener el primer operando (puede ser una variable o un valor constante)
+        if isinstance(op1, str) and op1 in self.variables:
+            valor1 = self.builder.load(self.variables[op1], name=f"{op1}_valor")
+        else:
+            valor1 = ir.Constant(ir.IntType(32), op1)
+
+        # Obtener el segundo operando (puede ser una variable o un valor constante)
+        if isinstance(op2, str) and op2 in self.variables:
+            valor2 = self.builder.load(self.variables[op2], name=f"{op2}_valor")
+        else:
+            valor2 = ir.Constant(ir.IntType(32), op2)
+
+        # Generar la comparación "mayor que" (>)
+        resultado = self.builder.icmp_signed('>', valor1, valor2)
+
+        # Almacenar el resultado en una variable
+        resultado_greater = self.builder.alloca(ir.IntType(1), name="resultado_greater")
+        self.builder.store(resultado, resultado_greater)
+
+        # Retornar la dirección donde se almacenó el resultado
+        return resultado_greater
+
+    def generar_smaller(self, nodo):
+        # Nodo tiene la forma ('smaller', 'op1', 'op2')
+        op1 = nodo[1]
+        op2 = nodo[2]
+
+        # Obtener el primer operando (puede ser una variable o un valor constante)
+        if isinstance(op1, str) and op1 in self.variables:
+            valor1 = self.builder.load(self.variables[op1], name=f"{op1}_valor")
+        else:
+            valor1 = ir.Constant(ir.IntType(32), op1)
+
+        # Obtener el segundo operando (puede ser una variable o un valor constante)
+        if isinstance(op2, str) and op2 in self.variables:
+            valor2 = self.builder.load(self.variables[op2], name=f"{op2}_valor")
+        else:
+            valor2 = ir.Constant(ir.IntType(32), op2)
+
+        # Generar la comparación "menor que" (<)
+        resultado = self.builder.icmp_signed('<', valor1, valor2)
+
+        # Almacenar el resultado en una variable
+        resultado_smaller = self.builder.alloca(ir.IntType(1), name="resultado_smaller")
+        self.builder.store(resultado, resultado_smaller)
+
+        # Retornar la dirección donde se almacenó el resultado
+        return resultado_smaller
+    
+    def generar_sum(self, nodo):
+        # Nodo tiene la forma ('sum', 'op1', 'op2')
+        op1 = nodo[1]
+        op2 = nodo[2]
+
+        # Obtener el primer operando (puede ser una variable o un valor constante)
+        if isinstance(op1, str) and op1 in self.variables:
+            valor1 = self.builder.load(self.variables[op1], name=f"{op1}_valor")
+        else:
+            valor1 = ir.Constant(ir.IntType(32), op1)
+
+        # Obtener el segundo operando (valor constante)
+        valor2 = ir.Constant(ir.IntType(32), op2)
+
+        # Realizar la suma
+        resultado = self.builder.add(valor1, valor2)
+
+        # Almacenar el resultado en una variable
+        resultado_sum = self.builder.alloca(ir.IntType(32), name="resultado_sum")
+        self.builder.store(resultado, resultado_sum)
+
+        # Retornar la dirección donde se almacenó el resultado
+        return resultado_sum
+
+    def generar_mult(self, nodo):
+        # Nodo tiene la forma ('mult', 'op1', 'op2')
+        op1 = nodo[1]
+        op2 = nodo[2]
+
+        # Obtener los operandos
+        valor1 = ir.Constant(ir.IntType(32), op1)
+        valor2 = ir.Constant(ir.IntType(32), op2)
+
+        # Realizar la multiplicación
+        resultado = self.builder.mul(valor1, valor2)
+
+        # Almacenar el resultado en una variable
+        resultado_mult = self.builder.alloca(ir.IntType(32), name="resultado_mult")
+        self.builder.store(resultado, resultado_mult)
+
+        # Retornar la dirección donde se almacenó el resultado
+        return resultado_mult
+
+    def generar_substr(self, nodo):
+        # Nodo tiene la forma ('substr', 'op1', 'op2')
+        op1 = nodo[1]
+        op2 = nodo[2]
+
+        # Obtener los operandos
+        valor1 = ir.Constant(ir.IntType(32), op1)
+        valor2 = ir.Constant(ir.IntType(32), op2)
+
+        # Realizar la resta
+        resultado = self.builder.sub(valor1, valor2)
+
+        # Almacenar el resultado en una variable
+        resultado_substr = self.builder.alloca(ir.IntType(32), name="resultado_substr")
+        self.builder.store(resultado, resultado_substr)
+
+        # Retornar la dirección donde se almacenó el resultado
+        return resultado_substr
+
+    def generar_div(self, nodo):
+        # Nodo tiene la forma ('div', 'op1', 'op2')
+        op1 = nodo[1]
+        op2 = nodo[2]
+
+        # Obtener los operandos
+        valor1 = ir.Constant(ir.IntType(32), op1)
+        valor2 = ir.Constant(ir.IntType(32), op2)
+
+        # Realizar la división
+        resultado = self.builder.sdiv(valor1, valor2)
+
+        # Almacenar el resultado en una variable
+        resultado_div = self.builder.alloca(ir.IntType(32), name="resultado_div")
+        self.builder.store(resultado, resultado_div)
+
+        # Retornar la dirección donde se almacenó el resultado
+        return resultado_div
+
+
+    def generar_random(self, nodo):
+        # Nodo tiene la forma ('random', 'valor')
+        valor = nodo[1]
+
+        # Obtener el rango (puede ser una constante o el valor de una variable)
+        if isinstance(valor, str) and valor in self.variables:
+            rango = self.builder.load(self.variables[valor], name=f"{valor}_valor")
+        else:
+            rango = ir.Constant(ir.IntType(32), valor)
+
+        # Llamar a la función rand() de la biblioteca estándar de C
+        rand_func = self.module.globals.get('rand')
+        if not rand_func:
+            rand_func_type = ir.FunctionType(ir.IntType(32), [])
+            rand_func = ir.Function(self.module, rand_func_type, name='rand')
+
+        # Generar el número aleatorio
+        random_value = self.builder.call(rand_func, [])
+
+        # Aplicar el módulo para limitar el rango
+        resultado = self.builder.srem(random_value, rango)
+
+        # Almacenar el resultado en una variable
+        resultado_random = self.builder.alloca(ir.IntType(32), name="resultado_random")
+        self.builder.store(resultado, resultado_random)
+
+        # Retornar la dirección donde se almacenó el resultado
+        return resultado_random
 
 
 
 # Ejemplo de AST de entrada con un for loop
-ast = ('sentencias', ('proc', 'main', ('sentencias', ('def_variable', 'varGlobal1', ('logico', 'TRUE')), ('sentencias', ('and', 'varGlobal1', ('logico', 'TRUE')), ('sentencias', ('and', ('logico', 'TRUE'), ('logico', 'FALSE')))))))
+ast = ('sentencias', ('proc', 'main', ('sentencias', ('def_variable', 'varGlobal1', 60), ('sentencias', ('random', 60), ('sentencias', ('random', 'varGlobal1'))))))
 
 
 
