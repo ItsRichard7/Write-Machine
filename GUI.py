@@ -116,21 +116,77 @@ def load_file_content(file_path):
         codePanel.insert(tk.END, file_content)
         update_line_numbers()
 
+
+def new_file():
+    """Crea un nuevo archivo y solicita guardarlo de inmediato"""
+    global archivo
+    # Abrir el cuadro de diálogo para guardar archivo
+    file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt")])
+
+    if file_path:
+        # Crear el archivo vacío en la ruta especificada
+        with open(file_path, 'w') as file:
+            file.write("")  # Escribir contenido vacío
+
+        # Obtener el nombre del archivo
+        file_name = os.path.basename(file_path)
+
+        # Limpiar el área de edición
+        codePanel.delete("1.0", tk.END)
+        update_line_numbers()
+        name = file_name.replace('.txt', '')
+        # Crear y añadir el botón del archivo al panel de archivos
+        fileButton = tk.Button(filesPanel, text=name, font=("Consolas", 11, "bold"), bg="#4b6eaf", fg="#3b3d3f",
+                               width=30,
+                               height=2, relief=tk.FLAT, activebackground="#aaacad",
+                               command=lambda: load_file_content(file_path))
+        fileButton.pack(pady=2)
+
+        # Actualizar el contador de archivos
+        archivo = str(int(archivo) + 1)
+
 def upload_file():
     global archivo
     file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
     fileButton = archivo
     if file_path:
         file_name = os.path.basename(file_path)
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             file_content = file.read()
             codePanel.delete("1.0", tk.END)  # Limpiar el panel de código actual
             codePanel.insert(tk.END, file_content)
             update_line_numbers()
-            fileButton = tk.Button(filesPanel, text=file_name, font=("Consolas", 11, "bold"), bg="#4b6eaf", fg="#3b3d3f", width=30,
+            name = file_name.replace('.txt','')
+            fileButton = tk.Button(filesPanel, text=name, font=("Consolas", 11, "bold"), bg="#4b6eaf", fg="#3b3d3f", width=30,
                                 height=2, relief=tk.FLAT, activebackground="#aaacad", command=lambda: load_file_content(file_path))
             fileButton.pack(pady=2)
             archivo = (int(archivo) + 1)
+
+
+def save_file():
+    global archivo
+    # Abrir el cuadro de diálogo para guardar archivo
+    file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt")])
+
+    if file_path:
+        # Guardar el contenido del codePanel en el archivo
+        with open(file_path, 'w') as file:
+            file_content = codePanel.get("1.0", tk.END).strip()
+            file.write(file_content)
+
+        # Obtener el nombre del archivo
+        file_name = os.path.basename(file_path)
+        name = file_name.replace('.txt', '')
+
+        # Crear y añadir el botón del archivo al panel de archivos
+        fileButton = tk.Button(filesPanel, text=name, font=("Consolas", 11, "bold"), bg="#4b6eaf", fg="#3b3d3f",
+                               width=30,
+                               height=2, relief=tk.FLAT, activebackground="#aaacad",
+                               command=lambda: load_file_content(file_path))
+        fileButton.pack(pady=2)
+
+        # Actualizar el contador de archivos
+        archivo = str(int(archivo) + 1)
 
 
 # Crear la ventana principal
@@ -176,10 +232,19 @@ tableImageTk = ImageTk.PhotoImage(tableImage)
 tableButton = tk.Button(menuFrame, image=tableImageTk, command=lambda: run_code(False,True), bg="#3b3d3f", relief=tk.FLAT, activebackground="#4c5052")
 tableButton.place(x=widthWindow-100, y=7)
 
-# Botón de subir archivo
+# Botones de  archivos
+
+newFileButton = tk.Button(menuFrame, text="Nuevo Archivo", font=("Consolas", 13, "bold"),
+                          command=new_file, bg="#b4b4af", fg="#3b3d3f", relief=tk.FLAT, activebackground="#4b6eaf", activeforeground="#b4b4af")
+newFileButton.place(x=15, y=7)  # Colocar entre "Subir Archivo" y "Guardar Archivo"
+
 uploadButton = tk.Button(menuFrame, text="Subir Archivo", font=("Consolas", 13, "bold"),
                          command=upload_file, bg="#b4b4af", fg="#3b3d3f", relief=tk.FLAT, activebackground="#4b6eaf", activeforeground="#b4b4af")
-uploadButton.place(x=15, y=7)
+uploadButton.place(x=170, y=7)
+
+saveButton = tk.Button(menuFrame, text="Guardar Archivo", font=("Consolas", 13, "bold"),
+                       command=save_file, bg="#b4b4af", fg="#3b3d3f", relief=tk.FLAT, activebackground="#4b6eaf", activeforeground="#b4b4af")
+saveButton.place(x=325, y=7)
 
 """
 Panel de consola, aquí se va a printear
@@ -211,10 +276,6 @@ filesPanel.pack()
 filesLabel = tk.Label(filesPanel, text="Archivos", bg="#3c3f41", fg="#828485", font=("Consolas", 13, "bold"), width=52)
 filesLabel.pack(fill=tk.X)
 
-editableFile = tk.Button(filesPanel, text="Archivo editable", font=("Consolas", 11, "bold"), bg="#4b6eaf", fg="#3b3d3f", width=30,
-                         height=2, relief=tk.FLAT, activebackground="#aaacad", command=lambda: [codePanel.delete("1.0", tk.END),update_line_numbers()])
-editableFile.pack()
-
 
 """
 Panel de números de línea
@@ -230,9 +291,30 @@ numbersText.pack(side=tk.LEFT, fill=tk.Y)
 """
 Panel de código
 """
-codePanel = scrolledtext.ScrolledText(root, bg="#2b2b2b", fg="white", insertbackground="white",
-                                      font=("Consolas", 12), bd=0, relief=tk.FLAT)
-codePanel.pack(expand=True, fill=tk.BOTH, padx=2, pady=2)
+# Crear un marco para contener el área de código y las barras de desplazamiento
+codePanelFrame = tk.Frame(root, bg="#2b2b2b")
+codePanelFrame.pack(expand=True, fill=tk.BOTH, padx=2, pady=2)
+
+# Crear la barra de desplazamiento horizontal
+h_scroll = Scrollbar(codePanelFrame, orient=tk.HORIZONTAL)
+h_scroll.pack(side=tk.BOTTOM, fill=tk.X)  # Colocar la barra de desplazamiento en la parte inferior del marco
+
+# Crear el área de texto con desplazamiento horizontal
+codePanel = scrolledtext.ScrolledText(
+    codePanelFrame,
+    bg="#2b2b2b",
+    fg="white",
+    insertbackground="white",
+    font=("Consolas", 12),
+    bd=0,
+    relief=tk.FLAT,
+    wrap="none",  # Deshabilitar el ajuste automático de línea
+    xscrollcommand=h_scroll.set  # Asociar la barra de desplazamiento horizontal
+)
+codePanel.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
+
+# Configurar la barra de desplazamiento horizontal
+h_scroll.config(command=codePanel.xview)
 
 # Actualizar los números de línea al cambiar el contenido o desplazarse
 codePanel.bind('<KeyRelease>', update_line_numbers)
