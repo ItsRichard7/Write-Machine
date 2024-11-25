@@ -76,6 +76,22 @@ class CodeGenerator:
             self.generar_div(nodo)
         elif tipo == 'random':
             self.generar_random(nodo)
+        elif tipo == 'beginning':
+            self.generar_beginning(nodo)
+        elif tipo == 'continue_up':
+            self.generar_continue_up(nodo)
+        elif tipo == 'continue_down':
+            self.generar_continue_down(nodo)
+        elif tipo == 'continue_right':
+            self.generar_continue_right(nodo)
+        elif tipo == 'continue_left':
+            self.generar_continue_left(nodo)
+        elif tipo == 'up':
+            self.generar_up(nodo)
+        elif tipo == 'down':
+            self.generar_down(nodo)
+        elif tipo == 'pos':
+            self.generar_pos(nodo)
         else:
             print(f"Tipo de nodo no manejado: {tipo}")
 
@@ -794,6 +810,191 @@ class CodeGenerator:
 
         # Retornar la dirección donde se almacenó el resultado
         return resultado_random
+
+    def generar_continue_up(self, nodo):
+        # Nodo tiene la forma ('continue_up', valor)
+        valor = nodo[1]
+
+        formato = "continue_up: %d\n\0"
+        formato_global = self.module.globals.get("formato_continue_up")
+        if not formato_global:
+            formato_global = ir.GlobalVariable(self.module, ir.ArrayType(ir.IntType(8), len(formato)),
+                                               name="formato_continue_up")
+            formato_global.initializer = ir.Constant(ir.ArrayType(ir.IntType(8), len(formato)),
+                                                     bytearray(formato, "utf8"))
+            formato_global.global_constant = True
+
+        # Valor a imprimir
+        valor_x = self.builder.load(self.variables[valor], name=f"{valor}_continue_up") if isinstance(valor,
+                                                                                                      str) else ir.Constant(
+            ir.IntType(32), valor)
+
+        formato_ptr = self.builder.bitcast(formato_global, ir.PointerType(ir.IntType(8)))
+
+        # Llamar a `printf`
+        printf_func = self.module.globals.get('printf')
+        if not printf_func:
+            printf_ty = ir.FunctionType(ir.IntType(32), [ir.PointerType(ir.IntType(8))], var_arg=True)
+            printf_func = ir.Function(self.module, printf_ty, name='printf')
+
+        self.builder.call(printf_func, [formato_ptr, valor_x])
+
+    def generar_continue_down(self, nodo):
+        # Nodo tiene la forma ('continue_down', valor)
+        valor = nodo[1]
+
+        formato = "continue_down: %d\n\0"
+        formato_global = self.module.globals.get("formato_continue_down")
+        if not formato_global:
+            formato_global = ir.GlobalVariable(self.module, ir.ArrayType(ir.IntType(8), len(formato)),
+                                               name="formato_continue_down")
+            formato_global.initializer = ir.Constant(ir.ArrayType(ir.IntType(8), len(formato)),
+                                                     bytearray(formato, "utf8"))
+            formato_global.global_constant = True
+
+        # Valor a imprimir
+        valor_x = self.builder.load(self.variables[valor], name=f"{valor}_continue_down") if isinstance(valor,
+                                                                                                        str) else ir.Constant(
+            ir.IntType(32), valor)
+
+        formato_ptr = self.builder.bitcast(formato_global, ir.PointerType(ir.IntType(8)))
+
+        # Llamar a `printf`
+        printf_func = self.module.globals.get('printf')
+        if not printf_func:
+            printf_ty = ir.FunctionType(ir.IntType(32), [ir.PointerType(ir.IntType(8))], var_arg=True)
+            printf_func = ir.Function(self.module, printf_ty, name='printf')
+
+        self.builder.call(printf_func, [formato_ptr, valor_x])
+
+    def generar_continue_right(self, nodo):
+        # Nodo tiene la forma ('continue_right', valor)
+        valor = nodo[1]
+
+        formato = "continue_right: %d\n\0"
+        formato_global = self.module.globals.get("formato_continue_right")
+        if not formato_global:
+            formato_global = ir.GlobalVariable(self.module, ir.ArrayType(ir.IntType(8), len(formato)),
+                                               name="formato_continue_right")
+            formato_global.initializer = ir.Constant(ir.ArrayType(ir.IntType(8), len(formato)),
+                                                     bytearray(formato, "utf8"))
+            formato_global.global_constant = True
+
+        # Valor a imprimir
+        valor_x = self.builder.load(self.variables[valor], name=f"{valor}_continue_right") if isinstance(valor,
+                                                                                                         str) else ir.Constant(
+            ir.IntType(32), valor)
+
+        formato_ptr = self.builder.bitcast(formato_global, ir.PointerType(ir.IntType(8)))
+
+        # Llamar a `printf`
+        printf_func = self.module.globals.get('printf')
+        if not printf_func:
+            printf_ty = ir.FunctionType(ir.IntType(32), [ir.PointerType(ir.IntType(8))], var_arg=True)
+            printf_func = ir.Function(self.module, printf_ty, name='printf')
+
+        self.builder.call(printf_func, [formato_ptr, valor_x])
+
+    def generar_continue_left(self, nodo):
+        # Nodo tiene la forma ('continue_left', valor)
+        valor = nodo[1]
+
+        formato = "continue_left: %d\n\0"
+        formato_global = self.module.globals.get("formato_continue_left")
+        if not formato_global:
+            formato_global = ir.GlobalVariable(self.module, ir.ArrayType(ir.IntType(8), len(formato)),
+                                               name="formato_continue_left")
+            formato_global.initializer = ir.Constant(ir.ArrayType(ir.IntType(8), len(formato)),
+                                                     bytearray(formato, "utf8"))
+            formato_global.global_constant = True
+
+        # Valor a imprimir
+        valor_x = self.builder.load(self.variables[valor], name=f"{valor}_continue_left") if isinstance(valor,
+                                                                                                        str) else ir.Constant(
+            ir.IntType(32), valor)
+
+        formato_ptr = self.builder.bitcast(formato_global, ir.PointerType(ir.IntType(8)))
+
+        # Llamar a `printf`
+        printf_func = self.module.globals.get('printf')
+        if not printf_func:
+            printf_ty = ir.FunctionType(ir.IntType(32), [ir.PointerType(ir.IntType(8))], var_arg=True)
+            printf_func = ir.Function(self.module, printf_ty, name='printf')
+
+        self.builder.call(printf_func, [formato_ptr, valor_x])
+
+    def generar_pos(self, nodo):
+        # Nodo tiene la forma ('pos', ('op1', 'op2'))
+        op1, op2 = nodo[1]
+
+        # Obtener el primer operando (variable o constante)
+        valor1 = self.builder.load(self.variables[op1], name=f"{op1}_valor") if isinstance(op1, str) else ir.Constant(
+            ir.IntType(32), op1)
+
+        # Obtener el segundo operando (variable o constante)
+        valor2 = self.builder.load(self.variables[op2], name=f"{op2}_valor") if isinstance(op2, str) else ir.Constant(
+            ir.IntType(32), op2)
+
+        # Definir el formato de impresión
+        formato = "pos: (%d, %d)\n\0"
+        formato_global = self.module.globals.get("formato_pos")
+        if not formato_global:
+            formato_global = ir.GlobalVariable(self.module, ir.ArrayType(ir.IntType(8), len(formato)),
+                                               name="formato_pos")
+            formato_global.initializer = ir.Constant(ir.ArrayType(ir.IntType(8), len(formato)),
+                                                     bytearray(formato, "utf8"))
+            formato_global.global_constant = True
+
+        # Convertir el formato a puntero
+        formato_ptr = self.builder.bitcast(formato_global, ir.PointerType(ir.IntType(8)))
+
+        # Llamar a `printf`
+        printf_func = self.module.globals.get('printf')
+        if not printf_func:
+            printf_ty = ir.FunctionType(ir.IntType(32), [ir.PointerType(ir.IntType(8))], var_arg=True)
+            printf_func = ir.Function(self.module, printf_ty, name='printf')
+
+        self.builder.call(printf_func, [formato_ptr, valor1, valor2])
+
+    def generar_up(self):
+        formato = "up\n\0"
+        formato_global = self.module.globals.get("formato_up")
+        if not formato_global:
+            formato_global = ir.GlobalVariable(self.module, ir.ArrayType(ir.IntType(8), len(formato)),
+                                               name="formato_up")
+            formato_global.initializer = ir.Constant(ir.ArrayType(ir.IntType(8), len(formato)),
+                                                     bytearray(formato, "utf8"))
+            formato_global.global_constant = True
+
+        formato_ptr = self.builder.bitcast(formato_global, ir.PointerType(ir.IntType(8)))
+
+        # Llamar a `printf`
+        printf_func = self.module.globals.get('printf')
+        if not printf_func:
+            printf_ty = ir.FunctionType(ir.IntType(32), [ir.PointerType(ir.IntType(8))], var_arg=True)
+            printf_func = ir.Function(self.module, printf_ty, name='printf')
+
+        self.builder.call(printf_func, [formato_ptr])
+
+    def generar_down(self):
+        formato = "down\n\0"
+        formato_global = self.module.globals.get("formato_down")
+        if not formato_global:
+            formato_global = ir.GlobalVariable(self.module, ir.ArrayType(ir.IntType(8), len(formato)),
+                                               name="formato_down")
+            formato_global.initializer = ir.Constant(ir.ArrayType(ir.IntType(8), len(formato)),
+                                                     bytearray(formato, "utf8"))
+            formato_global.global_constant = True
+
+        formato_ptr = self.builder.bitcast(formato_global, ir.PointerType(ir.IntType(8)))
+
+        # Llamar a `printf`
+        printf_func = self.module.globals.get('printf')
+        if not printf_func:
+            printf_ty = ir.FunctionType(ir.IntType(32), [ir.PointerType(ir.IntType(8))], var_arg=True)
+            printf_func = ir.Function(self.module, printf_ty, name='printf')
+
+        self.builder.call(printf_func, [formato_ptr])
 
 
 
