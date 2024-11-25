@@ -4,17 +4,26 @@ from PIL import Image, ImageTk
 from lexico import errores, lexer, verificar_comentario_inicial
 from sintactico import visualizar_arbol, parser
 from semantico import AnalizadorSemantico
+from generator import CodeGenerator
 import os
 import PIL
+from llvmlite import ir, binding
 
 
 global archivo
 archivo = "1"
 
+# Instancia global de CodeGenerator
+global generador
+generador = CodeGenerator()
+
+import subprocess
+
+
 # Ejemplo de uso dentro de run_code
 def run_code(arbol, tabla):
     consolePanel.config(state=tk.NORMAL)  # Habilitar la consola para que sea editable
-    consolePanel.delete('1.0', tk.END)  # Eliminar todo el texto desde la primera posición hasta el final
+    consolePanel.delete('1.0', tk.END)
     consolePanel.config(state=tk.DISABLED)  # Deshabilitar nuevamente para evitar ediciones manuales
     errores.clear()  # Limpiamos la lista de errores
     code = codePanel.get("1.0", tk.END).strip()
@@ -52,6 +61,8 @@ def run_code(arbol, tabla):
                         mostrar_imagen_con_scroll("tabla_simbolos.png")
                     consolePanel.insert(tk.END, "Código compilado con éxito <3 \n", 'exito')
                     consolePanel.tag_config('exito', foreground="white", font=("Consolas", 13, "bold"))  # Configuración del estilo para los errores
+            ejecutar_asm()
+            open_control_window()
     else:
         show_errors(errores)
 
@@ -259,6 +270,158 @@ consoleLabel.pack(side=tk.BOTTOM, fill=tk.X, padx=2)
 # Separador para estética
 separator = tk.Frame(root, bg="#313335", height=25)
 separator.pack(side=tk.BOTTOM, fill=tk.X)
+
+"""
+Ventana del dibujo generado
+"""
+# Función para abrir la nueva ventana con la matriz y los botones
+def open_control_window():
+
+    control_window = Toplevel(root)
+    control_window.title("Control de Ejecución")
+    control_window.geometry("800x700")
+    control_window.configure(background="#2b2b2b")
+
+    # Crear un contenedor para los botones
+    button_frame = tk.Frame(control_window, bg="#2b2b2b")
+    button_frame.pack(side=tk.TOP, fill=tk.X, pady=10)
+
+    # Botones en la parte superior
+    step_button = tk.Button(button_frame, text="Step by Step", font=("Consolas", 12, "bold"),
+                             bg="#4b6eaf", fg="white", relief=tk.FLAT, activebackground="#6b8ecf", activeforeground="white",
+                             command=step_by_step_action)
+    step_button.pack(side=tk.LEFT, padx=10, fill=tk.X, expand=True)
+
+    final_button = tk.Button(button_frame, text="Final", font=("Consolas", 12, "bold"),
+                              bg="#4b6eaf", fg="white", relief=tk.FLAT, activebackground="#6b8ecf", activeforeground="white",
+                              command=final_action)
+    final_button.pack(side=tk.LEFT, padx=10, fill=tk.X, expand=True)
+
+    back_button = tk.Button(button_frame, text="Atrás", font=("Consolas", 12, "bold"),
+                             bg="#4b6eaf", fg="white", relief=tk.FLAT, activebackground="#6b8ecf", activeforeground="white",
+                             command=control_window.destroy)
+    back_button.pack(side=tk.LEFT, padx=10, fill=tk.X, expand=True)
+
+    # Crear un contenedor para la matriz
+    matrix_frame = tk.Frame(control_window, bg="#2b2b2b")
+    matrix_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
+
+    # Crear la matriz en el Canvas
+    create_canvas_matrix(matrix_frame, 64, 64, cell_size=10)
+
+# Crear matriz de puntos usando Canvas
+def create_canvas_matrix(parent, rows, cols, cell_size):
+    canvas = Canvas(parent, bg="#2b2b2b", width=cols * cell_size, height=rows * cell_size, highlightthickness=0)
+    canvas.pack(expand=True)
+
+    # Dibujar la matriz de celdas
+    for i in range(rows):
+        for j in range(cols):
+            x0, y0 = j * cell_size, i * cell_size
+            x1, y1 = x0 + cell_size, y0 + cell_size
+            rect_id = canvas.create_rectangle(x0, y0, x1, y1, fill="#48494a", outline="#2b2b2b")
+            # Asociar eventos a las celdas
+            canvas.tag_bind(rect_id, "<Button-1>", lambda e, id=rect_id: toggle_canvas_cell(canvas, id))
+
+# Alternar el color de una celda en el Canvas
+def toggle_canvas_cell(canvas, rect_id):
+    current_color = canvas.itemcget(rect_id, "fill")
+    new_color = "white" if current_color == "#48494a" else "#48494a"
+    canvas.itemconfig(rect_id, fill=new_color)
+
+# Acciones de los botones
+def step_by_step_action():
+    consolePanel.config(state=tk.NORMAL)
+    consolePanel.insert(tk.END, "Ejecución paso a paso iniciada...\n", 'info')
+    consolePanel.config(state=tk.DISABLED)
+    consolePanel.tag_config('info', foreground="#6bcf8f", font=("Consolas", 13, "bold"))
+
+def final_action():
+    consolePanel.config(state=tk.NORMAL)
+    consolePanel.insert(tk.END, "Ejecución final completada.\n", 'info')
+    consolePanel.config(state=tk.DISABLED)
+    consolePanel.tag_config('info', foreground="#6bcf8f", font=("Consolas", 13, "bold"))
+
+import sys
+
+class ConsoleRedirector:
+    def __init__(self, console_panel):
+        self.console_panel = console_panel
+
+    def write(self, message):
+        self.console_panel.config(state=tk.NORMAL)  # Habilitar el panel
+        self.console_panel.insert(tk.END, message)  # Agregar el mensaje al final
+        self.console_panel.see(tk.END)  # Hacer scroll hasta el final
+        self.console_panel.config(state=tk.DISABLED)  # Deshabilitar el panel
+
+    def flush(self):
+        pass  # Método requerido para compatibilidad con `sys.stdout`
+
+# Redirigir stdout y stderr
+sys.stdout = ConsoleRedirector(consolePanel)
+sys.stderr = ConsoleRedirector(consolePanel)
+
+
+
+def ejecutar_asm():
+    global generador
+
+    # Limpiar la consola antes de empezar
+    consolePanel.config(state=tk.NORMAL)
+    consolePanel.delete('1.0', tk.END)
+    consolePanel.config(state=tk.DISABLED)
+
+    # Ejemplo de AST de entrada con un for loop
+    ast = ('sentencias', ('proc', 'linea1', ('sentencias', ('def_variable', 'varLocal1', 1), ('sentencias', ('posy', 'varLocal1')))), ('sentencias', ('proc', 'posiciona', ['valorX', 'valorY'], ('sentencias', ('posx', 'valorX'), ('sentencias', ('posy', 'valorY')))), ('sentencias', ('proc', 'main', ('sentencias', ('def_variable', 'varGlobal1', 1), ('sentencias', ('invocacion_proc', 'linea1'), ('sentencias', ('invocacion_proc', 'posiciona', [('number', 5), ('number', 3)]))))))))
+
+
+    consolePanel.config(state=tk.NORMAL)
+    consolePanel.insert(tk.END, "Generando código...\n", 'info')
+    consolePanel.update()  # Forzar actualización de la interfaz
+    consolePanel.config(state=tk.DISABLED)
+
+    generador.generar_codigo(ast)
+
+    consolePanel.config(state=tk.NORMAL)
+    consolePanel.insert(tk.END, "Código generado:\n", 'info')
+    consolePanel.insert(tk.END, str(generador.module) + "\n")
+    consolePanel.update()  # Forzar actualización
+    consolePanel.config(state=tk.DISABLED)
+
+    # Generar el archivo ensamblador .asm
+    generador.generar_archivo_asm("output.asm")
+
+    consolePanel.config(state=tk.NORMAL)
+    consolePanel.insert(tk.END, "Archivo ensamblador generado: output.asm\n", 'info')
+    consolePanel.update()  # Forzar actualización
+    consolePanel.config(state=tk.DISABLED)
+
+    # Opcionalmente: ejecutar el código LLVM usando el motor JIT
+    modulo_llvm = binding.parse_assembly(str(generador.module))
+    modulo_llvm.verify()
+
+    target_machine = binding.Target.from_default_triple().create_target_machine()
+
+    with binding.create_mcjit_compiler(modulo_llvm, target_machine) as ee:
+        ee.finalize_object()
+
+        # Llamar a la función main
+        if "main" in generador.funciones:
+            func_ptr = ee.get_function_address("main")
+            import ctypes
+            main_fn = ctypes.CFUNCTYPE(None)(func_ptr)
+
+            consolePanel.config(state=tk.NORMAL)
+            consolePanel.insert(tk.END, "Ejecutando función main...\n", 'info')
+            consolePanel.update()  # Forzar actualización
+            consolePanel.config(state=tk.DISABLED)
+
+            main_fn()
+
+    consolePanel.config(state=tk.NORMAL)
+    consolePanel.insert(tk.END, "Ejecución completada.\n", 'info')
+    consolePanel.update()  # Forzar actualización
+    consolePanel.config(state=tk.DISABLED)
 
 
 """

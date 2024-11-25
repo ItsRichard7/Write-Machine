@@ -4,12 +4,12 @@ class CodeGenerator:
     def __init__(self):
         # Crear el módulo LLVM
         self.module = ir.Module(name="modulo_principal")
-        
+
         # Inicializar el target triple y data layout
         binding.initialize()
         binding.initialize_native_target()
         binding.initialize_native_asmprinter()  # Necesario para la impresión ASM
-        
+
         target = binding.Target.from_default_triple()
         target_machine = target.create_target_machine()
         self.module.triple = target.triple
@@ -104,7 +104,7 @@ class CodeGenerator:
 
         # Crear la lista de tipos de los parámetros (si existen)
         tipos_parametros = [ir.IntType(32)] * len(parametros)
-        
+
         # Crear la función LLVM con los tipos de los parámetros
         tipo_funcion = ir.FunctionType(ir.VoidType(), tipos_parametros)
         funcion = ir.Function(self.module, tipo_funcion, name=nombre)
@@ -156,7 +156,7 @@ class CodeGenerator:
         # Nodo tiene la forma ('put_variable', 'nombre_variable', nuevo_valor)
         nombre_var = nodo[1]
         nuevo_valor = nodo[2]
-        
+
         # Buscar la variable en la tabla de variables
         variable = self.variables.get(nombre_var)
         if variable:
@@ -252,10 +252,10 @@ class CodeGenerator:
 
             # Crear el bloque para este caso
             bloque_caso = self.builder.append_basic_block(f"when_{valor_case}")
-            
+
             # Crear el bloque para continuar si no se cumple la condición
             bloque_siguiente = self.builder.append_basic_block(f"next_{valor_case}")
-            
+
             # Comparar la variable con el valor del case
             condicion = self.builder.icmp_signed('==', valor_variable, ir.Constant(ir.IntType(32), valor_case))
             self.builder.cbranch(condicion, bloque_caso, bloque_siguiente)
@@ -283,7 +283,7 @@ class CodeGenerator:
         # Si es un solo 'when_case', procesarlo directamente
         if when_cases[0] == 'when_case':
             return [when_cases]
-        
+
         # Si es un 'when_cases', recorrerlo y procesar todos sus elementos
         casos = []
         for caso in when_cases[1:]:
@@ -293,7 +293,7 @@ class CodeGenerator:
             else:
                 # Añadir el 'when_case' actual
                 casos.append(caso)
-        
+
         return casos
 
     def generar_repeat_until(self, nodo):
@@ -348,7 +348,7 @@ class CodeGenerator:
 
         # Posicionar en el bloque de salida
         self.builder.position_at_end(bloque_salida)
-    
+
     def generar_while(self, nodo):
         # Nodo tiene la forma ('while', 'condición', 'instrucciones')
         condicion = nodo[1]
@@ -400,14 +400,14 @@ class CodeGenerator:
         self.builder.branch(bloque_condicion)
 
         # Posicionar en el bloque de salida
-        self.builder.position_at_end(bloque_salida)    
+        self.builder.position_at_end(bloque_salida)
 
 
     def add_variable_dos(self, nodo):
         # Nodo tiene la forma ('add_variable_dos', 'nombre_variable', valor)
         nombre_var = nodo[1]
         valor = nodo[2]
-        
+
         # Cargar el valor actual de la variable
         variable = self.variables.get(nombre_var)
         if variable:
@@ -422,11 +422,11 @@ class CodeGenerator:
         # Nodo tiene la forma ('add_variable_dos', 'nombre_variable1', 'nombre_variable2')
         nombre_var1 = nodo[1]
         nombre_var2 = nodo[2]
-        
+
         # Cargar el valor actual de las dos variables
         variable1 = self.variables.get(nombre_var1)
         variable2 = self.variables.get(nombre_var2)
-        
+
         if variable1 and variable2:
             valor_actual1 = self.builder.load(variable1, name=f"{nombre_var1}_actual")
             valor_actual2 = self.builder.load(variable2, name=f"{nombre_var2}_actual")
@@ -435,11 +435,11 @@ class CodeGenerator:
             print(f"Suma del valor de {nombre_var2} a {nombre_var1}")
         else:
             print(f"Una de las variables no fue encontrada.")
-    
+
     def add_variable_uno(self, nodo):
         # Nodo tiene la forma ('add_variable_uno', 'nombre_variable')
         nombre_var = nodo[1]
-        
+
         # Cargar el valor actual de la variable
         variable = self.variables.get(nombre_var)
         if variable:
@@ -450,32 +450,84 @@ class CodeGenerator:
         else:
             print(f"Variable {nombre_var} no encontrada.")
 
-
-
     def generar_posx(self, nodo):
+        # Nodo tiene la forma ('posx', valor)
         valor = nodo[1]
+
+        # Definir o reutilizar el formato de impresión para `printf`
+        formato_posx = self.module.globals.get("formato_posx")
+        if not formato_posx:
+            formato_posx = ir.GlobalVariable(self.module, ir.ArrayType(ir.IntType(8), len("Posición en X: %d\n\0")),
+                                             name="formato_posx")
+            formato_posx.initializer = ir.Constant(ir.ArrayType(ir.IntType(8), len("Posición en X: %d\n\0")),
+                                                   bytearray("Posicion en X: %d\n\0", "utf8"))
+            formato_posx.global_constant = True
+
+        # Obtener el valor que se imprimirá
         if isinstance(valor, int):
-            print(f"Generando PosX con valor {valor}")
+            valor_x = ir.Constant(ir.IntType(32), valor)
+        elif isinstance(valor, str) and valor in self.variables:
+            valor_x = self.builder.load(self.variables[valor], name=f"{valor}_posx")
         else:
-            variable = self.variables.get(valor)
-            if variable:
-                valor_posx = self.builder.load(variable, name="posx_temp")
-                print(f"Generando PosX con valor de la variable {valor}")
-            else:
-                print(f"Variable {valor} no encontrada.")
+            raise ValueError(f"Valor inválido para posición X: {valor}")
+
+        # Llamar a `printf` con el formato y el valor
+        printf_func = self.module.globals.get('printf')
+        if not printf_func:
+            printf_ty = ir.FunctionType(ir.IntType(32), [ir.PointerType(ir.IntType(8))], var_arg=True)
+            printf_func = ir.Function(self.module, printf_ty, name='printf')
+
+        formato_ptr = self.builder.bitcast(formato_posx, ir.PointerType(ir.IntType(8)))
+        self.builder.call(printf_func, [formato_ptr, valor_x])
+
+        # Llamar a fflush(stdout)
+        fflush_func = self.module.globals.get('fflush')
+        if not fflush_func:
+            fflush_ty = ir.FunctionType(ir.IntType(32), [ir.PointerType(ir.IntType(8))])
+            fflush_func = ir.Function(self.module, fflush_ty, name='fflush')
+
+        null_ptr = ir.Constant(ir.PointerType(ir.IntType(8)), None)
+        self.builder.call(fflush_func, [null_ptr])
 
     def generar_posy(self, nodo):
+        # Nodo tiene la forma ('posy', valor)
         valor = nodo[1]
+
+        # Definir o reutilizar el formato de impresión para `printf`
+        formato_posy = self.module.globals.get("formato_posy")
+        if not formato_posy:
+            formato_posy = ir.GlobalVariable(self.module, ir.ArrayType(ir.IntType(8), len("Posición en Y: %d\n\0")),
+                                             name="formato_posy")
+            formato_posy.initializer = ir.Constant(ir.ArrayType(ir.IntType(8), len("Posición en Y: %d\n\0")),
+                                                   bytearray("Posicion en Y: %d\n\0", "utf8"))
+            formato_posy.global_constant = True
+
+        # Obtener el valor que se imprimirá
         if isinstance(valor, int):
-            print(f"Generando PosY con valor {valor}")
+            valor_y = ir.Constant(ir.IntType(32), valor)
+        elif isinstance(valor, str) and valor in self.variables:
+            valor_y = self.builder.load(self.variables[valor], name=f"{valor}_posy")
         else:
-            variable = self.variables.get(valor)
-            if variable:
-                valor_posy = self.builder.load(variable, name="posy_temp")
-                print(f"Generando PosY con valor de la variable {valor}")
-            else:
-                print(f"Variable {valor} no encontrada.")
-    
+            raise ValueError(f"Valor inválido para posición Y: {valor}")
+
+        # Llamar a `printf` con el formato y el valor
+        printf_func = self.module.globals.get('printf')
+        if not printf_func:
+            printf_ty = ir.FunctionType(ir.IntType(32), [ir.PointerType(ir.IntType(8))], var_arg=True)
+            printf_func = ir.Function(self.module, printf_ty, name='printf')
+
+        formato_ptr = self.builder.bitcast(formato_posy, ir.PointerType(ir.IntType(8)))
+        self.builder.call(printf_func, [formato_ptr, valor_y])
+
+        # Llamar a fflush(stdout)
+        fflush_func = self.module.globals.get('fflush')
+        if not fflush_func:
+            fflush_ty = ir.FunctionType(ir.IntType(32), [ir.PointerType(ir.IntType(8))])
+            fflush_func = ir.Function(self.module, fflush_ty, name='fflush')
+
+        null_ptr = ir.Constant(ir.PointerType(ir.IntType(8)), None)
+        self.builder.call(fflush_func, [null_ptr])
+
     def generar_equal(self, nodo):
         # Nodo tiene la forma ('equal', 'op1', 'op2')
         op1 = nodo[1]
@@ -495,7 +547,7 @@ class CodeGenerator:
 
         # Generar la comparación y retornar el resultado booleano
         return self.builder.icmp_signed('==', valor1, valor2)
-    
+
     def generar_and(self, nodo):
         # Nodo tiene la forma ('and', 'op1', 'op2')
         op1 = nodo[1]
@@ -536,7 +588,7 @@ class CodeGenerator:
 
         # Retornar la dirección donde se almacenó el resultado
         return resultado_and
-    
+
     def generar_or(self, nodo):
         # Nodo tiene la forma ('and', 'op1', 'op2')
         op1 = nodo[1]
@@ -577,7 +629,7 @@ class CodeGenerator:
 
         # Retornar la dirección donde se almacenó el resultado
         return resultado_or
-    
+
     def generar_greater(self, nodo):
         # Nodo tiene la forma ('greater', 'op1', 'op2')
         op1 = nodo[1]
@@ -631,7 +683,7 @@ class CodeGenerator:
 
         # Retornar la dirección donde se almacenó el resultado
         return resultado_smaller
-    
+
     def generar_sum(self, nodo):
         # Nodo tiene la forma ('sum', 'op1', 'op2')
         op1 = nodo[1]
@@ -745,35 +797,5 @@ class CodeGenerator:
 
 
 
-# Ejemplo de AST de entrada con un for loop
-ast = ('sentencias', ('proc', 'linea1', ('sentencias', ('def_variable', 'varLocal1', 1), ('sentencias', ('posy', 'varLocal1')))), ('sentencias', ('proc', 'posiciona', ['valorX', 'valorY'], ('sentencias', ('posx', 'valorX'), ('sentencias', ('posy', 'valorY')))), ('sentencias', ('proc', 'main', ('sentencias', ('def_variable', 'varGlobal1', 1), ('sentencias', ('invocacion_proc', 'linea1'), ('sentencias', ('invocacion_proc', 'posiciona', [('number', 1), ('number', 1)]))))))))
 
 
-
-
-# Crear el generador y generar código
-generador = CodeGenerator()
-generador.generar_codigo(ast)
-
-# Imprimir el módulo LLVM generado
-print(generador.module)
-
-# Generar el archivo ensamblador .asm
-generador.generar_archivo_asm("output.asm")
-
-# Opcionalmente: ejecutar el código LLVM usando el motor JIT
-modulo_llvm = binding.parse_assembly(str(generador.module))
-modulo_llvm.verify()
-
-target_machine = binding.Target.from_default_triple().create_target_machine()
-
-with binding.create_mcjit_compiler(modulo_llvm, target_machine) as ee:
-    ee.finalize_object()
-
-    # Llamar a la función main
-    if "main" in generador.funciones:
-        func_ptr = ee.get_function_address("main")
-        import ctypes
-        main_fn = ctypes.CFUNCTYPE(None)(func_ptr)
-        print("Ejecutando función main...")
-        main_fn()
