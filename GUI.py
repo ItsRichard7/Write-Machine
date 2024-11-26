@@ -36,8 +36,6 @@ def run_code(arbol, tabla):
         if errores:
             show_errors(errores)
         else:
-            for tok in lexer:
-                print(tok)
             lexer.lineno = 1
             arb_sint = parser.parse(code)
             if errores:
@@ -50,6 +48,7 @@ def run_code(arbol, tabla):
                 lexer.lineno = 1
                 analizador = AnalizadorSemantico(arb_sint)
                 analizador.analizar(arb_sint)
+
                 print(errores)
                 if errores:
                    show_errors(errores)
@@ -61,7 +60,9 @@ def run_code(arbol, tabla):
                         mostrar_imagen_con_scroll("tabla_simbolos.png")
                     consolePanel.insert(tk.END, "Código compilado con éxito <3 \n", 'exito')
                     consolePanel.tag_config('exito', foreground="white", font=("Consolas", 13, "bold"))  # Configuración del estilo para los errores
-            ejecutar_asm()
+            arbol_simplificado = analizador.simplificar_arbol(arb_sint)
+
+            ejecutar_asm(arbol_simplificado)
             open_control_window()
     else:
         show_errors(errores)
@@ -156,22 +157,31 @@ def new_file():
         # Actualizar el contador de archivos
         archivo = str(int(archivo) + 1)
 
+
 def upload_file():
     global archivo
     file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
     fileButton = archivo
     if file_path:
         file_name = os.path.basename(file_path)
-        with open(file_path, 'r', encoding='utf-8') as file:
-            file_content = file.read()
-            codePanel.delete("1.0", tk.END)  # Limpiar el panel de código actual
-            codePanel.insert(tk.END, file_content)
-            update_line_numbers()
-            name = file_name.replace('.txt','')
-            fileButton = tk.Button(filesPanel, text=name, font=("Consolas", 11, "bold"), bg="#4b6eaf", fg="#3b3d3f", width=30,
-                                height=2, relief=tk.FLAT, activebackground="#aaacad", command=lambda: load_file_content(file_path))
-            fileButton.pack(pady=2)
-            archivo = (int(archivo) + 1)
+        try:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                file_content = file.read()
+        except UnicodeDecodeError:
+            # Si falla con UTF-8, intentamos con 'latin-1'
+            with open(file_path, 'r', encoding='latin-1') as file:
+                file_content = file.read()
+
+        codePanel.delete("1.0", tk.END)  # Limpiar el panel de código actual
+        codePanel.insert(tk.END, file_content)
+        update_line_numbers()
+        name = file_name.replace('.txt', '')
+        fileButton = tk.Button(filesPanel, text=name, font=("Consolas", 11, "bold"), bg="#4b6eaf", fg="#3b3d3f",
+                               width=30,
+                               height=2, relief=tk.FLAT, activebackground="#aaacad",
+                               command=lambda: load_file_content(file_path))
+        fileButton.pack(pady=2)
+        archivo = (int(archivo) + 1)
 
 
 def save_file():
@@ -357,13 +367,11 @@ class ConsoleRedirector:
     def flush(self):
         pass  # Método requerido para compatibilidad con `sys.stdout`
 
-# Redirigir stdout y stderr
-sys.stdout = ConsoleRedirector(consolePanel)
-sys.stderr = ConsoleRedirector(consolePanel)
 
 
 
-def ejecutar_asm():
+
+def ejecutar_asm(ast):
     global generador
 
     # Limpiar la consola antes de empezar
@@ -372,13 +380,13 @@ def ejecutar_asm():
     consolePanel.config(state=tk.DISABLED)
 
     # Ejemplo de AST de entrada con un for loop
-    ast = ('sentencias', ('proc', 'linea1', ('sentencias', ('def_variable', 'varLocal1', 1), ('sentencias', ('posy', 'varLocal1')))), ('sentencias', ('proc', 'posiciona', ['valorX', 'valorY'], ('sentencias', ('posx', 'valorX'), ('sentencias', ('posy', 'valorY')))), ('sentencias', ('proc', 'main', ('sentencias', ('def_variable', 'varGlobal1', 1), ('sentencias', ('invocacion_proc', 'linea1'), ('sentencias', ('invocacion_proc', 'posiciona', [('number', 5), ('number', 3)]))))))))
-
 
     consolePanel.config(state=tk.NORMAL)
     consolePanel.insert(tk.END, "Generando código...\n", 'info')
     consolePanel.update()  # Forzar actualización de la interfaz
     consolePanel.config(state=tk.DISABLED)
+
+    print(ast)
 
     generador.generar_codigo(ast)
 

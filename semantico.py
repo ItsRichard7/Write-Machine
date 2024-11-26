@@ -209,6 +209,8 @@ class AnalizadorSemantico:
         # Imprimir el valor actual de la variable
         print(f"Variable '{nombre_variable}' está siendo usada correctamente. Valor actual: {valor_actual}.")
 
+        print(nuevo_valor)
+
         # Si hay un nuevo valor proporcionado, verificar su tipo
         if nuevo_valor is not None:
             nuevo_tipo = 'entero' if isinstance(nuevo_valor, int) else 'booleano' if nuevo_valor in ["TRUE", "FALSE"] else None
@@ -480,6 +482,7 @@ class AnalizadorSemantico:
             valor_a = self.verificar_operacion(nodo[1], alcance)
         else:
             valor_a = self.obtener_valor(nodo[1], alcance)  # Primer argumento
+            print(valor_a)
 
             # Verificar ambos valores
             self.verificar_entero(valor_a, alcance)
@@ -547,11 +550,13 @@ class AnalizadorSemantico:
         self.verificar_entero(indice_menor, alcance)
         self.verificar_entero(indice_mayor, alcance)
         if var not in self.tabla_simbolos: 
-            self.tabla_simbolos[var] = {'tipo': "entero", 'valor': indice_menor}
+            self.tabla_simbolos[var] = {'tipo': "entero", 'valor': indice_menor} 
             while indice_menor < indice_mayor:
                 for i in range(len(self.extraer_sentencias(nodo))):
                     sentencia = self.extraer_sentencias(nodo)[i]
+                    print(sentencia)
                     self.analizar(sentencia, alcance)
+                    
                 indice_menor += 1
                 self.tabla_simbolos[var]['valor'] = indice_menor
         else:
@@ -1132,34 +1137,93 @@ if __name__ == "__main__":
     from sintactico import parser
 
     data = '''
-    // Programa de Prueba
-    Proc linea1()
-        [
-            //Define variable local
-            Def(varLocal1, 1);
-            PosY varLocal1;
-        ];
-    End;
+    //Imprime en código morse
+Proc impresion() 
+[ 
+//Baja para imprimir
+Down;
+//Imprime T en código morse (tres puntos)
+    For var1(1 to 3) Loop
+      [
+    Put(varGlobal1, 1);
+       PosY varGlobal1; 
+      ]
+    End Loop;
+//Sube para NO imprimir
+Up;
+    // Se mueve dos puntos a la derecha sin imprimir
+       Add(varGlobal1);
+    PosY varGlobal1;
+    Add(varGlobal1);
+    PosY varGlobal1;
 
-    Proc posiciona(valorX, valorY)
-        [
-            PosX valorX;
-            PosY valorY;
-        ];
-    End;
+//Baja para imprimir
+Down;
 
-     //comentario
-    Proc main()
-        [
-            // Define variable global
-            Def(varGlobal1, 1);
-            //Llama al procedimiento linea1
-            linea1();
-            //Llama al procedimiento posiciona
-            posiciona(1,1);
 
-        ];
-    End;
+// Imprime E en código morse  (un punto)
+    Add(varGlobal1);
+    PosY varGlobal1;
+
+//Sube para NO imprimir
+Up;
+    // Se mueve dos puntos a la derecha sin imprimir
+       Add(varGlobal1);
+    PosY varGlobal1;
+    Add(varGlobal1);
+    PosY varGlobal1;
+
+//Baja para imprimir
+Down;
+
+
+
+
+
+// Imprime C en código morse  (raya punto raya punto)
+// Imprime  (tres puntos)
+    Add(varGlobal1);
+    PosY varGlobal1;
+    Add(varGlobal1);
+    PosY varGlobal1;
+    Add(varGlobal1);
+    PosY varGlobal1;
+
+
+// Imprime  (un punto)
+    Add(varGlobal1);
+    PosY varGlobal1;
+
+
+// Imprime  (tres puntos)
+    Add(varGlobal1);
+    PosY varGlobal1;
+    Add(varGlobal1);
+    PosY varGlobal1;
+    Add(varGlobal1);
+    PosY varGlobal1;
+
+
+// Imprime (un punto)
+    Add(varGlobal1);
+    PosY varGlobal1;
+]; 
+End; 
+
+
+
+
+Proc main() 
+[ 
+
+// Define variable global 
+
+Def(varGlobal1, 1); 
+
+//Llama al procedimiento letra1 
+impresion(); 
+]; 
+End;
     '''
     
 

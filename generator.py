@@ -4,6 +4,7 @@ class CodeGenerator:
     def __init__(self):
         # Crear el módulo LLVM
         self.module = ir.Module(name="modulo_principal")
+        self.main = False
 
         # Inicializar el target triple y data layout
         binding.initialize()
@@ -152,6 +153,7 @@ class CodeGenerator:
         nombre = nodo[1]
         valor = nodo[2]
 
+
         # Crear la variable en el ámbito actual
         variable = self.builder.alloca(ir.IntType(1) if isinstance(valor, tuple) and valor[0] == 'logico' else ir.IntType(32), name=nombre)
 
@@ -188,6 +190,8 @@ class CodeGenerator:
 
         # Obtener los valores de los argumentos
         valores_args = []
+
+
         for arg in argumentos:
             if arg[0] == 'number':
                 valores_args.append(ir.Constant(ir.IntType(32), arg[1]))
@@ -519,6 +523,7 @@ class CodeGenerator:
             formato_posy.global_constant = True
 
         # Obtener el valor que se imprimirá
+        print(self.variables)
         if isinstance(valor, int):
             valor_y = ir.Constant(ir.IntType(32), valor)
         elif isinstance(valor, str) and valor in self.variables:

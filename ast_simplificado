@@ -3,68 +3,248 @@ digraph {
 	nodo0 [label=sentencias]
 	nodo1 [label=proc]
 	nodo0 -> nodo1
-	nodo2 [label=linea1]
+	nodo2 [label=impresion]
 	nodo1 -> nodo2
 	nodo3 [label=sentencias]
 	nodo1 -> nodo3
-	nodo4 [label=def_variable]
+	nodo4 [label=d]
 	nodo3 -> nodo4
-	nodo5 [label=varLocal1]
+	nodo5 [label=o]
 	nodo4 -> nodo5
-	nodo6 [label=1]
+	nodo6 [label=w]
 	nodo4 -> nodo6
-	nodo7 [label=sentencias]
-	nodo3 -> nodo7
-	nodo8 [label=posy]
-	nodo7 -> nodo8
-	nodo9 [label=varLocal1]
+	nodo7 [label=n]
+	nodo4 -> nodo7
+	nodo8 [label=sentencias]
+	nodo3 -> nodo8
+	nodo9 [label=for_loop]
 	nodo8 -> nodo9
-	nodo10 [label=sentencias]
-	nodo0 -> nodo10
-	nodo11 [label=proc]
-	nodo10 -> nodo11
-	nodo12 [label=posiciona]
-	nodo11 -> nodo12
-	nodo13 [label="['valorX', 'valorY']"]
-	nodo11 -> nodo13
-	nodo14 [label=sentencias]
-	nodo11 -> nodo14
-	nodo15 [label=posx]
+	nodo10 [label=var1]
+	nodo9 -> nodo10
+	nodo11 [label=1]
+	nodo9 -> nodo11
+	nodo12 [label=3]
+	nodo9 -> nodo12
+	nodo13 [label=sentencias]
+	nodo9 -> nodo13
+	nodo14 [label=put_variable]
+	nodo13 -> nodo14
+	nodo15 [label=varGlobal1]
 	nodo14 -> nodo15
-	nodo16 [label=valorX]
-	nodo15 -> nodo16
+	nodo16 [label=1]
+	nodo14 -> nodo16
 	nodo17 [label=sentencias]
-	nodo14 -> nodo17
+	nodo13 -> nodo17
 	nodo18 [label=posy]
 	nodo17 -> nodo18
-	nodo19 [label=valorY]
+	nodo19 [label=varGlobal1]
 	nodo18 -> nodo19
 	nodo20 [label=sentencias]
-	nodo10 -> nodo20
-	nodo21 [label=proc]
+	nodo8 -> nodo20
+	nodo21 [label=u]
 	nodo20 -> nodo21
-	nodo22 [label=main]
+	nodo22 [label=p]
 	nodo21 -> nodo22
 	nodo23 [label=sentencias]
-	nodo21 -> nodo23
-	nodo24 [label=def_variable]
+	nodo20 -> nodo23
+	nodo24 [label=add_variable_uno]
 	nodo23 -> nodo24
 	nodo25 [label=varGlobal1]
 	nodo24 -> nodo25
-	nodo26 [label=1]
-	nodo24 -> nodo26
-	nodo27 [label=sentencias]
-	nodo23 -> nodo27
-	nodo28 [label=invocacion_proc]
+	nodo26 [label=sentencias]
+	nodo23 -> nodo26
+	nodo27 [label=posy]
+	nodo26 -> nodo27
+	nodo28 [label=varGlobal1]
 	nodo27 -> nodo28
-	nodo29 [label=linea1]
-	nodo28 -> nodo29
-	nodo30 [label=sentencias]
-	nodo27 -> nodo30
-	nodo31 [label=invocacion_proc]
+	nodo29 [label=sentencias]
+	nodo26 -> nodo29
+	nodo30 [label=add_variable_uno]
+	nodo29 -> nodo30
+	nodo31 [label=varGlobal1]
 	nodo30 -> nodo31
-	nodo32 [label=posiciona]
-	nodo31 -> nodo32
-	nodo33 [label="[('number', 1), ('number', 1)]"]
-	nodo31 -> nodo33
+	nodo32 [label=sentencias]
+	nodo29 -> nodo32
+	nodo33 [label=posy]
+	nodo32 -> nodo33
+	nodo34 [label=varGlobal1]
+	nodo33 -> nodo34
+	nodo35 [label=sentencias]
+	nodo32 -> nodo35
+	nodo36 [label=d]
+	nodo35 -> nodo36
+	nodo37 [label=o]
+	nodo36 -> nodo37
+	nodo38 [label=w]
+	nodo36 -> nodo38
+	nodo39 [label=n]
+	nodo36 -> nodo39
+	nodo40 [label=sentencias]
+	nodo35 -> nodo40
+	nodo41 [label=add_variable_uno]
+	nodo40 -> nodo41
+	nodo42 [label=varGlobal1]
+	nodo41 -> nodo42
+	nodo43 [label=sentencias]
+	nodo40 -> nodo43
+	nodo44 [label=posy]
+	nodo43 -> nodo44
+	nodo45 [label=varGlobal1]
+	nodo44 -> nodo45
+	nodo46 [label=sentencias]
+	nodo43 -> nodo46
+	nodo47 [label=u]
+	nodo46 -> nodo47
+	nodo48 [label=p]
+	nodo47 -> nodo48
+	nodo49 [label=sentencias]
+	nodo46 -> nodo49
+	nodo50 [label=add_variable_uno]
+	nodo49 -> nodo50
+	nodo51 [label=varGlobal1]
+	nodo50 -> nodo51
+	nodo52 [label=sentencias]
+	nodo49 -> nodo52
+	nodo53 [label=posy]
+	nodo52 -> nodo53
+	nodo54 [label=varGlobal1]
+	nodo53 -> nodo54
+	nodo55 [label=sentencias]
+	nodo52 -> nodo55
+	nodo56 [label=add_variable_uno]
+	nodo55 -> nodo56
+	nodo57 [label=varGlobal1]
+	nodo56 -> nodo57
+	nodo58 [label=sentencias]
+	nodo55 -> nodo58
+	nodo59 [label=posy]
+	nodo58 -> nodo59
+	nodo60 [label=varGlobal1]
+	nodo59 -> nodo60
+	nodo61 [label=sentencias]
+	nodo58 -> nodo61
+	nodo62 [label=d]
+	nodo61 -> nodo62
+	nodo63 [label=o]
+	nodo62 -> nodo63
+	nodo64 [label=w]
+	nodo62 -> nodo64
+	nodo65 [label=n]
+	nodo62 -> nodo65
+	nodo66 [label=sentencias]
+	nodo61 -> nodo66
+	nodo67 [label=add_variable_uno]
+	nodo66 -> nodo67
+	nodo68 [label=varGlobal1]
+	nodo67 -> nodo68
+	nodo69 [label=sentencias]
+	nodo66 -> nodo69
+	nodo70 [label=posy]
+	nodo69 -> nodo70
+	nodo71 [label=varGlobal1]
+	nodo70 -> nodo71
+	nodo72 [label=sentencias]
+	nodo69 -> nodo72
+	nodo73 [label=add_variable_uno]
+	nodo72 -> nodo73
+	nodo74 [label=varGlobal1]
+	nodo73 -> nodo74
+	nodo75 [label=sentencias]
+	nodo72 -> nodo75
+	nodo76 [label=posy]
+	nodo75 -> nodo76
+	nodo77 [label=varGlobal1]
+	nodo76 -> nodo77
+	nodo78 [label=sentencias]
+	nodo75 -> nodo78
+	nodo79 [label=add_variable_uno]
+	nodo78 -> nodo79
+	nodo80 [label=varGlobal1]
+	nodo79 -> nodo80
+	nodo81 [label=sentencias]
+	nodo78 -> nodo81
+	nodo82 [label=posy]
+	nodo81 -> nodo82
+	nodo83 [label=varGlobal1]
+	nodo82 -> nodo83
+	nodo84 [label=sentencias]
+	nodo81 -> nodo84
+	nodo85 [label=add_variable_uno]
+	nodo84 -> nodo85
+	nodo86 [label=varGlobal1]
+	nodo85 -> nodo86
+	nodo87 [label=sentencias]
+	nodo84 -> nodo87
+	nodo88 [label=posy]
+	nodo87 -> nodo88
+	nodo89 [label=varGlobal1]
+	nodo88 -> nodo89
+	nodo90 [label=sentencias]
+	nodo87 -> nodo90
+	nodo91 [label=add_variable_uno]
+	nodo90 -> nodo91
+	nodo92 [label=varGlobal1]
+	nodo91 -> nodo92
+	nodo93 [label=sentencias]
+	nodo90 -> nodo93
+	nodo94 [label=posy]
+	nodo93 -> nodo94
+	nodo95 [label=varGlobal1]
+	nodo94 -> nodo95
+	nodo96 [label=sentencias]
+	nodo93 -> nodo96
+	nodo97 [label=add_variable_uno]
+	nodo96 -> nodo97
+	nodo98 [label=varGlobal1]
+	nodo97 -> nodo98
+	nodo99 [label=sentencias]
+	nodo96 -> nodo99
+	nodo100 [label=posy]
+	nodo99 -> nodo100
+	nodo101 [label=varGlobal1]
+	nodo100 -> nodo101
+	nodo102 [label=sentencias]
+	nodo99 -> nodo102
+	nodo103 [label=add_variable_uno]
+	nodo102 -> nodo103
+	nodo104 [label=varGlobal1]
+	nodo103 -> nodo104
+	nodo105 [label=sentencias]
+	nodo102 -> nodo105
+	nodo106 [label=posy]
+	nodo105 -> nodo106
+	nodo107 [label=varGlobal1]
+	nodo106 -> nodo107
+	nodo108 [label=sentencias]
+	nodo105 -> nodo108
+	nodo109 [label=add_variable_uno]
+	nodo108 -> nodo109
+	nodo110 [label=varGlobal1]
+	nodo109 -> nodo110
+	nodo111 [label=sentencias]
+	nodo108 -> nodo111
+	nodo112 [label=posy]
+	nodo111 -> nodo112
+	nodo113 [label=varGlobal1]
+	nodo112 -> nodo113
+	nodo114 [label=sentencias]
+	nodo0 -> nodo114
+	nodo115 [label=proc]
+	nodo114 -> nodo115
+	nodo116 [label=main]
+	nodo115 -> nodo116
+	nodo117 [label=sentencias]
+	nodo115 -> nodo117
+	nodo118 [label=def_variable]
+	nodo117 -> nodo118
+	nodo119 [label=varGlobal1]
+	nodo118 -> nodo119
+	nodo120 [label=1]
+	nodo118 -> nodo120
+	nodo121 [label=sentencias]
+	nodo117 -> nodo121
+	nodo122 [label=invocacion_proc]
+	nodo121 -> nodo122
+	nodo123 [label=impresion]
+	nodo122 -> nodo123
 }

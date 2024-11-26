@@ -5,17 +5,19 @@
 	.type	linea1,@function
 linea1:
 	.cfi_startproc
-	subq	$40, %rsp
-	.cfi_def_cfa_offset 48
-	movl	$1, 36(%rsp)
-	movabsq	$formato_posy, %rcx
-	movabsq	$printf, %rax
-	movl	$1, %edx
-	callq	*%rax
+	pushq	%rax
+	.cfi_def_cfa_offset 16
+	movl	$1, 4(%rsp)
+	movabsq	$formato_posy, %rdi
+	movabsq	$printf, %rcx
+	movl	$1, %esi
+	xorl	%eax, %eax
+	callq	*%rcx
 	movabsq	$fflush, %rax
-	xorl	%ecx, %ecx
+	xorl	%edi, %edi
 	callq	*%rax
-	addq	$40, %rsp
+	popq	%rax
+	.cfi_def_cfa_offset 8
 	retq
 .Lfunc_end0:
 	.size	linea1, .Lfunc_end0-linea1
@@ -26,32 +28,53 @@ linea1:
 	.type	posiciona,@function
 posiciona:
 	.cfi_startproc
-	pushq	%rsi
+	pushq	%rbp
 	.cfi_def_cfa_offset 16
-	pushq	%rdi
+	pushq	%r15
 	.cfi_def_cfa_offset 24
-	subq	$40, %rsp
+	pushq	%r14
+	.cfi_def_cfa_offset 32
+	pushq	%rbx
+	.cfi_def_cfa_offset 40
+	subq	$24, %rsp
 	.cfi_def_cfa_offset 64
-	.cfi_offset %rdi, -24
-	.cfi_offset %rsi, -16
-	movl	%ecx, %eax
-	movl	%ecx, 36(%rsp)
-	movl	%edx, 32(%rsp)
-	movabsq	$formato_posx, %rcx
-	movabsq	$printf, %rsi
-	movl	%eax, %edx
-	callq	*%rsi
-	movabsq	$fflush, %rdi
-	xorl	%ecx, %ecx
-	callq	*%rdi
-	movl	32(%rsp), %edx
-	movabsq	$formato_posy, %rcx
-	callq	*%rsi
-	xorl	%ecx, %ecx
-	callq	*%rdi
-	addq	$40, %rsp
-	popq	%rdi
-	popq	%rsi
+	.cfi_offset %rbx, -40
+	.cfi_offset %r14, -32
+	.cfi_offset %r15, -24
+	.cfi_offset %rbp, -16
+	movl	%edi, 16(%rsp)
+	movl	%esi, 20(%rsp)
+	movl	$1, 12(%rsp)
+	movabsq	$formato_posy, %r14
+	movabsq	$printf, %r15
+	movabsq	$fflush, %rbx
+	.p2align	4, 0x90
+.LBB1_1:
+	movl	12(%rsp), %ebp
+	cmpl	$3, %ebp
+	jg	.LBB1_3
+	movl	16(%rsp), %esi
+	incl	%esi
+	movl	%esi, 16(%rsp)
+	movq	%r14, %rdi
+	xorl	%eax, %eax
+	callq	*%r15
+	xorl	%edi, %edi
+	callq	*%rbx
+	incl	%ebp
+	movl	%ebp, 12(%rsp)
+	jmp	.LBB1_1
+.LBB1_3:
+	addq	$24, %rsp
+	.cfi_def_cfa_offset 40
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%r14
+	.cfi_def_cfa_offset 24
+	popq	%r15
+	.cfi_def_cfa_offset 16
+	popq	%rbp
+	.cfi_def_cfa_offset 8
 	retq
 .Lfunc_end1:
 	.size	posiciona, .Lfunc_end1-posiciona
@@ -62,16 +85,17 @@ posiciona:
 	.type	main,@function
 main:
 	.cfi_startproc
-	subq	$40, %rsp
-	.cfi_def_cfa_offset 48
-	movl	$1, 36(%rsp)
+	pushq	%rax
+	.cfi_def_cfa_offset 16
+	movl	$1, 4(%rsp)
 	movabsq	$linea1, %rax
 	callq	*%rax
 	movabsq	$posiciona, %rax
-	movl	$5, %ecx
-	movl	$3, %edx
+	movl	$1, %edi
+	movl	$1, %esi
 	callq	*%rax
-	addq	$40, %rsp
+	popq	%rax
+	.cfi_def_cfa_offset 8
 	retq
 .Lfunc_end2:
 	.size	main, .Lfunc_end2-main
@@ -84,12 +108,5 @@ main:
 formato_posy:
 	.asciz	"Posicion en Y: %d\n"
 	.size	formato_posy, 19
-
-	.type	formato_posx,@object
-	.globl	formato_posx
-	.p2align	4
-formato_posx:
-	.asciz	"Posicion en X: %d\n"
-	.size	formato_posx, 19
 
 	.section	".note.GNU-stack","",@progbits
